@@ -21,9 +21,6 @@ return array (
 						'apartment' => __DIR__ . '/../view' 
 				) 
 		),
-		'module_layouts' => array(
-						'Ehome' => 'layout/layout',
-		),
 		'router' => array (
 				
 				'routes' => array (
@@ -58,7 +55,7 @@ return array (
 								),
 						),
 				) 
-		) 
+		),
 );
 
 ?>
