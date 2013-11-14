@@ -31,17 +31,7 @@ class FtpConfig {
 		$this->version = "1.0.2";
 		$this->date = "03.11.2013";
 		
-		// configuration
-// 		$this->pathToServerRoot = "";
-//		$this->pathToLocalRoot = "";
-// 		$this->ftpHost = "";
-// 		$this->ftpPort = "";
-// 		$this->ftpUser = "";
-// 		$this->ftpPass = "";
-// 		$this->dbHost = "";
-// 		$this->dbName = "";
-// 		$this->dbUser = "";
-// 		$this->dbPass = "";
+		
 		
 	}
 	
