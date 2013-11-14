@@ -31,17 +31,7 @@ class FtpConfig {
 		$this->version = "1.0.2";
 		$this->date = "03.11.2013";
 		
-		// configuration
-		$this->pathToServerRoot = "/"; 
-		$this->pathToLocalRoot = "\\Users\\jobauer\\workspace\\EhcServer\\";
-		$this->ftpHost = "paradoxfeet.de";
-		$this->ftpPort = "21";
-		$this->ftpUser = "f0088187"; 		
-		$this->ftpPass = "xfz9sVUvRBJRZxSX";
-		$this->dbHost = "localhost";
-		$this->dbName = "d0171593";
-		$this->dbUser = "d0171593";
-		$this->dbPass = "ehc";
+		
 		
 	}
 	
