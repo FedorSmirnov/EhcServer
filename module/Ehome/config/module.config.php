@@ -14,7 +14,6 @@ return array (
 				 
 		)
 		,
-		
 		'view_manager' => array (
 				
 				'template_path_stack' => array (
@@ -22,7 +21,9 @@ return array (
 						'apartment' => __DIR__ . '/../view' 
 				) 
 		),
-		
+		'module_layouts' => array(
+						'Ehome' => 'layout/layout',
+		),
 		'router' => array (
 				
 				'routes' => array (

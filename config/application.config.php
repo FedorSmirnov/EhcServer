@@ -32,8 +32,8 @@ return array (
 		// 'config_cache_enabled' => $booleanValue,
 				) 
 
-// The key used to create the configuration cache file name.
-// 'config_cache_key' => $stringKey,
+		// The key used to create the configuration cache file name.
+		// 'config_cache_key' => $stringKey,
 )		
 
 		// Whether or not to enable a module class map cache.
