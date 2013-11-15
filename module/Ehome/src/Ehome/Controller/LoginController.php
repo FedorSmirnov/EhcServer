@@ -33,7 +33,7 @@ class LoginController extends UserController { // from ZfcUser, extends Abstract
 	
 	public function loginAction() {
 	
-		Debug::dump("0");
+		//Debug::dump("0");
 		
 // 		if ($this->checkUserLogin()) { // TODO check session
 // 			return $this->redirect ()->toRoute ( $this->getOptions ()->getLoginRedirectRoute() );
