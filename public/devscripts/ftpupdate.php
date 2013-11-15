@@ -152,11 +152,11 @@ class FtpUpdate {
 		
 		// ---------------------------------------------------------------------
 		// module, Application, config
-// 		$moduleFiles = array(
-// 				"module/Application/config/module.config.php",
-// 				"module/Application/language/de.php",
-// 				"module/Application/language/en.php",
-// 				"module/Application/src/Application/Controller/IndexController.php",
+		$moduleFiles = array(
+				"module/Application/config/module.config.php",
+				//"module/Application/language/de.php",
+				//"module/Application/language/en.php",
+				//"module/Application/src/Application/Controller/IndexController.php",
 // 				"module/Application/src/Application/Controller/RestController.php",
 // 				"module/Application/src/Application/Controller/UtilitiesController.php",
 // 				"module/Application/src/Application/Entity/ResidentEntity.php",
@@ -186,28 +186,35 @@ class FtpUpdate {
 // 				"module/Application/view/application/utilities/test.phtml",
 // 				"module/Application/view/error/404.phtml",
 // 				"module/Application/view/error/index.phtml",
-// 				"module/Application/view/layout/layout.phtml",
+ 				"module/Application/view/layout/layout.phtml",
 // 				"module/Application/view/zfc-user/user/index.phtml",
 // 				"module/Application/view/zfc-user/user/login.phtml",
 // 				"module/Application/Module.php",
 // 				"module/ZfcUser/src/ZfcUser/Controller/UserController.php",
 // 				"module/ZfcUser/src/ZfcUser/Form/Login.php",
-// 		);
-// 		foreach($moduleFiles as $file){
-// 			// Loeschen
-// 			if (ftp_delete($conn_id, $file)) {
-// 				echo "* $file erfolgreich geloescht.\n";
-// 			} else {
-// 				echo "* Ein Fehler trat beim Loeschen von $file auf.\n";
-// 			}
-
-// 			// Hochladen
-// 			if (ftp_put($conn_id, $file, ($this->pathToLocalRoot . $file), FTP_ASCII)) {
-// 				echo "* $file erfolgreich hochgeladen.\n";
-// 			} else {
-// 				echo "* Ein Fehler trat beim Hochladen von $file auf.\n";
-// 			}
-// 		}
+				"module/Ehome/config/module.config.php",
+				"module/Ehome/src/Ehome/Controller/IndexController.php",
+				"module/Ehome/src/Ehome/Controller/LoginController.php",
+				"module/Ehome/view/ehome/index/index.phtml",
+				"module/Ehome/view/ehome/login/index.phtml",
+				"module/Ehome/view/layout/layout.phtml",
+				"module/Ehome/autoload_classmap.php",
+				"module/Ehome/Module.php",
+		);
+		foreach($moduleFiles as $file){
+			// Loeschen
+			if (ftp_delete($conn_id, $file)) {
+				echo "* $file erfolgreich geloescht.\n";
+			} else {
+				echo "* Ein Fehler trat beim Loeschen von $file auf.\n";
+			}
+			// Hochladen
+			if (ftp_put($conn_id, $file, ($this->pathToLocalRoot . $file), FTP_ASCII)) {
+				echo "* $file erfolgreich hochgeladen.\n";
+			} else {
+				echo "* Ein Fehler trat beim Hochladen von $file auf.\n";
+			}
+		}
 		
 		// ---------------------------------------------------------------------
 		// public
@@ -215,8 +222,8 @@ class FtpUpdate {
 				"public/index.php",
 				"public/css/style.css",
 				"public/js/script.js",
-				"public/devscripts/ftpbuild.php",
-				"public/devscripts/ftpconfig.php",
+				//"public/devscripts/ftpbuild.php",
+				//"public/devscripts/ftpconfig.php",
 				"public/devscripts/ftpupdate.php",
 		);
 		foreach($publicFiles as $file){
