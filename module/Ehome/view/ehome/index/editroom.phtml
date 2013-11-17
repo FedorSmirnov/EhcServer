@@ -1,0 +1,23 @@
+<h1>Detailansicht Schlafzimmer</h1>
+<?php
+$form = $this->form;
+$form->prepare();
+?>
+<?php echo $this->form()->openTag($form) ?>
+    <dl class="zend_form">
+        <?php // TODO // echo $this->formElementErrors($form->get('name')) ?>
+
+        <dt><?php echo $this->formLabel($form->get('name')) ?></dt>
+        <dd><?php echo $this->formInput($form->get('name')) ?></dd>
+
+        <dt><?php echo $this->formLabel($form->get('humidity')) ?></dt>
+        <dd><?php echo $this->formInput($form->get('humidity')) ?></dd>
+
+        <?php if ($this->redirect): ?>
+            <input type="hidden" name="redirect" value="<?php echo $this->escapeHtml($this->redirect) ?>" />
+        <?php endif ?>
+
+        <dd><?php // echo $this->formButton($form->get('submit')) ?></dd>
+        <dd><?php echo $this->formInput($form->get('submit')) ?></dd>
+    </dl>
+<?php echo $this->form()->closeTag() ?>

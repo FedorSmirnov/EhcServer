@@ -7,7 +7,7 @@ use Zend\Session\Container;
 use Zend\View\Helper\ViewModel;
 use Zend\Debug\Debug;
 
-class EhomeUserController extends UserController { // from ZfcUser, extends AbstractActionController;
+class BackendController extends UserController { // from ZfcUser, extends AbstractActionController;
 	
 	protected $roomTable;
 	
@@ -18,16 +18,14 @@ class EhomeUserController extends UserController { // from ZfcUser, extends Abst
     const CONTROLLER_NAME    = 'zfcuser';
 	
 	public function indexAction() {	
-		Debug::dump("0");
+		//Debug::dump("0");
 		if (!$this->zfcUserAuthentication()->hasIdentity()){ // check for valid session
-			return $this->redirect()->toRoute(static::ROUTE_LOGIN);
+			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
 		}
 		
-		// get room entities
-		$rooms = $this->getRoomTable()->fetchAll();
-		return new ViewModel(
-				array('rooms' => $rooms)
-		);
+		// TODO show rooms
+		
+		return new ViewModel();
 		
 		// get lines of log file
 // 		$utilitiesController = new UtilitiesController();
@@ -74,10 +72,13 @@ class EhomeUserController extends UserController { // from ZfcUser, extends Abst
 	
 	public function loginAction() {
 	
-		Debug::dump("0");
-		if ($this->checkUserLogin()) {
-			Debug::dump("1");
-			return $this->redirect()->toRoute( $this->getOptions()->getLoginRedirectRoute());
+		//Debug::dump("0");
+// 		if ($this->checkUserLogin()) {
+// 			//Debug::dump("1");
+// 			return $this->redirect()->toRoute( $this->getOptions()->getLoginRedirectRoute());
+// 		}
+		if (!$this->zfcUserAuthentication()->hasIdentity()){ // check for valid session
+			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
 		}
 		$request = $this->getRequest ();
 		$form = $this->getLoginForm ();

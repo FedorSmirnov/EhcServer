@@ -1,3 +1,9 @@
+<?php 
+
+// Notes:
+
+
+?>
 <!-- Startseite -->
 <div class="row">
 	<div class="span12">
@@ -12,7 +18,53 @@
     <p>
     	Mustermann, Musterweg 13, 12345 Musterstadt
     </p>
-    <p>
-    	<a class="btn btn-warning btn-large" href="<?php echo $this->url('login') ?>">Eintreten &raquo;</a>
-    </p> 
 </div>
+<?php 
+echo "<div class='row'>";
+echo "<div class='span12'>";
+// system state
+echo "<h2>Debug</h2>";
+echo "<h3>Raumübersicht</h3>";
+foreach($this->dbgrooms as $room){
+	echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . ";</p>";
+}
+echo "</div>";
+echo "</div>";
+echo "<hr>";
+
+echo "<div class='row'>";
+echo "<div class='span8'>";
+// Cockpit
+echo "<h2>Cockpit</h2>";
+echo "<div style='float: left; padding-right: 16px;'>" . $this->gravatar($this->zfcUserIdentity()->getEmail()) . "</div>";
+echo "<p>";
+echo "Angemeldet als " . $useremail;
+echo "</p>";
+echo "<p>";
+echo "<a class='btn' href=" . $this->url('zfcuser/logout') . ">Ausloggen</a> ";
+echo "<a class='btn' href=" . $this->url('zfcuser') . ">Profileinstellungen</a>";
+echo "</p>";
+echo "</div>";
+echo "<div class='span4'>";
+echo "<h2>Hilfe</h2>";
+echo "<p>";
+echo "Wir helfen Ihnen gerne:<br>";
+echo "support@example.org und 01234-12345";
+echo "</p>";
+echo "</div>";
+echo "</div>";
+echo "<hr>";
+echo "<div class='row'>";
+echo "<div class='span12'>";
+// CRUD rooms
+echo "<h2>Räume</h2>";
+//echo "<p><a href='" . $this->url('home', array('action' => 'add')) . "' title='Add room'>Raum hinzufügen</a></p>";
+foreach($this->rooms as $room){
+	// var_dump($room);
+	// TODO escapen
+	//echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . "; <a href='" . $this->url('home', array('action' => 'edit', 'id' => $room->id)) . "' title='Bearbeiten des Eintrags'>Bearbeiten</a>; <a href='" . $this->url('home', array('action' => 'delete', 'id' => $room->id)) . "' title='Loeschen des Eintrags'>Löschen</a>; <a href='" . $this->url('home', array('action' => 'edit', 'id' => $room->id)) . "' title='Betreten'>Betreten</a></p>";
+	echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . "; <a href='" . $this->url('editroom') . "' title='Betreten'>Betreten</a></p>";
+}
+echo "</div>";
+echo "</div>";
+?>

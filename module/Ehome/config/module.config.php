@@ -5,7 +5,7 @@ namespace Ehome;
 return array (
 		'controllers' => array (
 				'invokables' => array (
-						'Ehome\Controller\EhomeUser' => 'Ehome\Controller\EhomeUserController',
+						'Ehome\Controller\Backend' => 'Ehome\Controller\BackendController',
 						'Ehome\Controller\Index' => 'Ehome\Controller\IndexController' 
 				)
 				 
@@ -27,7 +27,7 @@ return array (
 										)
 										,
 										'defaults' => array (		
-												'controller' => 'Ehome\Controller\EhomeUser',
+												'controller' => 'Ehome\Controller\Backend',
 												'action' => 'index' 
 										) 
 								) 
@@ -42,18 +42,43 @@ return array (
 										),
 								),
 						),
-						'user' => array(
+						'editroom' => array(
 								'type' => 'Zend\Mvc\Router\Http\Literal',
 								'options' => array(
-										'route'    => '/user',
+										'route'    => '/editroom',
 										'defaults' => array(
-												'controller' => 'Ehome\Controller\EhomeUser',
-												'action'     => 'index',
+												'controller' => 'Ehome\Controller\Index',
+												'action'     => 'editroom',
 										),
 								),
 						),
+// 						'zfcuser' => array (
+// 								'type' => 'literal',
+// 								'priority' => 1000,
+// 								'options' => array (
+// 										'route' => '/user',
+// 										'defaults' => array (
+// 												'controller' => 'Ehome\Controller\Backend',
+// 												'action' => 'index' 
+// 										) 
+// 								),
+// 								'may_terminate' => true,
+// 								'child_routes' => array (
+										
+// 										'login' => array (
+// 												'type' => 'Literal',
+// 												'options' => array (
+// 														'route' => '/login',
+// 														'defaults' => array (
+// 																'controller' => 'Ehome\Controller\Backend',
+// 																'action' => 'login' 
+// 														) 
+// 												) 
+// 										) 
+// 								) 
+// 						) 
 				) 
-		),
+		) 
 );
 
 ?>
