@@ -1,0 +1,81 @@
+<?php 
+
+// Notes:
+
+
+?>
+<!-- Startseite -->
+<div class="row">
+	<div class="span12">
+		<p style="text-align: center;">
+			<img src="http://ehcserver.jochen-bauer.net/img/ehome-center-logo.png"
+				alt="Bild Header E|Home-Center" />
+		</p>
+	</div>
+</div>
+<div class="hero-unit">
+    <h1><?php echo sprintf("Willkommen!", '<span class="zf-green">', '</span>') ?></h1>
+    <p>
+    	Mustermann, Musterweg 13, 12345 Musterstadt
+    </p>
+</div>
+<?php 
+echo "<div class='row'>";
+echo "<div class='span12'>";
+// system state
+echo "<h2>Debug</h2>";
+echo "<p><a href='" . $this->url('home', array('action' => 'temp')) . "' title='tempAction'>TempAction</a></p>";
+?>
+<h3>TODOs</h3>
+<p>Durchspielen des Datenbankdurchgriffs f�r das Room-Modul samt der CRUD-Optionen.</p>
+<p>Visualisierung des Systemzustand in Form einer Tabelle und in Form der Image-Map</p>
+<p>�nderung der Zeichenkette Sign In auf Abschicken - Frage: wie erweitere ich die ZfcUser-Login-Formularklasse im Ehome-Modul</p>
+<p>�nderung des Layouts - Frage: wie setze ich ein eigenes Layout f�r das Ehome-Modul?</p>
+<p>Probleml�sung: man will nach dem Login auf die Seite des IndexControllers, man will dort aber den Link einen Link zu den Profileinstellungen des ZfcUser-Controllers.</p>
+<p>Check ob BackendController komplett entfernt werden kann.</p>
+<p>EditRoom-View und Rolle der Datentypen heraus arbeiten.</p>
+<?php 
+echo "<h3>Raum�bersicht</h3>";
+foreach($this->dbgrooms as $room){
+	echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . ";</p>";
+}
+echo "</div>";
+echo "</div>";
+echo "<hr>";
+
+echo "<div class='row'>";
+echo "<div class='span8'>";
+// Cockpit
+echo "<h2>Cockpit</h2>";
+echo "<div style='float: left; padding-right: 16px;'>" . $this->gravatar($this->zfcUserIdentity()->getEmail()) . "</div>";
+echo "<p>";
+echo "Angemeldet als " . $useremail;
+echo "</p>";
+echo "<p>";
+echo "<a class='btn' href=" . $this->url('zfcuser/logout') . ">Ausloggen</a> ";
+//echo "<a class='btn' href=" . $this->url('zfcuser') . ">Profileinstellungen</a>";
+echo "</p>";
+echo "</div>";
+echo "<div class='span4'>";
+echo "<h2>Hilfe</h2>";
+echo "<p>";
+echo "Wir helfen Ihnen gerne:<br>";
+echo "support@example.org und 01234-12345";
+echo "</p>";
+echo "</div>";
+echo "</div>";
+echo "<hr>";
+echo "<div class='row'>";
+echo "<div class='span12'>";
+// CRUD rooms
+echo "<h2>R�ume func</h2>";
+//echo "<p><a href='" . $this->url('home', array('action' => 'add')) . "' title='Add room'>Raum hinzuf�gen</a></p>";
+foreach($this->rooms as $room){
+	// var_dump($room);
+	// TODO escapen
+	//echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . "; <a href='" . $this->url('home', array('action' => 'edit', 'id' => $room->id)) . "' title='Bearbeiten des Eintrags'>Bearbeiten</a>; <a href='" . $this->url('home', array('action' => 'delete', 'id' => $room->id)) . "' title='Loeschen des Eintrags'>L�schen</a>; <a href='" . $this->url('home', array('action' => 'edit', 'id' => $room->id)) . "' title='Betreten'>Betreten</a></p>";
+	echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . "; <a href='" . $this->url('editroom', array('id' => $room->id)) . "' title='Betreten'>Betreten</a></p>";
+}
+echo "</div>";
+echo "</div>";
+?>
