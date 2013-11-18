@@ -2,29 +2,20 @@
 //use \Zend\Debug\Debug;
 ?>
 <script>
-// adapt screen for ipad
-function adaptPageForIpad(){
-	//alert("iPad in docready.");
-	// move all lights more to the right;
-	jQuery('#light_kitchen_one').css('right','600px');
-	jQuery('#light_kitchen_two').css('right','580px');
-	jQuery('#light_bathroom_one').css('right','630px');
-	jQuery('#light_bathroom_two').css('right','610px');
-	jQuery('#light_living_one').css('right','320px');
-	jQuery('#light_living_two').css('right','300px');
-}
-
-// check for ipad
-function isiPad(){
-    return (navigator.platform.indexOf("iPad") != -1);
-}
-
 // jquery main function after page is loaded
 jQuery(document).ready(function() {
+	var isiPad = navigator.userAgent.match(/iPad/i) != null;
 	if (isiPad){
-		adaptPageForIpad();
+		alert('ipad');
+		// move all lights more to the right;
+		jQuery('#light_kitchen_one').css('right','600px');
+		jQuery('#light_kitchen_two').css('right','580px');
+		jQuery('#light_bathroom_one').css('right','630px');
+		jQuery('#light_bathroom_two').css('right','610px');
+		jQuery('#light_living_one').css('right','320px');
+		jQuery('#light_living_two').css('right','300px');
 	} else {
-		//adaptPageForIpad();
+		// do nothing
 	}
 });
 </script>
