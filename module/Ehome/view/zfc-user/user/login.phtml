@@ -21,18 +21,9 @@ $form->setAttribute('method', 'post');
         <?php if ($this->redirect): ?>
             <input type="hidden" name="redirect" value="<?php echo $this->escapeHtml($this->redirect) ?>" />
         <?php endif ?>
-
-        <!-- 
-        <dd><?php // echo $this->formButton($form->get('submit')) ?></dd>
-        -->
-        <dd><?php echo $this->formButton($form->get('room')) ?> | <?php echo $this->formButton($form->get('functional')) ?></dd>
-        <!-- 
-        <dd><?php // echo $this->formButton($form->get('submitFunctionalView')) ?></dd>
-         -->
+        <dd><?php echo $this->formButton($form->get('submit')) ?></dd>
     </dl>
-
 <?php echo $this->form()->closeTag() ?>
-
 <?php if ($this->enableRegistration) : ?>
 Noch nicht angemeldet? <a href="<?php echo $this->url('zfcuser/register') . ($this->redirect ? '?redirect='.$this->redirect : '') ?>">Anmelden!</a>
 <?php endif; ?>

@@ -22,11 +22,23 @@ class Room {
 		return $this->id;
 	}
 	
+	public function setId($id){
+		$this->id = $id;
+	}
+	
 	public function getName(){
 		return $this->name;
 	}
 	
+	public function setName($name){
+		$this->name = $name;
+	}
+	
 	public function getHumidity(){
 		return $this->humidity;
+	}
+	
+	public function setHumidity($humidity){
+		$this->humidity = $humidity;
 	}
 }

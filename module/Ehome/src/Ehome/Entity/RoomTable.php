@@ -30,10 +30,10 @@ class RoomTable {
 	
 	public function saveRoom(Room $room){
 		$data = array (
-				'name' => $room->name,
-				'humidity' => $room->humidity 
+				'name' => $room->getName(),
+				'humidity' => $room->getHumidity() 
 		);
-		$id = (int) $room->id;
+		$id = (int) $room->getId();
 		if ($id == 0) {
 			$this->tableGateway->insert($data);
 		} else {

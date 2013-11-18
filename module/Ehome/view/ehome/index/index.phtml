@@ -1,179 +1,169 @@
-<?php 
-
-// Notes:
-
-
-?>
 <style type="text/css">
 td,th {
         padding: 10px;
         text-align: left;
 }
-
-.button_dropdown {
-        float: right;
-}
-
 #container {
         text-align: center;
         position: relative;
 }
-
 #background {
         width: 100%;
         height: 100%;
 }
-
 .light {
         width: 35px;
         height: 35px;
 }
-
 #light_kitchen {
         position: absolute;
         bottom: 35px;
         right: 730px;
 }
-
 #light_bathroom {
         position: absolute;
         bottom: 240px;
         right: 760px;
 }
-
 #light_living {
         position: absolute;
         bottom: 150px;
         right: 450px;
 }
-}
 </style>
+<!-- DEBUGGING AREA -->
+<div class='row'>
+	<div class='span12'>
+		<h2>Debugging Area</h2>
+	</div>
+</div>
+<div class='row'>
+	<div class='span6'>
+		<h3>TODOs</h3>
+		<p>Änderung des Layouts - Frage: wie setze ich ein eigenes Layout für das Ehome-Modul?</p>
+		<p>Auflisten der Profileinstellungen macht Probleme!</p>
+		<p>Problemlösung: man will nach dem Login auf die Seite des IndexControllers, man will dort aber den Link einen Link zu den Profileinstellungen des ZfcUser-Controllers.</p>
+		<p>EditRoom-View und Rolle der Datentypen heraus arbeiten.</p>
+	</div>
+	<div class='span3'>
+		<h3>UI-Komponenten</h3>
+		<p>
+			<a class="btn btn-success" href="" target="_blank">Erfolgsbutton mit Pfeilen &raquo;</a>
+		</p>
+		<p>
+			<a class="btn" href="">Normaler Button</a>
+		</p>
+	</div>
+		<div class='span3'>
+		<h3>Actions</h3>
+		<p>
+			<a class="btn" href="<?php echo $this->url('home', array('action' => 'temp')); ?>">TempAction</a>
+		</p>
+	</div>
+</div>
+<hr>
+<!-- // DEBUGGING AREA -->
 <!-- Startseite -->
 <div class="row">
 	<div class="span12">
 		<p style="text-align: center;">
-			<img src="http://ehcserver.jochen-bauer.net/img/ehome-center-logo.png"
-				alt="Bild Header E|Home-Center" />
+			<img src='<?php echo $this->basePath(); ?>/img/ehome-center-logo.png' alt="Bild Header E|Home-Center" />
 		</p>
 	</div>
 </div>
 <div class="hero-unit">
     <h1><?php echo sprintf("Willkommen!", '<span class="zf-green">', '</span>') ?></h1>
-    <p>
-    	Mustermann, Musterweg 13, 12345 Musterstadt
-    </p>
+    <p>Mustermann, Musterweg 13, 12345 Musterstadt</p>
+    <div id="container">
+			<div id="background">
+				<img alt="apartment_picture" src='<?php echo $this->basePath();?>/img/praterstr3.jpg'>
+			</div>
+            <div id="light_kitchen" class="light">
+            	<img class="img_light" id="img_light_kitchen" alt="gluehbirne_aus" src=<?php
+if ($light_kitchen) {
+	echo $this->basePath() . '/img/gluehbirne_an.png';
+} else {
+	echo $this->basePath() . '/img/gluehbirne_aus.png';
+}
+				?> />
+			</div>
+            <div id="light_bathroom" class="light">
+            	<img class="img_light" id="img_light_bathroom" alt="gluehbirne_aus" src=<?php
+if ($light_bath) {
+	echo $this->basePath() . '/img/gluehbirne_an.png';
+} else {
+    echo $this->basePath() . '/img/gluehbirne_aus.png';
+}
+                ?> />
+            </div>
+            <div id="light_living" class="light">
+            	<img class="img_light" id="img_light_living" alt="gluehbirne_aus" src=<?php 
+if ($light_living) {
+	echo $this->basePath() . '/img/gluehbirne_an.png';
+} else {
+	echo $this->basePath() . '/img/gluehbirne_aus.png';
+}
+				?> />
+			</div><!-- // light-living -->
+		</div><!-- // div container -->
+</div><!-- // hero-unit -->
+<div class='row'>
+	<div class='span8'>
+		<h2>Cockpit</h2>
+		<div style='float: left; padding-right: 16px;'><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()); ?>
+		</div>
+		<p>
+			Angemeldet als <?php echo $useremail; ?>
+		</p>
+		<p>
+			<a class='btn' href="<?php echo $this->url('zfcuser/logout'); ?>">Ausloggen</a>
+			<!-- 
+			<a class='btn' href="<?php //echo $this->url('zfcuser/changeemail'); ?>">E-Mail ändern</a> 
+			<a class='btn' href="<?php //echo $this->url('zfcuser/changepassword'); ?>">Passwort ändern</a>
+			-->
+		</p>
+	</div>
+	<div class='span4'>
+		<h2>Hilfe</h2>
+		<p>
+			Wir helfen Ihnen gerne:<br>
+			support@example.org und 01234-12345
+		</p>
+	</div>
+</div>
+<div class='row'>
+	<div class='span12'>
+		<h2>Räume</h2>
+		<?php foreach($this->rooms as $room){
+				echo "<p>";
+				echo $room->getId() . "; ";
+				echo $room->getName() . "; ";
+				echo $room->getHumidity() . ";";
+				$id = "" . $room->getId(); // TODO url-Helper did not work like expected, check $this->url('home', array('action' => 'editroom', 'id' => $room->getId()))
+				echo "<a href='" . $this->url('home', array('action' => 'editroom', 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags'>Bearbeiten</a>;";
+				echo "</p>";
+		}
+		?>
+	</div>
 </div>
 <?php 
-echo "<div class='row'>";
-echo "<div class='span12'>";
-// home picture
-?>
-
-                <div id="container">
-
-                        <div id="background">
-                                <img alt="apartment_picture"
-                                        src='http://ehcserver.jochen-bauer.net/img/praterstr3.jpg'>
-                        </div>
-
-
-
-                        <div id="light_kitchen" class="light">
-                                <img class="img_light" id="img_light_kitchen" alt="gluehbirne_aus"
-                                        src=<?php
-                                        if ($light_kitchen) {
-                                                echo 'http://ehcserver.jochen-bauer.net/img/gluehbirne_an.png';
-                                        } else {
-                                                echo 'http://ehcserver.jochen-bauer.net/img/gluehbirne_aus.png';
-                                        }
-                                        ?>>
-                        </div>
-
-                        <div id="light_bathroom" class="light">
-                                <img class="img_light" id="img_light_bathroom" alt="gluehbirne_aus"
-                                        src=<?php
-                                        
-                                        if ($light_bath) {
-                                                echo 'http://ehcserver.jochen-bauer.net/img/gluehbirne_an.png';
-                                        } else {
-                                                echo 'http://ehcserver.jochen-bauer.net/img/gluehbirne_aus.png';
-                                        }
-                                        ?>>
-                        </div>
-
-                        <div id="light_living" class="light">
-                                <img class="img_light" id="img_light_living" alt="gluehbirne_aus"
-                                        src=<?php
-                                        
-                                        if ($light_living) {
-                                                echo 'http://ehcserver.jochen-bauer.net/img/gluehbirne_an.png';
-                                        } else {
-                                               echo 'http://ehcserver.jochen-bauer.net/img/gluehbirne_aus.png';
-                                        }
-                                        ?>>
-                        </div>
-
-                </div>
-
-<?php
-// system state
-echo "<h2>Debug</h2>";
-echo "<p><a href='" . $this->url('home', array('action' => 'temp')) . "' title='tempAction'>TempAction</a></p>";
-?>
-<h3>TODOs</h3>
-<p>Durchspielen des Datenbankdurchgriffs für das Room-Modul samt der CRUD-Optionen.</p>
-<p>Visualisierung des Systemzustand in Form einer Tabelle und in Form der Image-Map</p>
-<p>Änderung der Zeichenkette Sign In auf Abschicken - Frage: wie erweitere ich die ZfcUser-Login-Formularklasse im Ehome-Modul</p>
-<p>Änderung des Layouts - Frage: wie setze ich ein eigenes Layout für das Ehome-Modul?</p>
-<p>Problemlösung: man will nach dem Login auf die Seite des IndexControllers, man will dort aber den Link einen Link zu den Profileinstellungen des ZfcUser-Controllers.</p>
-<p>Check ob BackendController komplett entfernt werden kann.</p>
-<p>EditRoom-View und Rolle der Datentypen heraus arbeiten.</p>
-<?php 
-echo "<h3>Raumübersicht</h3>";
-foreach($this->dbgrooms as $room){
-	echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . ";</p>";
-}
-echo "</div>";
-echo "</div>";
-echo "<hr>";
-
-echo "<div class='row'>";
-echo "<div class='span8'>";
-// Cockpit
-echo "<h2>Cockpit</h2>";
-echo "<div style='float: left; padding-right: 16px;'>" . $this->gravatar($this->zfcUserIdentity()->getEmail()) . "</div>";
-echo "<p>";
-echo "Angemeldet als " . $useremail;
-echo "</p>";
-echo "<p>";
-echo "<a class='btn' href=" . $this->url('zfcuser/logout') . ">Ausloggen</a> ";
-echo "<a class='btn' href=" . $this->url('zfcuser/changeemail') . ">E-Mail ändern</a>";
-echo "<a class='btn' href=" . $this->url('zfcuser/changepassword') .">Passwort ändern</a>";
-echo "<a class='btn' href=" . $this->url('zfcuser') . ">Profileinstellungen</a>";
-echo "</p>";
-echo "</div>";
-echo "<div class='span4'>";
-echo "<h2>Hilfe</h2>";
-echo "<p>";
-echo "Wir helfen Ihnen gerne:<br>";
-echo "support@example.org und 01234-12345";
-echo "</p>";
-echo "</div>";
-echo "</div>";
-echo "<hr>";
-echo "<div class='row'>";
-echo "<div class='span12'>";
+// echo "<h3>Raumübersicht</h3>";
+// foreach($this->dbgrooms as $room){
+// 	echo "<p>" . $room->getId() . "; " . $room->getName() . "; " . $room->getHumidity() . ";</p>";
+// }
+// echo "</div>";
+// echo "</div>";
+// echo "<hr>";
+// echo "<hr>";
+// echo "<div class='row'>";
+// echo "<div class='span12'>";
 // CRUD rooms
-echo "<h2>Räume</h2>";
-//echo "<p><a href='" . $this->url('home', array('action' => 'add')) . "' title='Add room'>Raum hinzufügen</a></p>";
-foreach($this->rooms as $room){
-	// var_dump($room);
-	// TODO escapen
-	//echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . "; <a href='" . $this->url('home', array('action' => 'edit', 'id' => $room->id)) . "' title='Bearbeiten des Eintrags'>Bearbeiten</a>; <a href='" . $this->url('home', array('action' => 'delete', 'id' => $room->id)) . "' title='Loeschen des Eintrags'>Löschen</a>; <a href='" . $this->url('home', array('action' => 'edit', 'id' => $room->id)) . "' title='Betreten'>Betreten</a></p>";
-	echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . "; <a href='" . $this->url('editroom', array('id' => $room->id)) . "' title='Betreten'>Betreten</a></p>";
-}
-echo "</div>";
-echo "</div>";
+// echo "<h2>Räume</h2>";
+// //echo "<p><a href='" . $this->url('home', array('action' => 'add')) . "' title='Add room'>Raum hinzufügen</a></p>";
+// foreach($this->rooms as $room){
+// 	echo "<p>" . $room->getId() . "; " . $room->getName() . "; " . $room->getHumidity() . "; <a href='" . $this->url('home', array('action' => 'edit', 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags'>Bearbeiten</a>; <a href='" . $this->url('home', array('action' => 'delete', 'id' => $room->getId())) . "' title='Loeschen des Eintrags'>Löschen</a>; <a href='" . $this->url('home', array('action' => 'edit', 'id' => $room->getId())) . "' title='Betreten'>Betreten</a></p>";
+// echo "</div>";
+// echo "</div>";
 ?>
 <!-- 
 <div class="row">
@@ -238,17 +228,4 @@ echo "</div>";
 	</div>
 </div>
  -->
-<!-- 
-<div class="row">
-	<div class="span12">
-		<h2>Beispiele Oberflächenkomponenten</h2>
-		<p>
-			<a class="btn btn-success" href="" target="_blank">Erfolgsbutton mit
-				Pfeilen &raquo;</a>
-		</p>
-		<p>
-			<a class="btn" href="">Normaler Button</a>
-		</p>
-	</div>
-</div>
--->
+
