@@ -24,6 +24,15 @@ echo "<div class='row'>";
 echo "<div class='span12'>";
 // system state
 echo "<h2>Debug</h2>";
+?>
+<h3>TODOs</h3>
+<p>Durchspielen des Datenbankdurchgriffs für das Room-Modul samt der CRUD-Optionen.</p>
+<p>Visualisierung des Systemzustand in Form einer Tabelle und in Form der Image-Map</p>
+<p>Änderung der Zeichenkette Sign In auf Abschicken - Frage: wie erweitere ich die ZfcUser-Login-Formularklasse im Ehome-Modul</p>
+<p>Änderung des Layouts - Frage: wie setze ich ein eigenes Layout für das Ehome-Modul?</p>
+<p>Problemlösung: man will nach dem Login auf die Seite des IndexControllers, man will dort aber den Link einen Link zu den Profileinstellungen des ZfcUser-Controllers.</p>
+<p>Check ob BackendController komplett entfernt werden kann.</p>
+<?php 
 echo "<h3>Raumübersicht</h3>";
 foreach($this->dbgrooms as $room){
 	echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . ";</p>";
@@ -42,7 +51,7 @@ echo "Angemeldet als " . $useremail;
 echo "</p>";
 echo "<p>";
 echo "<a class='btn' href=" . $this->url('zfcuser/logout') . ">Ausloggen</a> ";
-echo "<a class='btn' href=" . $this->url('zfcuser') . ">Profileinstellungen</a>";
+//echo "<a class='btn' href=" . $this->url('zfcuser') . ">Profileinstellungen</a>";
 echo "</p>";
 echo "</div>";
 echo "<div class='span4'>";
