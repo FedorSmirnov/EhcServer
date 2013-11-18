@@ -52,19 +52,18 @@ return array (
 										),
 								),
 						),
-// 						'zfcuser' => array (
-// 								'type' => 'literal',
-// 								'priority' => 1000,
-// 								'options' => array (
-// 										'route' => '/user',
-// 										'defaults' => array (
-// 												'controller' => 'Ehome\Controller\Backend',
-// 												'action' => 'index' 
-// 										) 
-// 								),
-// 								'may_terminate' => true,
-// 								'child_routes' => array (
-										
+						'zfcuser' => array (
+								'type' => 'literal',
+								'priority' => 1000,
+								'options' => array (
+										'route' => '/user',
+										'defaults' => array (
+												'controller' => 'Ehome\Controller\Index',
+												'action' => 'index' 
+										) 
+								),
+								'may_terminate' => true,
+								'child_routes' => array (
 // 										'login' => array (
 // 												'type' => 'Literal',
 // 												'options' => array (
@@ -75,8 +74,8 @@ return array (
 // 														) 
 // 												) 
 // 										) 
-// 								) 
-// 						) 
+								) 
+						) 
 				) 
 		) 
 );
