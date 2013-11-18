@@ -1,3 +1,6 @@
+<?php 
+use \Zend\Debug\Debug;
+?>
 <style type="text/css">
 td,th {
         padding: 10px;
@@ -15,20 +18,35 @@ td,th {
         width: 35px;
         height: 35px;
 }
-#light_kitchen {
+#light_kitchen_one {
         position: absolute;
         bottom: 35px;
-        right: 730px;
+        right: 740px;
 }
-#light_bathroom {
+#light_kitchen_two {
+        position: absolute;
+        bottom: 35px;
+        right: 720px;
+}
+#light_bathroom_one {
         position: absolute;
         bottom: 240px;
-        right: 760px;
+        right: 770px;
 }
-#light_living {
+#light_bathroom_two {
+        position: absolute;
+        bottom: 240px;
+        right: 750px;
+}
+#light_living_one {
         position: absolute;
         bottom: 150px;
-        right: 450px;
+        right: 460px;
+}
+#light_living_two {
+        position: absolute;
+        bottom: 150px;
+        right: 440px;
 }
 </style>
 <!-- DEBUGGING AREA -->
@@ -79,27 +97,58 @@ td,th {
 			<div id="background">
 				<img alt="apartment_picture" src='<?php echo $this->basePath();?>/img/praterstr3.jpg'>
 			</div>
-            <div id="light_kitchen" class="light">
-            	<img class="img_light" id="img_light_kitchen" alt="gluehbirne_aus" src=<?php
-if ($light_kitchen) {
+            <div id="light_kitchen_one" class="light">
+            	<img class="img_light" id="img_light_kitchen_one" alt="gluehbirne_aus" src=<?php
+if ($lightoneKitchen) {
+	//Debug::dump(lightoneKitchen);
 	echo $this->basePath() . '/img/gluehbirne_an.png';
 } else {
+	//Debug::dump(lightoneKitchen);
 	echo $this->basePath() . '/img/gluehbirne_aus.png';
 }
 				?> />
 			</div>
-            <div id="light_bathroom" class="light">
-            	<img class="img_light" id="img_light_bathroom" alt="gluehbirne_aus" src=<?php
-if ($light_bath) {
+			<div id="light_kitchen_two" class="light">
+            	<img class="img_light" id="img_light_kitchen_two" alt="gluehbirne_aus" src=<?php
+if ($lighttwoKitchen) {
+	//Debug::dump(lighttwoKitchen);
+	echo $this->basePath() . '/img/gluehbirne_an.png';
+} else {
+	//Debug::dump(lighttwoKitchen);
+	echo $this->basePath() . '/img/gluehbirne_aus.png';
+}
+				?> />
+			</div>
+            <div id="light_bathroom_one" class="light">
+            	<img class="img_light" id="img_light_bathroom_one" alt="gluehbirne_aus" src=<?php
+if ($lightoneBath) {
 	echo $this->basePath() . '/img/gluehbirne_an.png';
 } else {
     echo $this->basePath() . '/img/gluehbirne_aus.png';
 }
                 ?> />
             </div>
-            <div id="light_living" class="light">
-            	<img class="img_light" id="img_light_living" alt="gluehbirne_aus" src=<?php 
-if ($light_living) {
+            <div id="light_bathroom_two" class="light">
+            	<img class="img_light" id="img_light_bathroom_two" alt="gluehbirne_aus" src=<?php
+if ($lighttwoBath) {
+	echo $this->basePath() . '/img/gluehbirne_an.png';
+} else {
+    echo $this->basePath() . '/img/gluehbirne_aus.png';
+}
+                ?> />
+            </div>
+            <div id="light_living_one" class="light">
+            	<img class="img_light" id="img_light_living_one" alt="gluehbirne_aus" src=<?php 
+if ($lightoneLivingRoom) {
+	echo $this->basePath() . '/img/gluehbirne_an.png';
+} else {
+	echo $this->basePath() . '/img/gluehbirne_aus.png';
+}
+				?> />
+			</div><!-- // light-living -->
+			<div id="light_living_two" class="light">
+            	<img class="img_light" id="img_light_living_two" alt="gluehbirne_aus" src=<?php 
+if ($lighttwoLivingRoom) {
 	echo $this->basePath() . '/img/gluehbirne_an.png';
 } else {
 	echo $this->basePath() . '/img/gluehbirne_aus.png';
@@ -135,17 +184,33 @@ if ($light_living) {
 <div class='row'>
 	<div class='span12'>
 		<h2>Räume</h2>
+		<table border="1px">
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Luftfeuchtigkeit</th>
+			<th>LichtEins</th>
+			<th>LichtZwei</th>
+		</tr>
 		<?php foreach($this->rooms as $room){
-				echo "<p>";
-				echo $room->getId() . " | ";
-				echo $room->getName() . " | ";
-				echo $room->getHumidity() . " | ";
-				echo $room->getLightone() . " | ";
-				echo $room->getLighttwo() . " | ";
-				echo "<a href='" . $this->url('editroom', array('id' => $room->getId())) . "' title='Bearbeiten des Eintrags'>Bearbeiten</a>;";
-				echo "</p>";
+				echo "<tr>";
+				echo "<td>" . $room->getId() . "</td>";
+				echo "<td>" . $room->getName() . "</td>";
+				echo "<td>" . $room->getHumidity() . "</td>";
+				if ($room->getLightone() == 100){
+					echo "<td><span style='color:orange;'>AN</span></td>";
+				} else {
+					echo "<td><span style='color:green;'>AUS</span></td>";
+				}
+				if ($room->getLighttwo() == 100){
+					echo "<td><span style='color:orange;'>AN</span></td>";
+				} else {
+					echo "<td><span style='color:green;'>AUS</span></td>";
+				}
+				echo "<td><a href='" . $this->url('editroom', array('id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
+				echo "</tr>";
 		}
-		echo "<p>";
+		echo "</table>";
 		// TODO add Room
 		?>
 	</div>

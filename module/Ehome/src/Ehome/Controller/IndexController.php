@@ -25,19 +25,90 @@ class IndexController extends AbstractActionController {
 		$user = $this->zfcUserAuthentication()->getIdentity();
 		$email = $user->getEmail();
 		$rooms = $this->getRoomTable()->fetchAll();
-		// picture vars
-		$light_bath = true;
-		$light_kitchen = true;
-		$light_living = false;
-		
+		// lights
+		$lightoneBath = false;
+		$lighttwoBath = false;
+		$lightoneKitchen = false;
+		$lighttwoKitchen = false;
+		$lightoneLivingRoom = false;
+		$lighttwoLivingRoom = false;
+		$rooms->buffer();
+		foreach($rooms as $room){
+			$id = $room->getId();
+			if ($id == 3){
+				$lightoneBathValue = $room->getLightone();
+				$lighttwoBathValue = $room->getLighttwo();
+				if ($lightoneBathValue == 100){
+					$lightoneBath = true;
+				}
+				if ($lighttwoBathValue == 100){
+					$lighttwoBath = true;
+				}
+			} else if ($id == 1){ // kitchen
+				//Debug::dump($room);
+				$lightoneKitchenValue = $room->getLightone();
+				$lighttwoKitchenValue = $room->getLighttwo();
+				if ($lightoneKitchenValue == 100){
+					$lightoneKitchen = true;
+				}
+				if ($lighttwoKitchenValue == 100){
+					$lighttwoKitchen = true;
+				}
+			} else if ($id == 2){
+				$lightoneLivingRoomValue = $room->getLightone();
+				$lighttwoLivingRoomValue = $room->getLighttwo();
+				if ($lightoneLivingRoomValue == 100){
+					$lightoneLivingRoom = true;
+				}
+				if ($lighttwoLivingRoomValue == 100){
+					$lighttwoLivingRoom = true;
+				}
+			} else {}
+		}
 		return new ViewModel(
 				array(
 						'rooms' => $rooms,
 						'useremail' => $email,
-						'light_bath' => $light_bath,
-						'light_kitchen' => $light_kitchen,
-						'light_living' => $light_living
+						'lightoneBath' => $lightoneBath,
+						'lighttwoBath' => $lighttwoBath,
+						'lightoneKitchen' => $lightoneKitchen,
+						'lighttwoKitchen' => $lighttwoKitchen,
+						'lightoneLivingRoom' => $lightoneLivingRoom,
+						'lighttwoLivingRoom' => $lighttwoLivingRoom
 				));
+	}
+	
+	public function editroomAction() {
+		$roomForm = new RoomForm(); 
+		$roomId = (int) $this->params()->fromRoute('id', 0);
+		$message = "";
+		if ($this->getRequest()->isPost()){ // form was submitted
+			$roomForm->setData($this->getRequest()->getPost());
+			if ($roomForm->isValid()){
+				$formData = $roomForm->getData();
+				$room = $this->getRoomTable()->getRoom($roomId);
+				$room->setName($formData['name']);
+				$room->setHumidity($formData['humidity']);
+				$room->setLightone($formData['lightone']);
+				$room->setLighttwo($formData['lighttwo']);
+				$this->getRoomTable()->saveRoom($room);
+				return $this->redirect()->toRoute('home');
+			}
+		} else { // show form
+			$room = $this->getRoomTable()->getRoom($roomId);
+			$roomForm->bind($room);
+		}
+		return new ViewModel(array(
+			'form' => $roomForm,
+		));
+	}
+	
+	public function getRoomTable() {
+		if (!$this->roomTable) {
+			$sm = $this->getServiceLocator();
+			$this->roomTable = $sm->get('Ehome\Entity\RoomTable');
+		}
+		return $this->roomTable;
 	}
 	
 	// DEVELOPMENT AREA
@@ -54,12 +125,12 @@ class IndexController extends AbstractActionController {
 		// 		} else {
 		// 			throw new \Exception("No corresponding index view!");
 		// 		}
-		
+	
 		//Debug::dump($roomForm->getData());
 		//throw new \Exception("BP");
-		
+	
 		// return $this->redirect()->toRoute('home');
-		
+	
 		// logout and clear session
 		$session = new Container('session');
 		$session->getManager()->getStorage()->clear('session');
@@ -77,7 +148,7 @@ class IndexController extends AbstractActionController {
 		// 					'action' => 'index'
 		// 			) );
 		// 		}
-		
+	
 		// 		$form = new RoomForm();
 		// 		// Bind: tut die Daten aus dem Modell in die Form und am Ende des Vorgangs wieder zurück
 		// 		$form->bind($room);
@@ -95,38 +166,6 @@ class IndexController extends AbstractActionController {
 		// 				'id' => $id,
 		// 				'form' => $form
 		// 		);
-	}
-	
-	public function editroomAction() {
-		$roomForm = new RoomForm(); 
-		$roomId = (int) $this->params()->fromRoute('id', 0);
-		$message = "";
-		if ($this->getRequest()->isPost()){ // form was submitted
-			$roomForm->setData($this->getRequest()->getPost());
-			if ($roomForm->isValid()){
-				$formData = $roomForm->getData();
-				$room = $this->getRoomTable()->getRoom($roomId);
-				$room->setName($formData['name']);
-				$room->setHumidity($formData['humidity']);
-				$room->setLightone($formData['lightone']);
-				$room->setLighttwo($formData['lighttwo']);
-				$this->getRoomTable()->saveRoom($room);
-			}
-		} else { // show form
-			$room = $this->getRoomTable()->getRoom($roomId);
-			$roomForm->bind($room);
-		}
-		return new ViewModel(array(
-			'form' => $roomForm,
-		));
-	}
-	
-	public function getRoomTable() {
-		if (!$this->roomTable) {
-			$sm = $this->getServiceLocator();
-			$this->roomTable = $sm->get('Ehome\Entity\RoomTable');
-		}
-		return $this->roomTable;
 	}
 	
 }
