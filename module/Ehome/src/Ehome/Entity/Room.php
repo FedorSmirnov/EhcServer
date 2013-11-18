@@ -14,5 +14,9 @@ class Room {
 		$this->humidity = (! empty ( $data ['humidity'] )) ? $data ['humidity'] : null;
 	}
 	
+	public function getArrayCopy(){ // bind() expects method
+		return get_object_vars($this);
+	}
+	
 	// TODO write accessor methods
 }

@@ -11,7 +11,7 @@ class RoomForm extends Form {
 
 	public function __construct(){
 		parent::__construct('roomForm');
-		$this->setAttribute('action', 'edit');
+		//$this->setAttribute('action', 'editroom');
 		$this->setAttribute('method', 'post');
 		//$this->setInputFilter(new \Ehome\Filter\RoomFilter());
 		$this->add(array( // TODO hidden field mit id

@@ -24,8 +24,7 @@ return array (
 										'route' => '/login[/:action]',
 										'constraints' => array (			
 												'action' => '[a-zA-Z][a-zA-Z0-9-_]*' 
-										)
-										,
+										),
 										'defaults' => array (		
 												'controller' => 'Ehome\Controller\Backend',
 												'action' => 'index' 
@@ -43,9 +42,12 @@ return array (
 								),
 						),
 						'editroom' => array(
-								'type' => 'Zend\Mvc\Router\Http\Literal',
+								'type' => 'segment',
 								'options' => array(
-										'route'    => '/editroom',
+										'route'    => '/editroom[/:id]', // id optional
+										'constraints' => array (
+												'id' => '[0-9-_]*'
+										),
 										'defaults' => array(
 												'controller' => 'Ehome\Controller\Index',
 												'action'     => 'editroom',

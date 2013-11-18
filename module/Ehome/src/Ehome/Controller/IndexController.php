@@ -38,22 +38,28 @@ class IndexController extends AbstractActionController {
 	}
 	
 	public function editroomAction() {
-		//Debug::dump("4");
-		
 		$roomForm = new RoomForm(); 
+		//$roomId = ( int ) $this->params()->fromRoute('id', 0);
 		$message = "";
-		
-		if ($this->getRequest()->isPost()){
+		if ($this->getRequest()->isPost()){ // form was submitted
 			$roomForm->setData($this->getRequest()->getPost());
 			if ($roomForm->isValid()){
-				Debug::dump($roomForm->getData());
-// 				$roomId = 2;
-// 				$room = $this->getRoomTable()->getRoom($roomId);
-// 				$room->setName();
-// 				$room->setHumidity();
-// 				$this->getRoomTable()->saveRoom($room);
-				
+				//Debug::dump($roomForm->getData());
+				//throw new \Exception("BP");
+				$formData = $roomForm->getData();
+				$roomId = ( int ) $this->params()->fromRoute('id', 0);
+				$room = $this->getRoomTable()->getRoom($roomId);
+				$room->name = $formData['name']; // TODO use accessor methods
+				$room->humidity = $formData['humidity'];
+				$this->getRoomTable()->saveRoom($room);
+				// return $this->redirect()->toRoute('home');
 			}
+		} else { // show form
+			//$roomId = (int) $this->params()->fromRoute('id', 0);
+			$roomId = (int) $this->params()->fromRoute('id', 0);
+			$room = $this->getRoomTable()->getRoom($roomId);
+			//Debug::dump($room);
+			$roomForm->bind($room);
 		}
 		
 		return new ViewModel(array(

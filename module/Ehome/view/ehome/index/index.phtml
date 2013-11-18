@@ -32,6 +32,7 @@ echo "<h2>Debug</h2>";
 <p>Änderung des Layouts - Frage: wie setze ich ein eigenes Layout für das Ehome-Modul?</p>
 <p>Problemlösung: man will nach dem Login auf die Seite des IndexControllers, man will dort aber den Link einen Link zu den Profileinstellungen des ZfcUser-Controllers.</p>
 <p>Check ob BackendController komplett entfernt werden kann.</p>
+<p>EditRoom-View und Rolle der Datentypen heraus arbeiten.</p>
 <?php 
 echo "<h3>Raumübersicht</h3>";
 foreach($this->dbgrooms as $room){
@@ -72,7 +73,7 @@ foreach($this->rooms as $room){
 	// var_dump($room);
 	// TODO escapen
 	//echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . "; <a href='" . $this->url('home', array('action' => 'edit', 'id' => $room->id)) . "' title='Bearbeiten des Eintrags'>Bearbeiten</a>; <a href='" . $this->url('home', array('action' => 'delete', 'id' => $room->id)) . "' title='Loeschen des Eintrags'>Löschen</a>; <a href='" . $this->url('home', array('action' => 'edit', 'id' => $room->id)) . "' title='Betreten'>Betreten</a></p>";
-	echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . "; <a href='" . $this->url('editroom') . "' title='Betreten'>Betreten</a></p>";
+	echo "<p>" . $room->id . "; " . $room->name . "; " . $room->humidity . "; <a href='" . $this->url('editroom', array('id' => $room->id)) . "' title='Betreten'>Betreten</a></p>";
 }
 echo "</div>";
 echo "</div>";
