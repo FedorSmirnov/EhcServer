@@ -137,45 +137,19 @@ if ($light_living) {
 		<h2>Räume</h2>
 		<?php foreach($this->rooms as $room){
 				echo "<p>";
-				echo $room->getId() . "; ";
-				echo $room->getName() . "; ";
-				echo $room->getHumidity() . ";";
-				$id = "" . $room->getId(); // TODO url-Helper did not work like expected, check $this->url('home', array('action' => 'editroom', 'id' => $room->getId()))
-				echo "<a href='" . $this->url('home', array('action' => 'editroom', 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags'>Bearbeiten</a>;";
+				echo $room->getId() . " | ";
+				echo $room->getName() . " | ";
+				echo $room->getHumidity() . " | ";
+				echo $room->getLightone() . " | ";
+				echo $room->getLighttwo() . " | ";
+				echo "<a href='" . $this->url('editroom', array('id' => $room->getId())) . "' title='Bearbeiten des Eintrags'>Bearbeiten</a>;";
 				echo "</p>";
 		}
+		echo "<p>";
+		// TODO add Room
 		?>
 	</div>
 </div>
-<?php 
-// echo "<h3>Raumübersicht</h3>";
-// foreach($this->dbgrooms as $room){
-// 	echo "<p>" . $room->getId() . "; " . $room->getName() . "; " . $room->getHumidity() . ";</p>";
-// }
-// echo "</div>";
-// echo "</div>";
-// echo "<hr>";
-// echo "<hr>";
-// echo "<div class='row'>";
-// echo "<div class='span12'>";
-// CRUD rooms
-// echo "<h2>Räume</h2>";
-// //echo "<p><a href='" . $this->url('home', array('action' => 'add')) . "' title='Add room'>Raum hinzufügen</a></p>";
-// foreach($this->rooms as $room){
-// 	echo "<p>" . $room->getId() . "; " . $room->getName() . "; " . $room->getHumidity() . "; <a href='" . $this->url('home', array('action' => 'edit', 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags'>Bearbeiten</a>; <a href='" . $this->url('home', array('action' => 'delete', 'id' => $room->getId())) . "' title='Loeschen des Eintrags'>Löschen</a>; <a href='" . $this->url('home', array('action' => 'edit', 'id' => $room->getId())) . "' title='Betreten'>Betreten</a></p>";
-// echo "</div>";
-// echo "</div>";
-?>
-<!-- 
-<div class="row">
-	<div class="span12">
-		<p style="text-align: center;">
-			<img src="http://ehcserver.jochen-bauer.net/img/ehome-center-header.jpg" alt="Bild Header E|Home-Center" />
-		</p>
-	</div>
-</div>
-<hr>
- -->
 
 <!-- 
 <hr>

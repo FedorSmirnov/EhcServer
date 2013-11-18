@@ -6,12 +6,16 @@ class Room {
 	
 	private $id;
 	private $name;
+	private $lightone; // value from 0 to 100 percent
+	private $lighttwo;
 	private $humidity;
 
 	public function exchangeArray($data) {
 		$this->id = (! empty ( $data ['id'] )) ? $data ['id'] : null;
 		$this->name = (! empty ( $data ['name'] )) ? $data ['name'] : null;
 		$this->humidity = (! empty ( $data ['humidity'] )) ? $data ['humidity'] : null;
+		$this->lightone = (! empty ( $data ['lightone'] )) ? $data ['lightone'] : null;
+		$this->lighttwo = (! empty ( $data ['lighttwo'] )) ? $data ['lighttwo'] : null;
 	}
 	
 	public function getArrayCopy(){
@@ -40,5 +44,21 @@ class Room {
 	
 	public function setHumidity($humidity){
 		$this->humidity = $humidity;
+	}
+	
+	public function getLightone(){
+		return $this->lightone;
+	}
+	
+	public function setLightone($value){
+		$this->lightone = $value;
+	}
+	
+	public function getLighttwo(){
+		return $this->lighttwo;
+	}
+	
+	public function setLighttwo($value){
+		$this->lighttwo = $value;
 	}
 }

@@ -17,7 +17,8 @@ class RoomForm extends Form {
 				'name' => 'name',
 				'attributes' => array(
 						'type' => 'text',
-						'id' => 'name'),
+						'id' => 'name',
+				),
 				'options' => array('label' => 'Name des Raumes')
 		));
 		$this->add(array(
@@ -26,6 +27,20 @@ class RoomForm extends Form {
 						'type' => 'text',
 						'id' => 'humidity'),
 				'options' => array('label' => 'Luftfeuchtigkeit')
+		));
+		$this->add(array(
+				'name' => 'lightone',
+				'attributes' => array(
+						'type' => 'text',
+						'id' => 'lightone'),
+				'options' => array('label' => 'Lampe Eins')
+		));
+		$this->add(array(
+				'name' => 'lighttwo',
+				'attributes' => array(
+						'type' => 'text',
+						'id' => 'lighttwo'),
+				'options' => array('label' => 'Lampe Zwei')
 		));
 		$this->add(array( // submit;
 				'name' => 'submit',

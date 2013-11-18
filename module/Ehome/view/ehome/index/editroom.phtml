@@ -10,6 +10,10 @@ $form->prepare();
         <dd><?php echo $this->formInput($form->get('name')) ?></dd>
         <dt><?php echo $this->formLabel($form->get('humidity')) ?></dt>
         <dd><?php echo $this->formInput($form->get('humidity')) ?></dd>
+        <dt><?php echo $this->formLabel($form->get('lightone')) ?></dt>
+        <dd><?php echo $this->formInput($form->get('lightone')) ?></dd>
+        <dt><?php echo $this->formLabel($form->get('lighttwo')) ?></dt>
+        <dd><?php echo $this->formInput($form->get('lighttwo')) ?></dd>
         <?php if ($this->redirect): ?>
             <input type="hidden" name="redirect" value="<?php echo $this->escapeHtml($this->redirect) ?>" />
         <?php endif ?>

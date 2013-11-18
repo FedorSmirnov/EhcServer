@@ -100,7 +100,6 @@ class IndexController extends AbstractActionController {
 	public function editroomAction() {
 		$roomForm = new RoomForm(); 
 		$roomId = (int) $this->params()->fromRoute('id', 0);
-		Debug::dump($roomId);
 		$message = "";
 		if ($this->getRequest()->isPost()){ // form was submitted
 			$roomForm->setData($this->getRequest()->getPost());
@@ -109,6 +108,8 @@ class IndexController extends AbstractActionController {
 				$room = $this->getRoomTable()->getRoom($roomId);
 				$room->setName($formData['name']);
 				$room->setHumidity($formData['humidity']);
+				$room->setLightone($formData['lightone']);
+				$room->setLighttwo($formData['lighttwo']);
 				$this->getRoomTable()->saveRoom($room);
 			}
 		} else { // show form
