@@ -147,7 +147,9 @@ echo "Angemeldet als " . $useremail;
 echo "</p>";
 echo "<p>";
 echo "<a class='btn' href=" . $this->url('zfcuser/logout') . ">Ausloggen</a> ";
-//echo "<a class='btn' href=" . $this->url('zfcuser') . ">Profileinstellungen</a>";
+echo "<a class='btn' href=" . $this->url('zfcuser/changeemail') . ">E-Mail ändern</a>";
+echo "<a class='btn' href=" . $this->url('zfcuser/changepassword') .">Passwort ändern</a>";
+echo "<a class='btn' href=" . $this->url('zfcuser') . ">Profileinstellungen</a>";
 echo "</p>";
 echo "</div>";
 echo "<div class='span4'>";
@@ -173,3 +175,80 @@ foreach($this->rooms as $room){
 echo "</div>";
 echo "</div>";
 ?>
+<!-- 
+<div class="row">
+	<div class="span12">
+		<p style="text-align: center;">
+			<img src="http://ehcserver.jochen-bauer.net/img/ehome-center-header.jpg" alt="Bild Header E|Home-Center" />
+		</p>
+	</div>
+</div>
+<hr>
+ -->
+
+<!-- 
+<hr>
+<div class="row">
+	<div class="span12">
+		<h2>Systemnachrichten</h2>
+-->
+<?php 
+// foreach($logMessages as $logMessage){
+// 	echo "<p>" . $logMessage . "</p>";
+// }
+?>
+<!-- 
+ 		<p>
+			<a class="btn" href="<?php // echo $this->url('clearlog'); ?>">Systemnachrichten löschen</a>
+		</p>
+
+	</div>
+</div>
+-->
+<!-- 
+<div class="row">
+	<div class="span12">
+		<h2>Haussystem</h2>
+		<p>
+			Energiefüllstand Solaranlage; Anzahl der Benutzer; Datenzugriffe extern;
+		</p>
+		<p>
+			<a class="btn" href="">Betreten</a>
+		</p>
+	</div>
+</div>
+-->
+<!-- 
+<div class="row">
+	<div class="span12">
+		<h2>Gemeinschaftsmodul</h2>
+		<p>Organisation der Gartenbepflanzung</p>
+		<p>
+			<a class="btn" href="">Betreten</a>
+		</p>
+	</div>
+</div>
+-->
+<!-- 
+<div class="row">
+	<div class="span12">
+		<h2>Hilfebereich</h2>
+		<h3>Anwender-Geschichten</h3>
+		<p>Die Temperatur um ein Grad erhöhen.</p>
+	</div>
+</div>
+ -->
+<!-- 
+<div class="row">
+	<div class="span12">
+		<h2>Beispiele Oberflächenkomponenten</h2>
+		<p>
+			<a class="btn btn-success" href="" target="_blank">Erfolgsbutton mit
+				Pfeilen &raquo;</a>
+		</p>
+		<p>
+			<a class="btn" href="">Normaler Button</a>
+		</p>
+	</div>
+</div>
+-->

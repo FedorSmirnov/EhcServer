@@ -61,46 +61,6 @@ class IndexController extends AbstractActionController {
 		$session->getManager()->getStorage()->clear('session');
 		$this->redirect()->toRoute('zfcuser/logout');
 	}
-	public function functionalAction(){
-		throw new \Exception("No corresponding index view!");
-		// check if logged in
-		if (!$this->zfcUserAuthentication()->hasIdentity()){ // check for valid session
-			return $this->redirect ()->toRoute(static::ROUTE_LOGIN);
-		}
-		// user
-		$user = $this->zfcUserAuthentication()->getIdentity();
-		$email = $user->getEmail();
-		// CRUD rooms
-		// get room entities
-		$rooms = $this->getRoomTable()->fetchAll();
-		$dbgrooms = $this->getRoomTable()->fetchAll();
-		return new ViewModel(
-				array(
-						'rooms' => $rooms,
-						'dbgrooms' => $dbgrooms,
-						'useremail' => $email
-				));
-	}
-	
-	public function roomAction(){
-		// check if logged in
-		if (!$this->zfcUserAuthentication()->hasIdentity()){ // check for valid session
-			return $this->redirect ()->toRoute(static::ROUTE_LOGIN);
-		}
-		// user
-		$user = $this->zfcUserAuthentication()->getIdentity();
-		$email = $user->getEmail();
-		// CRUD rooms
-		// get room entities
-		$rooms = $this->getRoomTable()->fetchAll();
-		$dbgrooms = $this->getRoomTable()->fetchAll();
-		return new ViewModel(
-				array(
-						'rooms' => $rooms,
-						'dbgrooms' => $dbgrooms,
-						'useremail' => $email
-				));
-	}
 	
 	public function editroomAction() {
 		$roomForm = new RoomForm(); 
