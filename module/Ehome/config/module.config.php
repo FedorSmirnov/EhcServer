@@ -5,7 +5,7 @@ namespace Ehome;
 return array (
 		'controllers' => array (
 				'invokables' => array (
-						'Ehome\Controller\Backend' => 'Ehome\Controller\BackendController',
+						'Ehome\Controller\JobaUser' => 'Ehome\Controller\JobaUserController',
 						'Ehome\Controller\Index' => 'Ehome\Controller\IndexController' 
 				)
 				 
@@ -18,23 +18,10 @@ return array (
 		),
 		'router' => array (
 				'routes' => array (	
-						'login' => array (		
-								'type' => 'segment',
-								'options' => array (		
-										'route' => '/login[/:action]',
-										'constraints' => array (			
-												'action' => '[a-zA-Z][a-zA-Z0-9-_]*' 
-										),
-										'defaults' => array (		
-												'controller' => 'Ehome\Controller\Backend',
-												'action' => 'index' 
-										) 
-								) 
-						),
 						'home' => array(
-								'type' => 'Zend\Mvc\Router\Http\Literal',
+								'type' => 'Zend\Mvc\Router\Http\Segment',
 								'options' => array(
-										'route'    => '/',
+										'route'    => '/[:action]',
 										'defaults' => array(
 												'controller' => 'Ehome\Controller\Index',
 												'action'     => 'index',
@@ -64,20 +51,20 @@ return array (
 												'action' => 'index' 
 										) 
 								),
-//								'may_terminate' => true,
-//								'child_routes' => array (
-// 										'login' => array (
-// 												'type' => 'Literal',
-// 												'options' => array (
-// 														'route' => '/login',
-// 														'defaults' => array (
-// 																'controller' => 'Ehome\Controller\Backend',
-// 																'action' => 'login' 
-// 														) 
-// 												) 
-// 										) 
-//								) 
-						) 
+								'may_terminate' => true,
+								'child_routes' => array (
+										'login' => array (
+												'type' => 'Literal',
+												'options' => array (
+														'route' => '/login',
+														'defaults' => array (
+																'controller' => 'Ehome\Controller\JobaUser',
+																'action' => 'login' 
+														) 
+												) 
+										) 
+								) 
+						),
 				) 
 		) 
 );
