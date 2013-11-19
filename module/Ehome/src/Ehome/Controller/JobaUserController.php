@@ -9,6 +9,7 @@ use Zend\Debug\Debug;
 
 class JobaUserController extends UserController { // from ZfcUser, extends AbstractActionController;
 	
+	const ROUTE_LOGIN = 'zfcuser/login';
     const CONTROLLER_NAME    = 'zfcuser';
 	
 	public function loginAction() {
