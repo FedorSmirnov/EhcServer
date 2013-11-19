@@ -6,7 +6,6 @@
 jQuery(document).ready(function() {
         var isiPad = navigator.userAgent.match(/iPad/i) != null;
         if (isiPad){
-                //alert('ipad');
                 // move all lights more to the right;
                 jQuery('#light_kitchen_one').css('right','600px');
                 jQuery('#light_kitchen_two').css('right','580px');
@@ -78,9 +77,9 @@ td,th {
         <div class='span6'>
                 <h3>TODOs</h3>
                 <p>url helper problem, siehe http://stackoverflow.com/questions/20056698/zend-framework-2-url-helper</p>
-                <p>Änderung des Layouts - Frage: wie setze ich ein eigenes Layout für das Ehome-Modul?</p>
+                <p>ï¿½nderung des Layouts - Frage: wie setze ich ein eigenes Layout fï¿½r das Ehome-Modul?</p>
                 <p>Auflisten der Profileinstellungen macht Probleme!</p>
-                <p>Problemlösung: man will nach dem Login auf die Seite des IndexControllers, man will dort aber den Link einen Link zu den Profileinstellungen des ZfcUser-Controllers.</p>
+                <p>Problemlï¿½sung: man will nach dem Login auf die Seite des IndexControllers, man will dort aber den Link einen Link zu den Profileinstellungen des ZfcUser-Controllers.</p>
                 <p>EditRoom-View und Rolle der Datentypen heraus arbeiten.</p>
         </div>
         <div class='span3'>
@@ -114,9 +113,9 @@ td,th {
     <h1><?php echo sprintf("Willkommen!", '<span class="zf-green">', '</span>') ?></h1>
     <p>Mustermann, Musterweg 13, 12345 Musterstadt</p>
     <div id="container">
-                        <div id="background">
-                                <img alt="apartment_picture" src='<?php echo $this->basePath();?>/img/praterstr3.jpg'>
-                        </div>
+    	<div id="background">
+			<img alt="apartment_picture" src='<?php echo $this->basePath();?>/img/praterstr3.jpg'>
+        </div>
             <div id="light_kitchen_one" class="light">
                     <img class="img_light" id="img_light_kitchen_one" alt="gluehbirne_aus" src=<?php
 if ($lightoneKitchen) {
@@ -178,63 +177,63 @@ if ($lighttwoLivingRoom) {
                 </div><!-- // div container -->
 </div><!-- // hero-unit -->
 <div class='row'>
-        <div class='span8'>
-                <h2>Cockpit</h2>
-                <div style='float: left; padding-right: 16px;'><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()); ?>
-                </div>
-                <p>
-                        Angemeldet als <?php echo $useremail; ?>
-                </p>
-                <p>
-                        <a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
-                        <!-- 
-                        <a class='btn' href="<?php //echo $this->url('zfcuser/changeemail'); ?>">E-Mail ändern</a> 
-                        <a class='btn' href="<?php //echo $this->url('zfcuser/changepassword'); ?>">Passwort ändern</a>
-                        -->
-                </p>
-        </div>
-        <div class='span4'>
-                <h2>Hilfe</h2>
-                <p>
-                        Wir helfen Ihnen gerne:<br>
-                        support@example.org und 01234-12345
-                </p>
-        </div>
+	<div class='span8'>
+    <h2>Cockpit</h2>
+    <div style='float: left; padding-right: 16px;'><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()); ?>
+    </div>
+    <p>
+    	Angemeldet als <?php echo $useremail; ?>
+    </p>
+    <p>
+    	<a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
+        <!-- 
+        <a class='btn' href="<?php //echo $this->url('zfcuser/changeemail'); ?>">E-Mail ï¿½ndern</a> 
+        <a class='btn' href="<?php //echo $this->url('zfcuser/changepassword'); ?>">Passwort ï¿½ndern</a>
+        -->
+	</p>
+    </div>
+    <div class='span4'>
+    	<h2>Hilfe</h2>
+        <p>
+        	Wir helfen Ihnen gerne:<br>
+        	support@example.org und 01234-12345
+        </p>
+	</div>
 </div>
 <div class='row'>
-        <div class='span12'>
-                <h2>Räume room</h2>
-                <table border="1px">
-                <tr>
-                        <!-- <th>ID</th> -->
-                        <th>Name</th>
-                        <th>Luftfeuchtigkeit</th>
-                        <th>LichtEins</th>
-                        <th>LichtZwei</th>
-                        <th>Aktion</th>
-                </tr>
-                <?php foreach($this->rooms as $room){
-                                echo "<tr>";
-                                //echo "<td>" . $room->getId() . "</td>";
-                                echo "<td>" . $room->getName() . "</td>";
-                                echo "<td>" . $room->getHumidity() . "</td>";
-                                if ($room->getLightone() == 100){
-                                        echo "<td><span style='color:orange;'>AN</span></td>";
-                                } else {
-                                        echo "<td><span style='color:green;'>AUS</span></td>";
-                                }
-                                if ($room->getLighttwo() == 100){
-                                        echo "<td><span style='color:orange;'>AN</span></td>";
-                                } else {
-                                        echo "<td><span style='color:green;'>AUS</span></td>";
-                                }
-                                echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
-                                echo "</tr>";
-                }
-                echo "</table>";
-                // TODO add Room
-                ?>
-        </div>
+	<div class='span12'>
+    	<h2>RÃ¤ume</h2>
+        <table border="1px">
+        	<tr>
+            <!-- <th>ID</th> -->
+            	<th>Name</th>
+            	<th>Luftfeuchtigkeit</th>
+            	<th>LichtEins</th>
+            	<th>LichtZwei</th>
+            	<th>Aktion</th>
+            </tr>
+<?php foreach($this->rooms as $room){
+		echo "<tr>";
+        //echo "<td>" . $room->getId() . "</td>";
+        echo "<td>" . $room->getName() . "</td>";
+        echo "<td>" . $room->getHumidity() . "</td>";
+        if ($room->getLightone() == 100){
+        	echo "<td><span style='color:orange;'>AN</span></td>";
+        } else {
+        	echo "<td><span style='color:green;'>AUS</span></td>";
+        }
+        if ($room->getLighttwo() == 100){
+        	echo "<td><span style='color:orange;'>AN</span></td>";
+        } else {
+        	echo "<td><span style='color:green;'>AUS</span></td>";
+        }
+        echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
+        echo "</tr>";
+	}
+	echo "</table>";
+    // TODO add Room
+?>
+	</div>
 </div>
 
 <!-- 
@@ -250,7 +249,7 @@ if ($lighttwoLivingRoom) {
 ?>
 <!-- 
                  <p>
-                        <a class="btn" href="<?php // echo $this->url('clearlog'); ?>">Systemnachrichten löschen</a>
+                        <a class="btn" href="<?php // echo $this->url('clearlog'); ?>">Systemnachrichten lï¿½schen</a>
                 </p>
 
         </div>
@@ -261,7 +260,7 @@ if ($lighttwoLivingRoom) {
         <div class="span12">
                 <h2>Haussystem</h2>
                 <p>
-                        Energiefüllstand Solaranlage; Anzahl der Benutzer; Datenzugriffe extern;
+                        Energiefï¿½llstand Solaranlage; Anzahl der Benutzer; Datenzugriffe extern;
                 </p>
                 <p>
                         <a class="btn" href="">Betreten</a>
@@ -280,12 +279,3 @@ if ($lighttwoLivingRoom) {
         </div>
 </div>
 -->
-<!-- 
-<div class="row">
-        <div class="span12">
-                <h2>Hilfebereich</h2>
-                <h3>Anwender-Geschichten</h3>
-                <p>Die Temperatur um ein Grad erhöhen.</p>
-        </div>
-</div>
- -->

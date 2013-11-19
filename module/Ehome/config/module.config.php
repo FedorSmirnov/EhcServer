@@ -18,16 +18,6 @@ return array (
 		),
 		'router' => array (
 				'routes' => array (	
-// 						'home' => array(
-// 								'type' => 'Zend\Mvc\Router\Http\Segment',
-// 								'options' => array(
-// 										'route'    => '/[:action]',
-// 										'defaults' => array(
-// 												'controller' => 'Ehome\Controller\Index',
-// 												'action'     => 'index',
-// 										),
-// 								),
-// 						),
 						'home' => array(
 								'type' => 'Zend\Mvc\Router\Http\Segment',
 								'options' => array(
@@ -41,20 +31,6 @@ return array (
 										),
 								),
 						),
-// 						'editroom' => array(
-// 								'type' => 'segment',
-// 								'options' => array(
-// 										'route'    => '/[:action][/:id]', // id optional
-// 										'constraints' => array (
-// 												'id' => '[0-9-_]*'
-// 										),
-// 										'defaults' => array(
-// 												'controller' => 'Ehome\Controller\Index',
-// 												//'action'     => 'editroom',
-// 												'action'     => 'index',
-// 										),
-// 								),
-// 						),
 						'zfcuser' => array (
 								'type' => 'literal',
 								'priority' => 1000,

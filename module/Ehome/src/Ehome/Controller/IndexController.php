@@ -12,34 +12,33 @@ use Zend\View\Model\ViewModel;
 use Ehome\Form\RoomForm;
 
 class IndexController extends AbstractActionController {
+	
 	protected $roomTable;
 	const ROUTE_LOGIN = 'zfcuser/login';
+	
 	public function indexAction(){
-		// check if logged in
 		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
 			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
 		}
-		// here come the two branches for the functional and the roombased views
-		$session = new Container ( "session" );
+		// pick corresponding view 
+		$session = new Container("session");
 		$viewType = $session->viewType;
-		if ($viewType == "functional") {
-			return $this->redirect ()->toRoute ( 'home', array (
-					'action' => 'indexfunctional' 
+		if ($viewType == "functional"){
+			return $this->redirect()->toRoute('home', array(
+				'action' => 'indexfunctional' 
 			));
-		} else if ($viewType == "room") {
-			return $this->redirect ()->toRoute ( 'home', array (
-					'action' => 'indexroom'
+		} else if ($viewType == "room"){
+			return $this->redirect ()->toRoute('home', array(
+				'action' => 'indexroom'
 			));
 		} else {
-			throw new \Exception ( "Problem with the session settings." );
+			throw new \Exception("Problem with the session settings.");
 		}
 		
-		// old one branch situation
-		// user
+		// scenario: submit button
 // 		$user = $this->zfcUserAuthentication()->getIdentity();
 // 		$email = $user->getEmail();
 // 		$rooms = $this->getRoomTable()->fetchAll();
-// 		// lights
 // 		$lightoneBath = false;
 // 		$lighttwoBath = false;
 // 		$lightoneKitchen = false;
@@ -92,28 +91,23 @@ class IndexController extends AbstractActionController {
 // 				));
 	}
 	
-	public function indexroomAction() {
-	
-		// check if is logged in
+	public function indexroomAction(){
 		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
 			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
 		}
-	
-		// user
 		$user = $this->zfcUserAuthentication ()->getIdentity ();
 		$email = $user->getEmail ();
 		$rooms = $this->getRoomTable ()->fetchAll ();
-		// lights
 		$lightoneBath = false;
 		$lighttwoBath = false;
 		$lightoneKitchen = false;
 		$lighttwoKitchen = false;
 		$lightoneLivingRoom = false;
 		$lighttwoLivingRoom = false;
-		$rooms->buffer ();
-		foreach ( $rooms as $room ) {
+		$rooms->buffer();
+		foreach ($rooms as $room){
 			$id = $room->getId ();
-			if ($id == 3) {
+			if ($id == 3){
 				$lightoneBathValue = $room->getLightone ();
 				$lighttwoBathValue = $room->getLighttwo ();
 				if ($lightoneBathValue == 100) {
@@ -123,7 +117,6 @@ class IndexController extends AbstractActionController {
 					$lighttwoBath = true;
 				}
 			} else if ($id == 1) { // kitchen
-				// Debug::dump($room);
 				$lightoneKitchenValue = $room->getLightone ();
 				$lighttwoKitchenValue = $room->getLighttwo ();
 				if ($lightoneKitchenValue == 100) {
@@ -155,12 +148,10 @@ class IndexController extends AbstractActionController {
 				'lighttwoLivingRoom' => $lighttwoLivingRoom
 		) );
 	}
-	public function indexfunctionalAction() {
-		// check if is logged in
+	public function indexfunctionalAction(){
 		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
 			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
 		}
-	
 		return new ViewModel ();
 	}
 	
@@ -258,8 +249,5 @@ class IndexController extends AbstractActionController {
 		// 				'form' => $form
 		// 		);
 	}
-	
 }
-
-
 ?>
