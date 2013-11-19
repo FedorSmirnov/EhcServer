@@ -186,7 +186,8 @@ if ($lighttwoLivingRoom) {
 			Angemeldet als <?php echo $useremail; ?>
 		</p>
 		<p>
-			<a class='btn' href="<?php echo $this->url('zfcuser/logout'); ?>">Ausloggen</a>
+			<!-- <a class='btn' href="<?php //echo $this->url('zfcuser/logout'); ?>">Ausloggen</a> -->
+			<a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
 			<!-- 
 			<a class='btn' href="<?php //echo $this->url('zfcuser/changeemail'); ?>">E-Mail ändern</a> 
 			<a class='btn' href="<?php //echo $this->url('zfcuser/changepassword'); ?>">Passwort ändern</a>
@@ -228,7 +229,8 @@ if ($lighttwoLivingRoom) {
 				} else {
 					echo "<td><span style='color:green;'>AUS</span></td>";
 				}
-				echo "<td><a href='" . $this->url('editroom', array('id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
+				//echo "<td><a href='" . $this->url('editroom', array('id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
+				echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
 				echo "</tr>";
 		}
 		echo "</table>";
