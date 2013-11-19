@@ -12,19 +12,97 @@ use Zend\View\Model\ViewModel;
 use Ehome\Form\RoomForm;
 
 class IndexController extends AbstractActionController {
-	
 	protected $roomTable;
 	const ROUTE_LOGIN = 'zfcuser/login';
-	
 	public function indexAction(){
-		// check if logged in 
-		if (!$this->zfcUserAuthentication()->hasIdentity()){ // check for valid session
-			return $this->redirect ()->toRoute(static::ROUTE_LOGIN);
+		// check if logged in
+		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
+			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
 		}
+		// here come the two branches for the functional and the roombased views
+		$session = new Container ( "session" );
+		$viewType = $session->viewType;
+		if ($viewType == "functional") {
+			return $this->redirect ()->toRoute ( 'home', array (
+					'action' => 'indexfunctional' 
+			));
+		} else if ($viewType == "room") {
+			return $this->redirect ()->toRoute ( 'home', array (
+					'action' => 'indexroom'
+			));
+		} else {
+			throw new \Exception ( "Problem with the session settings." );
+		}
+		
+		// old one branch situation
 		// user
-		$user = $this->zfcUserAuthentication()->getIdentity();
-		$email = $user->getEmail();
-		$rooms = $this->getRoomTable()->fetchAll();
+// 		$user = $this->zfcUserAuthentication()->getIdentity();
+// 		$email = $user->getEmail();
+// 		$rooms = $this->getRoomTable()->fetchAll();
+// 		// lights
+// 		$lightoneBath = false;
+// 		$lighttwoBath = false;
+// 		$lightoneKitchen = false;
+// 		$lighttwoKitchen = false;
+// 		$lightoneLivingRoom = false;
+// 		$lighttwoLivingRoom = false;
+// 		$rooms->buffer();
+// 		foreach($rooms as $room){
+// 			$id = $room->getId();
+// 			if ($id == 3){
+// 				$lightoneBathValue = $room->getLightone();
+// 				$lighttwoBathValue = $room->getLighttwo();
+// 				if ($lightoneBathValue == 100){
+// 					$lightoneBath = true;
+// 				}
+// 				if ($lighttwoBathValue == 100){
+// 					$lighttwoBath = true;
+// 				}
+// 			} else if ($id == 1){ // kitchen
+// 				//Debug::dump($room);
+// 				$lightoneKitchenValue = $room->getLightone();
+// 				$lighttwoKitchenValue = $room->getLighttwo();
+// 				if ($lightoneKitchenValue == 100){
+// 					$lightoneKitchen = true;
+// 				}
+// 				if ($lighttwoKitchenValue == 100){
+// 					$lighttwoKitchen = true;
+// 				}
+// 			} else if ($id == 2){
+// 				$lightoneLivingRoomValue = $room->getLightone();
+// 				$lighttwoLivingRoomValue = $room->getLighttwo();
+// 				if ($lightoneLivingRoomValue == 100){
+// 					$lightoneLivingRoom = true;
+// 				}
+// 				if ($lighttwoLivingRoomValue == 100){
+// 					$lighttwoLivingRoom = true;
+// 				}
+// 			} else {}
+// 		}
+// 		return new ViewModel(
+// 				array(
+// 						'rooms' => $rooms,
+// 						'useremail' => $email,
+// 						'lightoneBath' => $lightoneBath,
+// 						'lighttwoBath' => $lighttwoBath,
+// 						'lightoneKitchen' => $lightoneKitchen,
+// 						'lighttwoKitchen' => $lighttwoKitchen,
+// 						'lightoneLivingRoom' => $lightoneLivingRoom,
+// 						'lighttwoLivingRoom' => $lighttwoLivingRoom
+// 				));
+	}
+	
+	public function indexroomAction() {
+	
+		// check if is logged in
+		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
+			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
+		}
+	
+		// user
+		$user = $this->zfcUserAuthentication ()->getIdentity ();
+		$email = $user->getEmail ();
+		$rooms = $this->getRoomTable ()->fetchAll ();
 		// lights
 		$lightoneBath = false;
 		$lighttwoBath = false;
@@ -32,50 +110,58 @@ class IndexController extends AbstractActionController {
 		$lighttwoKitchen = false;
 		$lightoneLivingRoom = false;
 		$lighttwoLivingRoom = false;
-		$rooms->buffer();
-		foreach($rooms as $room){
-			$id = $room->getId();
-			if ($id == 3){
-				$lightoneBathValue = $room->getLightone();
-				$lighttwoBathValue = $room->getLighttwo();
-				if ($lightoneBathValue == 100){
+		$rooms->buffer ();
+		foreach ( $rooms as $room ) {
+			$id = $room->getId ();
+			if ($id == 3) {
+				$lightoneBathValue = $room->getLightone ();
+				$lighttwoBathValue = $room->getLighttwo ();
+				if ($lightoneBathValue == 100) {
 					$lightoneBath = true;
 				}
-				if ($lighttwoBathValue == 100){
+				if ($lighttwoBathValue == 100) {
 					$lighttwoBath = true;
 				}
-			} else if ($id == 1){ // kitchen
-				//Debug::dump($room);
-				$lightoneKitchenValue = $room->getLightone();
-				$lighttwoKitchenValue = $room->getLighttwo();
-				if ($lightoneKitchenValue == 100){
+			} else if ($id == 1) { // kitchen
+				// Debug::dump($room);
+				$lightoneKitchenValue = $room->getLightone ();
+				$lighttwoKitchenValue = $room->getLighttwo ();
+				if ($lightoneKitchenValue == 100) {
 					$lightoneKitchen = true;
 				}
-				if ($lighttwoKitchenValue == 100){
+				if ($lighttwoKitchenValue == 100) {
 					$lighttwoKitchen = true;
 				}
-			} else if ($id == 2){
-				$lightoneLivingRoomValue = $room->getLightone();
-				$lighttwoLivingRoomValue = $room->getLighttwo();
-				if ($lightoneLivingRoomValue == 100){
+			} else if ($id == 2) {
+				$lightoneLivingRoomValue = $room->getLightone ();
+				$lighttwoLivingRoomValue = $room->getLighttwo ();
+				if ($lightoneLivingRoomValue == 100) {
 					$lightoneLivingRoom = true;
 				}
-				if ($lighttwoLivingRoomValue == 100){
+				if ($lighttwoLivingRoomValue == 100) {
 					$lighttwoLivingRoom = true;
 				}
-			} else {}
+			} else {
+			}
 		}
-		return new ViewModel(
-				array(
-						'rooms' => $rooms,
-						'useremail' => $email,
-						'lightoneBath' => $lightoneBath,
-						'lighttwoBath' => $lighttwoBath,
-						'lightoneKitchen' => $lightoneKitchen,
-						'lighttwoKitchen' => $lighttwoKitchen,
-						'lightoneLivingRoom' => $lightoneLivingRoom,
-						'lighttwoLivingRoom' => $lighttwoLivingRoom
-				));
+		return new ViewModel ( array (
+				'rooms' => $rooms,
+				'useremail' => $email,
+				'lightoneBath' => $lightoneBath,
+				'lighttwoBath' => $lighttwoBath,
+				'lightoneKitchen' => $lightoneKitchen,
+				'lighttwoKitchen' => $lighttwoKitchen,
+				'lightoneLivingRoom' => $lightoneLivingRoom,
+				'lighttwoLivingRoom' => $lighttwoLivingRoom
+		) );
+	}
+	public function indexfunctionalAction() {
+		// check if is logged in
+		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
+			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
+		}
+	
+		return new ViewModel ();
 	}
 	
 	public function editroomAction() {
@@ -101,6 +187,11 @@ class IndexController extends AbstractActionController {
 		return new ViewModel(array(
 			'form' => $roomForm,
 		));
+	}
+	public function logoutAction() {
+		$session = new Container ( 'session' );
+		$session->getManager ()->getStorage ()->clear ( 'session' );
+		return $this->redirect ()->toRoute ( 'zfcuser/logout' );
 	}
 	
 	public function getRoomTable() {

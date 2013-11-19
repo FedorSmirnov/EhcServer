@@ -1,0 +1,30 @@
+<!-- Startseite -->
+<div class="row">
+        <div class="span12">
+                <p style="text-align: center;">
+                        <img src='<?php echo $this->basePath(); ?>/img/ehome-center-logo.png' alt="Bild Header E|Home-Center" />
+                </p>
+        </div>
+</div>
+<div class="hero-unit">
+    <h1><?php echo sprintf("Willkommen!", '<span class="zf-green">', '</span>') ?></h1>
+    <p>Mustermann, Musterweg 13, 12345 Musterstadt</p>
+    
+</div><!-- // hero-unit -->
+<div class='row'>
+        <div class='span8'>
+                <h2>Cockpit</h2>
+                <div style='float: left; padding-right: 16px;'><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()); ?>
+                </div>
+                <p>
+                        <a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
+                </p>
+        </div>
+        <div class='span4'>
+                <h2>Hilfe</h2>
+                <p>
+                        Wir helfen Ihnen gerne:<br>
+                        support@example.org und 01234-12345
+                </p>
+        </div>
+</div>

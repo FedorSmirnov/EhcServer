@@ -9,11 +9,11 @@ use Zend\Debug\Debug;
 
 class JobaUserController extends UserController { // from ZfcUser, extends AbstractActionController;
 	
-	const ROUTE_CHANGEPASSWD = 'zfcuser/changepassword'; // TODO should only be stored in ZfcUser UserController
-    const ROUTE_LOGIN        = 'zfcuser/login';
-    const ROUTE_REGISTER     = 'zfcuser/register';
-    const ROUTE_CHANGEEMAIL  = 'zfcuser/changeemail';
-    const CONTROLLER_NAME    = 'zfcuser';
+// 	const ROUTE_CHANGEPASSWD = 'zfcuser/changepassword'; // TODO should only be stored in ZfcUser UserController
+//     const ROUTE_LOGIN        = 'zfcuser/login';
+//     const ROUTE_REGISTER     = 'zfcuser/register';
+//     const ROUTE_CHANGEEMAIL  = 'zfcuser/changeemail';
+     const CONTROLLER_NAME    = 'zfcuser';
 	
 	public function loginAction() {
 		$request = $this->getRequest ();
