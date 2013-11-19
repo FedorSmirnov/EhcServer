@@ -1,3 +1,106 @@
+<?php 
+//use \Zend\Debug\Debug;
+?>
+<script>
+// jquery main function after page is loaded
+jQuery(document).ready(function() {
+        var isiPad = navigator.userAgent.match(/iPad/i) != null;
+        if (isiPad){
+                // move all lights more to the right;
+                jQuery('#light_kitchen_one').css('right','600px');
+                jQuery('#light_kitchen_two').css('right','580px');
+                jQuery('#light_bathroom_one').css('right','630px');
+                jQuery('#light_bathroom_two').css('right','610px');
+                jQuery('#light_living_one').css('right','320px');
+                jQuery('#light_living_two').css('right','300px');
+        } else {
+                // do nothing
+        }
+});
+</script>
+<style type="text/css">
+td,th {
+        padding: 10px;
+        text-align: left;
+}
+#container {
+        text-align: center;
+        position: relative;
+}
+#background {
+        width: 100%;
+        height: 100%;
+}
+.light {
+        width: 35px;
+        height: 35px;
+}
+#light_kitchen_one {
+        position: absolute;
+        bottom: 35px;
+        right: 740px;
+}
+#light_kitchen_two {
+        position: absolute;
+        bottom: 35px;
+        right: 720px;
+}
+#light_bathroom_one {
+        position: absolute;
+        bottom: 240px;
+        right: 770px;
+}
+#light_bathroom_two {
+        position: absolute;
+        bottom: 240px;
+        right: 750px;
+}
+#light_living_one {
+        position: absolute;
+        bottom: 150px;
+        right: 460px;
+}
+#light_living_two {
+        position: absolute;
+        bottom: 150px;
+        right: 440px;
+}
+</style>
+<!-- DEBUGGING AREA -->
+<!-- 
+<div class='row'>
+        <div class='span12'>
+                <h2>Debugging Area</h2>
+        </div>
+</div>
+<div class='row'>
+        <div class='span6'>
+                <h3>TODOs</h3>
+                <p>url helper problem, siehe http://stackoverflow.com/questions/20056698/zend-framework-2-url-helper</p>
+                <p>�nderung des Layouts - Frage: wie setze ich ein eigenes Layout f�r das Ehome-Modul?</p>
+                <p>Auflisten der Profileinstellungen macht Probleme!</p>
+                <p>Probleml�sung: man will nach dem Login auf die Seite des IndexControllers, man will dort aber den Link einen Link zu den Profileinstellungen des ZfcUser-Controllers.</p>
+                <p>EditRoom-View und Rolle der Datentypen heraus arbeiten.</p>
+        </div>
+        <div class='span3'>
+                <h3>UI-Komponenten</h3>
+                <p>
+                        <a class="btn btn-success" href="" target="_blank">Erfolgsbutton mit Pfeilen &raquo;</a>
+                </p>
+                <p>
+                        <a class="btn" href="">Normaler Button</a>
+                </p>
+        </div>
+                <div class='span3'>
+                <h3>Actions</h3>
+                <p>
+                        <a class="btn" href="<?php //echo $this->url('home', array('action' => 'temp')); ?>">TempAction</a>
+                </p>
+        </div>
+</div>
+<hr>
+ -->
+<!-- // DEBUGGING AREA -->
 <!-- Startseite -->
 <div class="row">
         <div class="span12">
@@ -9,22 +112,172 @@
 <div class="hero-unit">
     <h1><?php echo sprintf("Willkommen!", '<span class="zf-green">', '</span>') ?></h1>
     <p>Mustermann, Musterweg 13, 12345 Musterstadt</p>
-    
+    <div id="container">
+    	<div id="background">
+			<img alt="apartment_picture" src='<?php echo $this->basePath();?>/img/praterstr3.jpg'>
+        </div>
+            <div id="light_kitchen_one" class="light">
+                    <img class="img_light" id="img_light_kitchen_one" alt="gluehbirne_aus" src=<?php
+if ($lightoneKitchen) {
+        //Debug::dump(lightoneKitchen);
+        echo $this->basePath() . '/img/gluehbirne_an.png';
+} else {
+        //Debug::dump(lightoneKitchen);
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
+}
+                                ?> />
+                        </div>
+                        <div id="light_kitchen_two" class="light">
+                    <img class="img_light" id="img_light_kitchen_two" alt="gluehbirne_aus" src=<?php
+if ($lighttwoKitchen) {
+        //Debug::dump(lighttwoKitchen);
+        echo $this->basePath() . '/img/gluehbirne_an.png';
+} else {
+        //Debug::dump(lighttwoKitchen);
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
+}
+                                ?> />
+                        </div>
+            <div id="light_bathroom_one" class="light">
+                    <img class="img_light" id="img_light_bathroom_one" alt="gluehbirne_aus" src=<?php
+if ($lightoneBath) {
+        echo $this->basePath() . '/img/gluehbirne_an.png';
+} else {
+    echo $this->basePath() . '/img/gluehbirne_aus.png';
+}
+                ?> />
+            </div>
+            <div id="light_bathroom_two" class="light">
+                    <img class="img_light" id="img_light_bathroom_two" alt="gluehbirne_aus" src=<?php
+if ($lighttwoBath) {
+        echo $this->basePath() . '/img/gluehbirne_an.png';
+} else {
+    echo $this->basePath() . '/img/gluehbirne_aus.png';
+}
+                ?> />
+            </div>
+            <div id="light_living_one" class="light">
+                    <img class="img_light" id="img_light_living_one" alt="gluehbirne_aus" src=<?php 
+if ($lightoneLivingRoom) {
+        echo $this->basePath() . '/img/gluehbirne_an.png';
+} else {
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
+}
+                                ?> />
+                        </div><!-- // light-living -->
+                        <div id="light_living_two" class="light">
+                    <img class="img_light" id="img_light_living_two" alt="gluehbirne_aus" src=<?php 
+if ($lighttwoLivingRoom) {
+        echo $this->basePath() . '/img/gluehbirne_an.png';
+} else {
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
+}
+                                ?> />
+                        </div><!-- // light-living -->
+                </div><!-- // div container -->
 </div><!-- // hero-unit -->
 <div class='row'>
-        <div class='span8'>
-                <h2>Cockpit</h2>
-                <div style='float: left; padding-right: 16px;'><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()); ?>
-                </div>
-                <p>
-                        <a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
-                </p>
-        </div>
-        <div class='span4'>
-                <h2>Hilfe</h2>
-                <p>
-                        Wir helfen Ihnen gerne:<br>
-                        support@example.org und 01234-12345
-                </p>
-        </div>
+	<div class='span8'>
+    <h2>Cockpit</h2>
+    <div style='float: left; padding-right: 16px;'><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()); ?>
+    </div>
+    <p>
+    	Angemeldet als <?php echo $useremail; ?>
+    </p>
+    <p>
+    	<a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
+        <!-- 
+        <a class='btn' href="<?php //echo $this->url('zfcuser/changeemail'); ?>">E-Mail �ndern</a> 
+        <a class='btn' href="<?php //echo $this->url('zfcuser/changepassword'); ?>">Passwort �ndern</a>
+        -->
+	</p>
+    </div>
+    <div class='span4'>
+    	<h2>Hilfe</h2>
+        <p>
+        	Wir helfen Ihnen gerne:<br>
+        	support@example.org und 01234-12345
+        </p>
+	</div>
+</div>
+<div class='row'>
+	<div class='span12'>
+		<h2>Funktionen</h2>
+		<table border="1px">
+			<tr>
+            <!-- <th>ID</th> -->
+            	<th>Name</th>
+            	<th>Raum</th>
+            	<th>Wert</th>
+            	<th>Aktion</th>
+            </tr>
+            <tr>
+            	<td>BeleuchtungEins</td>
+            	<td>Wohnzimmer</td>
+            	<td>AN</td>
+            	<td><a href='' class='btn btn-success'>Ändern &raquo;</a></td>
+            </tr>
+            <tr>
+            	<td>BeleuchtungZwei</td>
+            	<td>Wohnzimmer</td>
+            	<td>AN</td>
+            	<td><a href='' class='btn btn-success'>Ändern &raquo;</a></td>
+            </tr>
+            <tr>
+            	<td>Fernseher</td>
+            	<td>Wohnzimmer</td>
+            	<td>AN</td>
+            	<td><a href='' class='btn btn-success'>Ändern &raquo;</a></td>
+            </tr>
+            <tr>
+            	<td>Türe</td>
+            	<td>Küche</td>
+            	<td>ZU</td>
+            	<td><a href='' class='btn btn-success'>Ändern &raquo;</a></td>
+            </tr>
+            <tr>
+            	<td>Türe</td>
+            	<td>Bad</td>
+            	<td>ZU</td>
+            	<td><a href='' class='btn btn-success'>Ändern &raquo;</a></td>
+            </tr>
+            <tr>
+            	<td>Türe</td>
+            	<td>Wohnzimmer</td>
+            	<td>ZU</td>
+            	<td><a href='' class='btn btn-success'>Ändern &raquo;</a></td>
+            </tr>
+		</table>
+    	<h2>Räume</h2>
+        <table border="1px">
+        	<tr>
+            <!-- <th>ID</th> -->
+            	<th>Name</th>
+            	<th>Luftfeuchtigkeit</th>
+            	<th>LichtEins</th>
+            	<th>LichtZwei</th>
+            	<th>Aktion</th>
+            </tr>
+<?php foreach($this->rooms as $room){
+		echo "<tr>";
+        //echo "<td>" . $room->getId() . "</td>";
+        echo "<td>" . $room->getName() . "</td>";
+        echo "<td>" . $room->getHumidity() . "</td>";
+        if ($room->getLightone() == 100){
+        	echo "<td><span style='color:orange;'>AN</span></td>";
+        } else {
+        	echo "<td><span style='color:green;'>AUS</span></td>";
+        }
+        if ($room->getLighttwo() == 100){
+        	echo "<td><span style='color:orange;'>AN</span></td>";
+        } else {
+        	echo "<td><span style='color:green;'>AUS</span></td>";
+        }
+        echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
+        echo "</tr>";
+	}
+	echo "</table>";
+    // TODO add Room
+?>
+	</div>
 </div>

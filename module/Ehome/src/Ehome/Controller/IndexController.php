@@ -149,10 +149,61 @@ class IndexController extends AbstractActionController {
 		) );
 	}
 	public function indexfunctionalAction(){
-		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
+				if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
 			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
 		}
-		return new ViewModel ();
+		$user = $this->zfcUserAuthentication ()->getIdentity ();
+		$email = $user->getEmail ();
+		$rooms = $this->getRoomTable ()->fetchAll ();
+		$lightoneBath = false;
+		$lighttwoBath = false;
+		$lightoneKitchen = false;
+		$lighttwoKitchen = false;
+		$lightoneLivingRoom = false;
+		$lighttwoLivingRoom = false;
+		$rooms->buffer();
+		foreach ($rooms as $room){
+			$id = $room->getId ();
+			if ($id == 3){
+				$lightoneBathValue = $room->getLightone ();
+				$lighttwoBathValue = $room->getLighttwo ();
+				if ($lightoneBathValue == 100) {
+					$lightoneBath = true;
+				}
+				if ($lighttwoBathValue == 100) {
+					$lighttwoBath = true;
+				}
+			} else if ($id == 1) { // kitchen
+				$lightoneKitchenValue = $room->getLightone ();
+				$lighttwoKitchenValue = $room->getLighttwo ();
+				if ($lightoneKitchenValue == 100) {
+					$lightoneKitchen = true;
+				}
+				if ($lighttwoKitchenValue == 100) {
+					$lighttwoKitchen = true;
+				}
+			} else if ($id == 2) {
+				$lightoneLivingRoomValue = $room->getLightone ();
+				$lighttwoLivingRoomValue = $room->getLighttwo ();
+				if ($lightoneLivingRoomValue == 100) {
+					$lightoneLivingRoom = true;
+				}
+				if ($lighttwoLivingRoomValue == 100) {
+					$lighttwoLivingRoom = true;
+				}
+			} else {
+			}
+		}
+		return new ViewModel ( array (
+				'rooms' => $rooms,
+				'useremail' => $email,
+				'lightoneBath' => $lightoneBath,
+				'lighttwoBath' => $lighttwoBath,
+				'lightoneKitchen' => $lightoneKitchen,
+				'lighttwoKitchen' => $lighttwoKitchen,
+				'lightoneLivingRoom' => $lightoneLivingRoom,
+				'lighttwoLivingRoom' => $lighttwoLivingRoom
+		) );
 	}
 	
 	public function editroomAction() {
@@ -161,6 +212,25 @@ class IndexController extends AbstractActionController {
 		$message = "";
 		if ($this->getRequest()->isPost()){ // form was submitted
 			$roomForm->setData($this->getRequest()->getPost());
+			// Problem with checkboxes
+			//$data = $roomForm->setAttribute($key, $value);
+// 			$valueLightOne = $roomForm->get('lightone');
+// 			$valueLightTwo = $roomForm->get('lighttwo');
+// 			if ($valueLightOne != null){
+// 				Debug::dump("BP11");
+// 				$roomForm->get('lightone')->setValue("100");
+// 			} else {
+// 				Debug::dump("BP10");
+// 				$roomForm->get('lightone')->setValue("0");
+// 			}
+// 			if ($valueLightTwo != null){
+// 				Debug::dump("BP21");
+// 				$roomForm->get('lighttwo')->setValue("100");
+// 			} else {
+// 				Debug::dump("BP20");
+// 				$roomForm->get('lighttwo')->setValue("0");
+// 			}
+// 			Debug::dump($roomForm->isValid());
 			if ($roomForm->isValid()){
 				$formData = $roomForm->getData();
 				$room = $this->getRoomTable()->getRoom($roomId);
@@ -174,6 +244,25 @@ class IndexController extends AbstractActionController {
 		} else { // show form
 			$room = $this->getRoomTable()->getRoom($roomId);
 			$roomForm->bind($room);
+			// checkbox-problems
+// 			$lightOneValue = $room->getLightone();
+// 			if ($lightOneValue == "100"){
+// 				Debug::dump('11');
+// 				$roomForm->get('lightone')->setChecked(true);
+// 			} else {
+// 				Debug::dump('10');
+// 				$roomForm->get('lightone')->setChecked(false);
+// 			}
+// 			$lightTwoValue = $room->getLighttwo();
+// 			if ($lightTwoValue == "100"){
+// 				Debug::dump('21');
+// 				$roomForm->get('lighttwo')->setChecked(true);
+// 			} else {
+// 				Debug::dump('20');
+// 				$roomForm->get('lighttwo')->setChecked(false);
+// 			}
+			//Debug::dump($room);
+			//Debug::dump($roomForm);
 		}
 		return new ViewModel(array(
 			'form' => $roomForm,
@@ -232,7 +321,7 @@ class IndexController extends AbstractActionController {
 		// 		}
 	
 		// 		$form = new RoomForm();
-		// 		// Bind: tut die Daten aus dem Modell in die Form und am Ende des Vorgangs wieder zurück
+		// 		// Bind: tut die Daten aus dem Modell in die Form und am Ende des Vorgangs wieder zurï¿½ck
 		// 		$form->bind($room);
 		// 		$form->get('submit')->setAttribute('value', 'Edit');
 		// 		$request = $this->getRequest();
