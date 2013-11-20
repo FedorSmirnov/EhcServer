@@ -186,10 +186,8 @@ if ($lighttwoLivingRoom) {
     </p>
     <p>
     	<a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
-        <!-- 
-        <a class='btn' href="<?php //echo $this->url('zfcuser/changeemail'); ?>">E-Mail ändern</a> 
-        <a class='btn' href="<?php //echo $this->url('zfcuser/changepassword'); ?>">Passwort ändern</a>
-        -->
+		<a class='btn' href="<?php echo $this->url('zfcuser', array('module' => 'zfcuser', 'controller' => 'zfcuser', 'action' => 'changeemail')); ?>">E-Mail ändern</a> 
+        <!-- <a class='btn' href="<?php //echo $this->url('zfcuser', array('action' => 'changepassword')); ?>">Passwort ändern</a> -->
 	</p>
     </div>
     <div class='span4'>
