@@ -206,6 +206,10 @@ class IndexController extends AbstractActionController {
 		) );
 	}
 	
+	public function ehometestAction(){
+		return new ViewModel();
+	}
+	
 	public function togglelightoneAction(){
 		$roomId = (int) $this->params()->fromRoute('id', 0);
 		// Debug::dump($roomId);

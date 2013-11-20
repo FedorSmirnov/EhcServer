@@ -31,6 +31,16 @@ return array (
 										),
 								),
 						),
+						'ehometest' => array(
+								'type' => 'Zend\Mvc\Router\Http\Literal',
+								'options' => array(
+										'route'    => '/ehometest',
+										'defaults' => array(
+												'controller' => 'Ehome\Controller\Index',
+												'action'     => 'ehometest',
+										),
+								),
+						),
 						'zfcuser' => array (
 								'type' => 'literal',
 								'priority' => 1000,

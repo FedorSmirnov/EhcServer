@@ -165,6 +165,7 @@ class FtpUpdate {
 				"module/Ehome/src/Ehome/Filter/RoomFilter.php",
 				"module/Ehome/src/Ehome/Form/RoomForm.php",
 				"module/Ehome/view/ehome/index/editroom.phtml",
+				"module/Ehome/view/ehome/index/ehometest.phtml",
 				"module/Ehome/view/ehome/index/index.phtml",
 				"module/Ehome/view/ehome/index/indexfunctional.phtml",
 				"module/Ehome/view/ehome/index/indexroom.phtml",

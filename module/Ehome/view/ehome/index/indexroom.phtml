@@ -67,39 +67,39 @@ td,th {
 }
 </style>
 <!-- DEBUGGING AREA -->
-<!-- 
+
 <div class='row'>
         <div class='span12'>
                 <h2>Debugging Area</h2>
         </div>
 </div>
 <div class='row'>
-        <div class='span6'>
-                <h3>TODOs</h3>
-                <p>url helper problem, siehe http://stackoverflow.com/questions/20056698/zend-framework-2-url-helper</p>
-                <p>�nderung des Layouts - Frage: wie setze ich ein eigenes Layout f�r das Ehome-Modul?</p>
-                <p>Auflisten der Profileinstellungen macht Probleme!</p>
-                <p>Probleml�sung: man will nach dem Login auf die Seite des IndexControllers, man will dort aber den Link einen Link zu den Profileinstellungen des ZfcUser-Controllers.</p>
-                <p>EditRoom-View und Rolle der Datentypen heraus arbeiten.</p>
-        </div>
-        <div class='span3'>
-                <h3>UI-Komponenten</h3>
-                <p>
-                        <a class="btn btn-success" href="" target="_blank">Erfolgsbutton mit Pfeilen &raquo;</a>
-                </p>
-                <p>
-                        <a class="btn" href="">Normaler Button</a>
-                </p>
-        </div>
-                <div class='span3'>
-                <h3>Actions</h3>
-                <p>
-                        <a class="btn" href="<?php //echo $this->url('home', array('action' => 'temp')); ?>">TempAction</a>
-                </p>
-        </div>
+	<div class='span6'>
+		<h3>TODOs</h3>
+		<p>url helper problem, siehe http://stackoverflow.com/questions/20056698/zend-framework-2-url-helper</p>
+		<p>Änderung des Layouts - Frage: wie setze ich ein eigenes Layout für das Ehome-Modul?</p>
+		<p>Auflisten der Profileinstellungen macht Probleme!</p>
+		<p>Problemlösung: man will nach dem Login auf die Seite des IndexControllers, man will dort aber den Link einen Link zu den Profileinstellungen des ZfcUser-Controllers.</p>
+		<p>EditRoom-View und Rolle der Datentypen heraus arbeiten.</p>
+	</div>
+	<div class='span3'>
+		<h3>UI-Komponenten</h3>
+		<p>
+			<a class="btn btn-success" href="" target="_blank">Erfolgsbutton mit Pfeilen &raquo;</a>
+		</p>
+		<p>
+			<a class="btn" href="">Normaler Button</a>
+		</p>
+	</div>
+	<div class='span3'>
+		<h3>Actions</h3>
+		<p>
+			<a class="btn" href="<?php //echo $this->url('home', array('action' => 'temp')); ?>">TempAction</a>
+		</p>
+	</div>
 </div>
 <hr>
- -->
+
 <!-- // DEBUGGING AREA -->
 <!-- Startseite -->
 <div class="row">
@@ -239,7 +239,7 @@ if ($lighttwoLivingRoom) {
         	echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 			echo "</td>";
         }
-        //echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
+        echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
         echo "</tr>";
 	}
 	echo "</table>";
