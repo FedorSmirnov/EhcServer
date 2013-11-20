@@ -149,7 +149,7 @@ class IndexController extends AbstractActionController {
 		) );
 	}
 	public function indexfunctionalAction(){
-				if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
+		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
 			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
 		}
 		$user = $this->zfcUserAuthentication ()->getIdentity ();
@@ -204,6 +204,27 @@ class IndexController extends AbstractActionController {
 				'lightoneLivingRoom' => $lightoneLivingRoom,
 				'lighttwoLivingRoom' => $lighttwoLivingRoom
 		) );
+	}
+	
+	public function togglelightoneAction(){
+		$roomId = (int) $this->params()->fromRoute('id', 0);
+		// Debug::dump($roomId);
+		$room = $this->getRoomTable()->getRoom($roomId);
+		$state = $room->getLightone();
+		//Debug::dump($state);
+		if ($state == "100"){
+			$room->setLightone("0");
+		} else if ($state == "0"){
+			$room->setLightone("100");
+		} else {
+			throw new \Exception("Fehler bei IndexController.toggleLightOneAction()");
+		}
+		$this->getRoomTable()->saveRoom($room);
+		return $this->redirect()->toRoute('home'); // TODO create const
+	}
+	
+	public function toggleLightTwoAction(){
+	
 	}
 	
 	public function editroomAction() {

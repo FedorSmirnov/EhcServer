@@ -1,5 +1,5 @@
 <?php 
-//use \Zend\Debug\Debug;
+use \Zend\Debug\Debug;
 ?>
 <script>
 // jquery main function after page is loaded
@@ -66,41 +66,6 @@ td,th {
         right: 440px;
 }
 </style>
-<!-- DEBUGGING AREA -->
-<!-- 
-<div class='row'>
-        <div class='span12'>
-                <h2>Debugging Area</h2>
-        </div>
-</div>
-<div class='row'>
-        <div class='span6'>
-                <h3>TODOs</h3>
-                <p>url helper problem, siehe http://stackoverflow.com/questions/20056698/zend-framework-2-url-helper</p>
-                <p>�nderung des Layouts - Frage: wie setze ich ein eigenes Layout f�r das Ehome-Modul?</p>
-                <p>Auflisten der Profileinstellungen macht Probleme!</p>
-                <p>Probleml�sung: man will nach dem Login auf die Seite des IndexControllers, man will dort aber den Link einen Link zu den Profileinstellungen des ZfcUser-Controllers.</p>
-                <p>EditRoom-View und Rolle der Datentypen heraus arbeiten.</p>
-        </div>
-        <div class='span3'>
-                <h3>UI-Komponenten</h3>
-                <p>
-                        <a class="btn btn-success" href="" target="_blank">Erfolgsbutton mit Pfeilen &raquo;</a>
-                </p>
-                <p>
-                        <a class="btn" href="">Normaler Button</a>
-                </p>
-        </div>
-                <div class='span3'>
-                <h3>Actions</h3>
-                <p>
-                        <a class="btn" href="<?php //echo $this->url('home', array('action' => 'temp')); ?>">TempAction</a>
-                </p>
-        </div>
-</div>
-<hr>
- -->
-<!-- // DEBUGGING AREA -->
 <!-- Startseite -->
 <div class="row">
         <div class="span12">
@@ -119,10 +84,8 @@ td,th {
             <div id="light_kitchen_one" class="light">
                     <img class="img_light" id="img_light_kitchen_one" alt="gluehbirne_aus" src=<?php
 if ($lightoneKitchen) {
-        //Debug::dump(lightoneKitchen);
         echo $this->basePath() . '/img/gluehbirne_an.png';
 } else {
-        //Debug::dump(lightoneKitchen);
         echo $this->basePath() . '/img/gluehbirne_aus.png';
 }
                                 ?> />
@@ -130,10 +93,8 @@ if ($lightoneKitchen) {
                         <div id="light_kitchen_two" class="light">
                     <img class="img_light" id="img_light_kitchen_two" alt="gluehbirne_aus" src=<?php
 if ($lighttwoKitchen) {
-        //Debug::dump(lighttwoKitchen);
         echo $this->basePath() . '/img/gluehbirne_an.png';
 } else {
-        //Debug::dump(lighttwoKitchen);
         echo $this->basePath() . '/img/gluehbirne_aus.png';
 }
                                 ?> />
@@ -204,80 +165,86 @@ if ($lighttwoLivingRoom) {
 	<div class='span12'>
 		<h2>Funktionen</h2>
 		<table border="1px">
-			<tr>
-            <!-- <th>ID</th> -->
-            	<th>Name</th>
-            	<th>Raum</th>
-            	<th>Wert</th>
-            	<th>Aktion</th>
-            </tr>
-            <tr>
-            	<td>BeleuchtungEins</td>
-            	<td>Wohnzimmer</td>
-            	<td>AN</td>
-            	<td><a href='' class='btn btn-success'>Ändern &raquo;</a></td>
-            </tr>
-            <tr>
-            	<td>BeleuchtungZwei</td>
-            	<td>Wohnzimmer</td>
-            	<td>AN</td>
-            	<td><a href='' class='btn btn-success'>Ändern &raquo;</a></td>
-            </tr>
-            <tr>
-            	<td>Fernseher</td>
-            	<td>Wohnzimmer</td>
-            	<td>AN</td>
-            	<td><a href='' class='btn btn-success'>Ändern &raquo;</a></td>
-            </tr>
-            <tr>
-            	<td>Türe</td>
-            	<td>Küche</td>
-            	<td>ZU</td>
-            	<td><a href='' class='btn btn-success'>Ändern &raquo;</a></td>
-            </tr>
-            <tr>
-            	<td>Türe</td>
-            	<td>Bad</td>
-            	<td>ZU</td>
-            	<td><a href='' class='btn btn-success'>Ändern &raquo;</a></td>
-            </tr>
-            <tr>
-            	<td>Türe</td>
-            	<td>Wohnzimmer</td>
-            	<td>ZU</td>
-            	<td><a href='' class='btn btn-success'>Ändern &raquo;</a></td>
-            </tr>
-		</table>
-    	<h2>Räume</h2>
-        <table border="1px">
-        	<tr>
-            <!-- <th>ID</th> -->
-            	<th>Name</th>
-            	<th>Luftfeuchtigkeit</th>
-            	<th>LichtEins</th>
-            	<th>LichtZwei</th>
-            	<th>Aktion</th>
-            </tr>
-<?php foreach($this->rooms as $room){
+ <?php 
+$functionsTable = array();
+$functionsTableRowTitle = array("LichtEins", "LichtZwei");
+$functionsTableColumnTitle = array("Küche", "Wohnzimmer", "Bad");
+//             Kueche   Wohnzimmer  Bad
+// LichtEins    Val      Val        Val
+// LichtZwei	Val 	 Val        Val 
+$roomsSize = sizeof($rooms);
+$rowsSize = sizeof($functionsTableRowTitle);
+for($i=0;$i<$rowsSize;$i++){
+	if ($i == 0){ // write header
 		echo "<tr>";
-        //echo "<td>" . $room->getId() . "</td>";
-        echo "<td>" . $room->getName() . "</td>";
-        echo "<td>" . $room->getHumidity() . "</td>";
-        if ($room->getLightone() == 100){
-        	echo "<td><span style='color:orange;'>AN</span></td>";
-        } else {
-        	echo "<td><span style='color:green;'>AUS</span></td>";
-        }
-        if ($room->getLighttwo() == 100){
-        	echo "<td><span style='color:orange;'>AN</span></td>";
-        } else {
-        	echo "<td><span style='color:green;'>AUS</span></td>";
-        }
-        echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
-        echo "</tr>";
+		echo "<th>Name</th>";
+		echo "<th>" . $functionsTableColumnTitle[0] . "</th>";
+		echo "<th>" . $functionsTableColumnTitle[1] . "</th>";
+		echo "<th>" . $functionsTableColumnTitle[2] . "</th>";
+		echo "</tr>";
 	}
-	echo "</table>";
-    // TODO add Room
+	echo "<tr>";
+	echo "<td>" . $functionsTableRowTitle[$i] . "</td>";
+	$j = 0;
+	//Debug::dump($rooms);
+	foreach($rooms as $room){
+		//Debug::dump($room);
+		if ($i == 0 && $room->getName() == $functionsTableColumnTitle[0]){
+			$valLightOneCellOne = $room->getLightone();  
+			if ($valLightOneCellOne == "100"){
+				echo "<td>";
+				echo "<span style='color:orange;'>AN</span> ";
+				echo "<a href='" . $this->url('home', array('action' => 'togglelightone' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Ändern</a>";
+				echo "</td>";
+			} else {
+				echo "<td><span style='color:green;'>AUS</span></td>";
+			}
+		}
+		if ($i == 0 && $room->getName() == $functionsTableColumnTitle[1]){
+			$valLightOneCellTwo = $room->getLightone();
+			if ($valLightOneCellTwo == "100"){
+				echo "<td><span style='color:orange;'>AN</span></td>";
+			} else {
+				echo "<td><span style='color:green;'>AUS</span></td>";
+			}
+		}
+		if ($i == 0 && $room->getName() == $functionsTableColumnTitle[2]){
+			$valLightOneCellThree = $room->getLightone();
+			if ($valLightOneCellThree == "100"){
+				echo "<td><span style='color:orange;'>AN</span></td>";
+			} else {
+				echo "<td><span style='color:green;'>AUS</span></td>";
+			}
+		}
+		if ($i == 1 && $room->getName() == $functionsTableColumnTitle[0]){
+			$valLightTwoCellOne = $room->getLighttwo();
+			if ($valLightTwoCellOne == "100"){
+				echo "<td><span style='color:orange;'>AN</span></td>";
+			} else {
+				echo "<td><span style='color:green;'>AUS</span></td>";
+			}
+		}
+		if ($i == 1 && $room->getName() == $functionsTableColumnTitle[1]){
+			$valLightTwoCellTwo = $room->getLighttwo();
+			if ($valLightTwoCellTwo == "100"){
+				echo "<td><span style='color:orange;'>AN</span></td>";
+			} else {
+				echo "<td><span style='color:green;'>AUS</span></td>";
+			}
+		}
+		if ($i == 1 && $room->getName() == $functionsTableColumnTitle[2]){
+			$valLightTwoCellThree = $room->getLighttwo();
+			if ($valLightTwoCellThree == "100"){
+				echo "<td><span style='color:orange;'>AN</span></td>";
+			} else {
+				echo "<td><span style='color:green;'>AUS</span></td>";
+			}
+		}
+		$j++;	
+	}
+	echo "</tr>";
+}
+echo "</table>";
 ?>
 	</div>
 </div>
