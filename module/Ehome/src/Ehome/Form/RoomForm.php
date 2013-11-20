@@ -31,49 +31,49 @@ class RoomForm extends Form {
 				'options' => array('label' => 'Luftfeuchtigkeit')
 		));
 		// input fields
-		$this->add(array(
-				'name' => 'lightone',
-				'attributes' => array(
-						'type' => 'text',
-						'id' => 'lightone'),
-				'options' => array('label' => 'Lampe Eins')
-		));
-		$this->add(array(
-				'name' => 'lighttwo',
-				'attributes' => array(
-					'type' => 'text',
-					'id' => 'lighttwo'),
-				'options' => array('label' => 'Lampe Zwei')
-		));
-		// checkboxes
 // 		$this->add(array(
 // 				'name' => 'lightone',
-// 				'type' => 'Zend\Form\Element\Checkbox',
-// 				//'attributes' => array(
-// 						// 'type' => 'text',
-// 						// 'id' => 'lightone'
-// 				//),
-// 				'options' => array(
-// 						'label' => 'Lampe Eins',
-// 						'use_hidden_element' => true,
-// 						'checked_value' => "100",
-// 						'unchecked_value' => "0",
-// 				)
+// 				'attributes' => array(
+// 						'type' => 'text',
+// 						'id' => 'lightone'),
+// 				'options' => array('label' => 'Lampe Eins')
 // 		));
 // 		$this->add(array(
 // 				'name' => 'lighttwo',
-// 				'type' => 'Zend\Form\Element\Checkbox',
-// 				//'attributes' => array(
-// 						// 'type' => 'text',
-// 						// 'id' => 'lighttwo'
-// 				//),
-// 				'options' => array(
-// 						'label' => 'Lampe Zwei',
-// 						'use_hidden_element' => true,
-// 						'checked_value' => "100",
-// 						'unchecked_value' => "0",
-// 				)
+// 				'attributes' => array(
+// 					'type' => 'text',
+// 					'id' => 'lighttwo'),
+// 				'options' => array('label' => 'Lampe Zwei')
 // 		));
+		// checkboxes
+		$this->add(array(
+				'name' => 'lightone',
+				'type' => 'Zend\Form\Element\Checkbox',
+				//'attributes' => array(
+						// 'type' => 'text',
+						// 'id' => 'lightone'
+				//),
+				'options' => array(
+						'label' => 'Lampe Eins',
+						'use_hidden_element' => true,
+						'checked_value' => "100",
+						'unchecked_value' => "0",
+				)
+		));
+		$this->add(array(
+				'name' => 'lighttwo',
+				'type' => 'Zend\Form\Element\Checkbox',
+				//'attributes' => array(
+						// 'type' => 'text',
+						// 'id' => 'lighttwo'
+				//),
+				'options' => array(
+						'label' => 'Lampe Zwei',
+						'use_hidden_element' => true,
+						'checked_value' => "100",
+						'unchecked_value' => "0",
+				)
+		));
 		$this->add(array( // submit;
 				'name' => 'submit',
 				'attributes' => array(

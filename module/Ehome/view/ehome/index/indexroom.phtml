@@ -210,7 +210,7 @@ if ($lighttwoLivingRoom) {
             	<th>Luftfeuchtigkeit</th>
             	<th>LichtEins</th>
             	<th>LichtZwei</th>
-            	<th>Aktion</th>
+            	<!-- <th>Aktion</th> -->
             </tr>
 <?php foreach($this->rooms as $room){
 		echo "<tr>";
@@ -218,16 +218,28 @@ if ($lighttwoLivingRoom) {
         echo "<td>" . $room->getName() . "</td>";
         echo "<td>" . $room->getHumidity() . "</td>";
         if ($room->getLightone() == 100){
-        	echo "<td><span style='color:orange;'>AN</span></td>";
+        	echo "<td>";
+        	echo "<span style='color:orange;'>AN </span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'togglelightone' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+			echo "</td>";
         } else {
-        	echo "<td><span style='color:green;'>AUS</span></td>";
+        	echo "<td>";
+        	echo "<span style='color:green;'>AUS</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'togglelightone' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+        	echo "</td>";
         }
         if ($room->getLighttwo() == 100){
-        	echo "<td><span style='color:orange;'>AN</span></td>";
+        	echo "<td>";
+        	echo "<span style='color:orange;'>AN </span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+			echo "</td>";
         } else {
-        	echo "<td><span style='color:green;'>AUS</span></td>";
+        	echo "<td>";
+        	echo "<span style='color:green;'>AUS</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+			echo "</td>";
         }
-        echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
+        //echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
         echo "</tr>";
 	}
 	echo "</table>";

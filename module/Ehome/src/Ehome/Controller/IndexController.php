@@ -275,22 +275,26 @@ class IndexController extends AbstractActionController {
 			$room = $this->getRoomTable()->getRoom($roomId);
 			$roomForm->bind($room);
 			// checkbox-problems
-// 			$lightOneValue = $room->getLightone();
-// 			if ($lightOneValue == "100"){
-// 				Debug::dump('11');
-// 				$roomForm->get('lightone')->setChecked(true);
-// 			} else {
-// 				Debug::dump('10');
-// 				$roomForm->get('lightone')->setChecked(false);
-// 			}
-// 			$lightTwoValue = $room->getLighttwo();
-// 			if ($lightTwoValue == "100"){
-// 				Debug::dump('21');
-// 				$roomForm->get('lighttwo')->setChecked(true);
-// 			} else {
-// 				Debug::dump('20');
-// 				$roomForm->get('lighttwo')->setChecked(false);
-// 			}
+			$lightOneValue = $room->getLightone();
+			if ($lightOneValue == "100"){
+				//Debug::dump('11');
+				$roomForm->get('lightone')->setValue(true);
+				$roomForm->get('lightone')->setChecked(true);
+			} else {
+				//Debug::dump('10');
+				$roomForm->get('lightone')->setValue(false);
+				$roomForm->get('lightone')->setChecked(false);
+			}
+			$lightTwoValue = $room->getLighttwo();
+			if ($lightTwoValue == "100"){
+				//Debug::dump('21');
+				$roomForm->get('lighttwo')->setValue(true);
+				$roomForm->get('lighttwo')->setChecked(true);
+			} else {
+				//Debug::dump('20');
+				$roomForm->get('lighttwo')->setValue(false);
+				$roomForm->get('lighttwo')->setChecked(false);
+			}
 			//Debug::dump($room);
 			//Debug::dump($roomForm);
 		}
