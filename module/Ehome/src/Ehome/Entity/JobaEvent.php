@@ -14,7 +14,7 @@ class JobaEvent {
 	public function exchangeArray($data) {
 		$this->id = (! empty ( $data ['id'] )) ? $data ['id'] : null;
 		$this->name = (! empty ( $data ['name'] )) ? $data ['name'] : null;
-		$this->name = (! empty ( $data ['value'] )) ? $data ['value'] : null;
+		$this->value = (! empty ( $data ['value'] )) ? $data ['value'] : null;
 		$this->type = (! empty ( $data ['type'] )) ? $data ['type'] : null;
 		$this->start= (! empty ( $data ['start'] )) ? $data ['start'] : null;
 		$this->end = (! empty ( $data ['end'] )) ? $data ['end'] : null;

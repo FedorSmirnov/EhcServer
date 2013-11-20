@@ -32,7 +32,7 @@ class JobaEventTable {
 	public function saveEvent(JobaEvent $event){
 		$data = array (
 				'name' => $event->getName(),
-				'name' => $event->getValue(),
+				'value' => $event->getValue(),
 				'type' => $event->getType(),
 				'start' => $event->getStart(),
 				'end' => $event->getEnd(),
@@ -52,6 +52,10 @@ class JobaEventTable {
 		}
 	}
 
+	public function addEvent(){
+		
+	}
+	
 	public function deleteEvent($id){
 		$this->tableGateway->delete(array(
 				'id' => (int) $id

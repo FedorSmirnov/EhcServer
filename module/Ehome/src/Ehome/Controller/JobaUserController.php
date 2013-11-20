@@ -6,6 +6,7 @@ use ZfcUser\Controller\UserController;
 use Zend\Session\Container;
 use Zend\View\Helper\ViewModel;
 use Zend\Debug\Debug;
+use Ehome\Entity\JobaEvent;
 
 class JobaUserController extends UserController { // from ZfcUser, extends AbstractActionController;
 	

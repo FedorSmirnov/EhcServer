@@ -10,7 +10,8 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 use Ehome\Form\RoomForm;
-use Ehome\Form\EventForm;
+use Ehome\Entity\JobaEvent;
+use Ehome\Form\JobaEventForm;
 
 class IndexController extends AbstractActionController {
 	
@@ -101,6 +102,7 @@ class IndexController extends AbstractActionController {
 		$email = $user->getEmail ();
 		$rooms = $this->getRoomTable ()->fetchAll();
 		$events = $this->getEventTable()->fetchAll();
+		//Debug::dump($events);
 		$lightoneBath = false;
 		$lighttwoBath = false;
 		$lightoneKitchen = false;
@@ -129,8 +131,8 @@ class IndexController extends AbstractActionController {
 					$lighttwoKitchen = true;
 				}
 			} else if ($id == 2) {
-				$lightoneLivingRoomValue = $room->getLightone ();
-				$lighttwoLivingRoomValue = $room->getLighttwo ();
+				$lightoneLivingRoomValue = $room->getLightone();
+				$lighttwoLivingRoomValue = $room->getLighttwo();
 				if ($lightoneLivingRoomValue == 100) {
 					$lightoneLivingRoom = true;
 				}
@@ -152,6 +154,7 @@ class IndexController extends AbstractActionController {
 				'lighttwoLivingRoom' => $lighttwoLivingRoom
 		) );
 	}
+	
 	public function indexfunctionalAction(){
 		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
 			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
@@ -218,10 +221,8 @@ class IndexController extends AbstractActionController {
 	
 	public function togglelightoneAction(){
 		$roomId = (int) $this->params()->fromRoute('id', 0);
-		// Debug::dump($roomId);
 		$room = $this->getRoomTable()->getRoom($roomId);
 		$state = $room->getLightone();
-		//Debug::dump($state);
 		if ($state == "100"){
 			$room->setLightone("0");
 		} else {
@@ -233,10 +234,8 @@ class IndexController extends AbstractActionController {
 	
 	public function togglelighttwoAction(){
 		$roomId = (int) $this->params()->fromRoute('id', 0);
-		// Debug::dump($roomId);
 		$room = $this->getRoomTable()->getRoom($roomId);
 		$state = $room->getLighttwo();
-		//Debug::dump($state);
 		if ($state == "100"){
 			$room->setLighttwo("0");
 		} else {
@@ -260,19 +259,20 @@ class IndexController extends AbstractActionController {
 				$event->setType($formData['type']);
 				$event->setStart($formData['start']);
 				$event->setEnd($formData['end']);
+				//Debug::dump($formData);
 				if ($formData['done'] == 1){
-					$room->setDone(true);
+					$event->setDone(true);
 				}else{
-					$room->setDone(false);
+					$event->setDone(false);
 				}
 				$this->getEventTable()->saveEvent($event);
 				return $this->redirect()->toRoute('home');
 			}
 		} else { // show form
-			$event = $this->getEventTable ()->getEvent($eventId);
+			$event = $this->getEventTable()->getEvent($eventId);
 			$eventForm->bind($event);
 			$doneValue = $event->getDone();
-			if ($lightOneValue == true) {
+			if ($doneValue == true) {
 				$eventForm->get('done')->setValue(1);
 			} else {
 				$eventForm->get('done')->setValue(0);
@@ -353,6 +353,15 @@ class IndexController extends AbstractActionController {
 	
 	// DEVELOPMENT AREA
 	public function tempAction(){
+		
+		// Message erzeugen:
+		$message = new JobaEvent();
+		$message->setName("tempActionCall");
+		$message->setValue("testVal");
+		$message->setType("message");
+		$message->setDone(0);
+		$this->getEventTable()->saveEvent($message);
+		
 		// clear session and log out
 		//$session = new Container('session');
 		//$viewType = $session->viewType;
@@ -372,10 +381,10 @@ class IndexController extends AbstractActionController {
 		// return $this->redirect()->toRoute('home');
 	
 		// logout and clear session
-		$session = new Container('session');
-		$session->getManager()->getStorage()->clear('session');
-		$this->redirect()->toRoute('zfcuser/logout');
-		// 		$id = (int) $this->params ()->fromRoute('id', 0);
+// 		$session = new Container('session');
+// 		$session->getManager()->getStorage()->clear('session');
+// 		$this->redirect()->toRoute('zfcuser/logout');
+// 		// 		$id = (int) $this->params ()->fromRoute('id', 0);
 		// 		if (!$id) {
 		// 			return $this->redirect ()->toRoute( 'home', array (
 		// 					'action' => 'add'
@@ -406,6 +415,8 @@ class IndexController extends AbstractActionController {
 		// 				'id' => $id,
 		// 				'form' => $form
 		// 		);
+		//return new ViewModel();
+		return $this->redirect()->toRoute('home');
 	}
 }
 ?>
