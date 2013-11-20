@@ -132,18 +132,20 @@ for($i=0;$i<$rowsSize;$i++){
 		echo "</tr>";
 	}
 	echo "<tr>";
-	echo "<td>" . $functionsTableRowTitle[$i] . "</td>";
+	echo "<td>";
+	echo  $functionsTableRowTitle[$i];
+	echo "</td>";
 	$j = 0;
 	foreach($rooms as $room){
 		if ($i == 0 && $room->getName() == $functionsTableColumnTitle[0]){
 			$valLightOneCellOne = $room->getLightone();  
 			if ($valLightOneCellOne == "100"){
-				echo "<td>";
-				echo "<span style='color:orange;'>AN </span> ";
+				echo "<td style='text-align: right;'>";
+				echo "<span style='color:orange;'>AN</span> ";
 				echo "<a href='" . $this->url('home', array('action' => 'togglelightone' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 				echo "</td>";
 			} else {
-				echo "<td>";
+				echo "<td style='text-align: right;'>";
 				echo "<span style='color:green;'>AUS</span> ";
 				echo "<a href='" . $this->url('home', array('action' => 'togglelightone' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 				echo "</td>";
@@ -152,12 +154,12 @@ for($i=0;$i<$rowsSize;$i++){
 		if ($i == 0 && $room->getName() == $functionsTableColumnTitle[1]){
 			$valLightOneCellTwo = $room->getLightone();
 			if ($valLightOneCellTwo == "100"){
-				echo "<td>";
-				echo "<span style='color:orange;'>AN </span> ";
+				echo "<td style='text-align: right;'>";
+				echo "<span style='color:orange;'>AN</span> ";
 				echo "<a href='" . $this->url('home', array('action' => 'togglelightone' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 				echo "</td>";
 			} else {
-				echo "<td>";
+				echo "<td style='text-align: right;'>";
 				echo "<span style='color:green;'>AUS</span> ";
 				echo "<a href='" . $this->url('home', array('action' => 'togglelightone' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 				echo "</td>";
@@ -167,12 +169,12 @@ for($i=0;$i<$rowsSize;$i++){
 		if ($i == 0 && $room->getName() == $functionsTableColumnTitle[2]){
 			$valLightOneCellThree = $room->getLightone();
 			if ($valLightOneCellThree == "100"){
-				echo "<td>";
-				echo "<span style='color:orange;'>AN </span> ";
+				echo "<td style='text-align: right;'>";
+				echo "<span style='color:orange;'>AN</span> ";
 				echo "<a href='" . $this->url('home', array('action' => 'togglelightone' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 				echo "</td>";
 			} else {
-				echo "<td>";
+				echo "<td style='text-align: right;'>";
 				echo "<span style='color:green;'>AUS</span> ";
 				echo "<a href='" . $this->url('home', array('action' => 'togglelightone' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 				echo "</td>";
@@ -181,12 +183,12 @@ for($i=0;$i<$rowsSize;$i++){
 		if ($i == 1 && $room->getName() == $functionsTableColumnTitle[0]){
 			$valLightTwoCellOne = $room->getLighttwo();
 			if ($valLightTwoCellOne == "100"){
-				echo "<td>";
-				echo "<span style='color:orange;'>AN </span> ";
+				echo "<td style='text-align: right;'>";
+				echo "<span style='color:orange;'>AN</span> ";
 				echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 				echo "</td>";
 			} else {
-				echo "<td>";
+				echo "<td style='text-align: right;'>";
 				echo "<span style='color:green;'>AUS</span> ";
 				echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 				echo "</td>";
@@ -195,12 +197,12 @@ for($i=0;$i<$rowsSize;$i++){
 		if ($i == 1 && $room->getName() == $functionsTableColumnTitle[1]){
 			$valLightTwoCellTwo = $room->getLighttwo();
 			if ($valLightTwoCellTwo == "100"){
-				echo "<td>";
-				echo "<span style='color:orange;'>AN </span> ";
+				echo "<td style='text-align: right;'>";
+				echo "<span style='color:orange;'>AN</span> ";
 				echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 				echo "</td>";
 			} else {
-				echo "<td>";
+				echo "<td style='text-align: right;'>";
 				echo "<span style='color:green;'>AUS</span> ";
                 echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 				echo "</td>";
@@ -209,12 +211,12 @@ for($i=0;$i<$rowsSize;$i++){
 		if ($i == 1 && $room->getName() == $functionsTableColumnTitle[2]){
 			$valLightTwoCellThree = $room->getLighttwo();
 			if ($valLightTwoCellThree == "100"){
-				echo "<td>";
-				echo "<span style='color:orange;'>AN </span> ";
+				echo "<td style='text-align: right;'>";
+				echo "<span style='color:orange;'>AN</span> ";
 				echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 				echo "</td>";
 			} else {
-				echo "<td>";
+				echo "<td style='text-align: right;'>";
 				echo "<span style='color:green;'>AUS</span> ";
 				echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 				echo "</td>";
