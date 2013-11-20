@@ -10,9 +10,11 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
 use Ehome\Form\RoomForm;
+use Ehome\Form\EventForm;
 
 class IndexController extends AbstractActionController {
 	
+	protected $eventTable;
 	protected $roomTable;
 	const ROUTE_LOGIN = 'zfcuser/login';
 	
@@ -97,7 +99,8 @@ class IndexController extends AbstractActionController {
 		}
 		$user = $this->zfcUserAuthentication ()->getIdentity ();
 		$email = $user->getEmail ();
-		$rooms = $this->getRoomTable ()->fetchAll ();
+		$rooms = $this->getRoomTable ()->fetchAll();
+		$events = $this->getEventTable()->fetchAll();
 		$lightoneBath = false;
 		$lighttwoBath = false;
 		$lightoneKitchen = false;
@@ -139,6 +142,7 @@ class IndexController extends AbstractActionController {
 		}
 		return new ViewModel ( array (
 				'rooms' => $rooms,
+				'events' => $events,
 				'useremail' => $email,
 				'lightoneBath' => $lightoneBath,
 				'lighttwoBath' => $lighttwoBath,
@@ -154,7 +158,8 @@ class IndexController extends AbstractActionController {
 		}
 		$user = $this->zfcUserAuthentication ()->getIdentity ();
 		$email = $user->getEmail ();
-		$rooms = $this->getRoomTable ()->fetchAll ();
+		$events = $this->getEventTable()->fetchAll();
+		$rooms = $this->getRoomTable()->fetchAll();
 		$lightoneBath = false;
 		$lighttwoBath = false;
 		$lightoneKitchen = false;
@@ -196,13 +201,14 @@ class IndexController extends AbstractActionController {
 		}
 		return new ViewModel ( array (
 				'rooms' => $rooms,
+				'events' => $events,
 				'useremail' => $email,
 				'lightoneBath' => $lightoneBath,
 				'lighttwoBath' => $lighttwoBath,
 				'lightoneKitchen' => $lightoneKitchen,
 				'lighttwoKitchen' => $lighttwoKitchen,
 				'lightoneLivingRoom' => $lightoneLivingRoom,
-				'lighttwoLivingRoom' => $lighttwoLivingRoom
+				'lighttwoLivingRoom' => $lighttwoLivingRoom,
 		) );
 	}
 	
@@ -240,6 +246,42 @@ class IndexController extends AbstractActionController {
 		return $this->redirect()->toRoute('home'); // TODO create const
 	}
 	
+	public function editjobaeventAction() {
+		$eventForm = new JobaEventForm();
+		$eventId = (int) $this->params()->fromRoute('id', 0);
+		$message = "";
+		if ($this->getRequest()->isPost()){ // form was submitted
+			$eventForm->setData($this->getRequest()->getPost());
+			if ($eventForm->isValid()){
+				$formData = $eventForm->getData();
+				$event = $this->getEventTable()->getEvent($eventId); // siehe JobaEventTable.php
+				$event->setName($formData['name']);
+				$event->setType($formData['type']);
+				$event->setStart($formData['start']);
+				$event->setEnd($formData['end']);
+				if ($formData['done'] == 1){
+					$room->setDone(true);
+				}else{
+					$room->setDone(false);
+				}
+				$this->getEventTable()->saveEvent($event);
+				return $this->redirect()->toRoute('home');
+			}
+		} else { // show form
+			$event = $this->getEventTable ()->getEvent($eventId);
+			$eventForm->bind($event);
+			$doneValue = $event->getDone();
+			if ($lightOneValue == true) {
+				$eventForm->get('done')->setValue(1);
+			} else {
+				$eventForm->get('done')->setValue(0);
+			}
+		}
+		return new ViewModel(array(
+				'form' => $eventForm,
+		));
+	}
+	
 	public function editroomAction() {
 		$roomForm = new RoomForm(); 
 		$roomId = (int) $this->params()->fromRoute('id', 0);
@@ -251,6 +293,7 @@ class IndexController extends AbstractActionController {
 				$room = $this->getRoomTable()->getRoom($roomId);
 				$room->setName($formData['name']);
 				$room->setHumidity($formData['humidity']);
+				$room->setTemperature($formData['temperature']);
 				if ($formData['lightone'] == 1){
 					$room->setLightone("100");
 				}else{
@@ -267,7 +310,7 @@ class IndexController extends AbstractActionController {
 		} else { // show form
 			$room = $this->getRoomTable ()->getRoom ( $roomId );
 			$roomForm->bind( $room );
-			$lightOneValue = $room->getLightone ();
+			$lightOneValue = $room->getLightone();
 			if ($lightOneValue == '100') {
 				$roomForm->get ( 'lightone' )->setValue ( 1 );
 			} else {
@@ -284,10 +327,19 @@ class IndexController extends AbstractActionController {
 			'form' => $roomForm,
 		));
 	}
+	
 	public function logoutAction() {
 		$session = new Container ( 'session' );
 		$session->getManager ()->getStorage ()->clear ( 'session' );
 		return $this->redirect ()->toRoute ( 'zfcuser/logout' );
+	}
+	
+	public function getEventTable() {
+		if (!$this->eventTable) {
+			$sm = $this->getServiceLocator();
+			$this->eventTable = $sm->get('Ehome\Entity\JobaEventTable');
+		}
+		return $this->eventTable;
 	}
 	
 	public function getRoomTable() {

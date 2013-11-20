@@ -1,4 +1,4 @@
-<h1>Detailansicht</h1>
+<h1>Detailansicht Raum</h1>
 <?php
 $form = $this->form;
 $form->prepare();
@@ -10,6 +10,8 @@ $form->prepare();
         <dd><?php echo $this->formInput($form->get('name')) ?></dd>
         <dt><?php echo $this->formLabel($form->get('humidity')) ?></dt>
         <dd><?php echo $this->formInput($form->get('humidity')) ?></dd>
+        <dt><?php echo $this->formLabel($form->get('temperature')) ?></dt>
+        <dd><?php echo $this->formInput($form->get('temperature')) ?></dd>
         <dt><?php echo $this->formLabel($form->get('lightone')) ?></dt>
         <dd><?php echo $this->formRadio($form->get('lightone')) ?></dd>
         <dt><?php echo $this->formLabel($form->get('lighttwo')) ?></dt>

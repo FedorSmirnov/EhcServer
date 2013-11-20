@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Ehome\Form;
 
@@ -8,12 +8,12 @@ use Zend\Form\Element\Submit;
 use Zend\Form\Element\Text;
 use Zend\Form\Form;
 
-class RoomForm extends Form {
+class JobaEventForm extends Form {
 
 	public function __construct(){
-		parent::__construct('roomForm');
+		parent::__construct('eventForm');
 		$this->setAttribute('method', 'post');
-		//$this->setInputFilter(new \Ehome\Filter\RoomFilter()); // TODO
+		//$this->setInputFilter(new \Ehome\Filter\EventFilter()); // TODO
 		$this->add(array(
 				'name' => 'name',
 				'attributes' => array(
@@ -21,42 +21,38 @@ class RoomForm extends Form {
 						'id' => 'name',
 						'readonly' => 'true'
 				),
-				'options' => array('label' => 'Name des Raumes')
+				'options' => array('label' => 'Name des Events')
 		));
 		$this->add(array(
-				'name' => 'humidity',
+				'name' => 'type',
 				'attributes' => array(
 						'type' => 'text',
-						'id' => 'humidity'),
-				'options' => array('label' => 'Luftfeuchtigkeit')
+						'id' => 'type'),
+				'options' => array('label' => 'Typ des Events')
 		));
 		$this->add(array(
-				'name' => 'temperature',
+				'name' => 'start',
 				'attributes' => array(
 						'type' => 'text',
 						'id' => 'temperature'),
-				'options' => array('label' => 'Temperatur')
+				'options' => array('label' => 'Startzeitpunkt')
 		));
-		// radiobuttons
+		$this->add(array(
+				'name' => 'end',
+				'attributes' => array(
+						'type' => 'text',
+						'id' => 'end'),
+				'options' => array('label' => 'Endzeitpunkt')
+		));
+		// radiobutton
 		$this->add ( array (
 				'type' => 'Zend\Form\Element\Radio',
-				'name' => 'lightone',
+				'name' => 'done',
 				'options' => array (
-						'label' => 'Licht 1',
+						'label' => 'Erledigt',
 						'value_options' => array (
-								'0' => 'Aus',
-								'1' => 'An'
-						)
-				)
-		) );
-		$this->add ( array (
-				'type' => 'Zend\Form\Element\Radio',
-				'name' => 'lighttwo',
-				'options' => array (
-						'label' => 'Licht 2',
-						'value_options' => array (
-								'0' => 'Aus',
-								'1' => 'An'
+								'0' => 'Nein',
+								'1' => 'Ja'
 						)
 				)
 		) );

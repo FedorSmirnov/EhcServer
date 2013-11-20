@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Filter;
+namespace Ehome\Filter;
 
 use Zend\InputFilter\InputFilter;
 

@@ -1,25 +1,26 @@
 <?php
+
 namespace Ehome\Entity;
 
 use Zend\Db\TableGateway\TableGateway;
 
-class RoomTable {
-	
+class JobaEventTable {
+
 	protected $tableGateway;
-	
+
 	public function __construct(TableGateway $tableGateway){
 		$this->tableGateway = $tableGateway;
 	}
-	
+
 	public function fetchAll(){
 		$resultSet = $this->tableGateway->select();
 		return $resultSet;
 	}
-	
-	public function getRoom($id){
+
+	public function getEvent($id){
 		$id = (int) $id;
 		$rowset = $this->tableGateway->select( array(
-				'id' => $id 
+				'id' => $id
 		));
 		$row = $rowset->current();
 		if (! $row) {
@@ -27,32 +28,32 @@ class RoomTable {
 		}
 		return $row;
 	}
-	
-	public function saveRoom(Room $room){
+
+	public function saveEvent(JobaEvent $event){
 		$data = array (
-				'name' => $room->getName(),
-				'humidity' => $room->getHumidity(),
-				'temperature' => $room->getTemperature(),
-				'lightone' => $room->getLightOne(),
-				'lighttwo' => $room->getLightTwo() 
+				'name' => $event->getName(),
+				'type' => $event->getType(),
+				'start' => $event->getStart(),
+				'end' => $event->getEnd(),
+				'done' => $event->getDone()
 		);
-		$id = (int) $room->getId();
+		$id = (int) $event->getId();
 		if ($id == 0) {
 			$this->tableGateway->insert($data);
 		} else {
-			if ($this->getRoom($id)){
+			if ($this->getEvent($id)){
 				$this->tableGateway->update($data, array (
-						'id' => $id 
+						'id' => $id
 				) );
 			} else {
 				throw new \Exception('Room id does not exist');
 			}
 		}
 	}
-	
-	public function deleteRoom($id){
+
+	public function deleteEvent($id){
 		$this->tableGateway->delete(array(
-				'id' => (int) $id 
+				'id' => (int) $id
 		) );
 	}
 }

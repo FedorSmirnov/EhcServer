@@ -2,6 +2,8 @@
 
 namespace Ehome;
 
+use Ehome\Entity\JobaEvent;
+use Ehome\Entity\JobaEventTable;
 use Ehome\Entity\Room;
 use Ehome\Entity\RoomTable;
 use Zend\Db\ResultSet\ResultSet;
@@ -33,6 +35,17 @@ class Module {
 	public function getServiceConfig() {
 		return array (
 				'factories' => array (
+						'Ehome\Entity\JobaEventTable' => function ($sm) {
+							$tableGateway = $sm->get('JobaEventTableGateway');
+							$table = new JobaEventTable($tableGateway);
+							return $table;
+						},
+						'JobaEventTableGateway' => function ($sm) {
+							$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+							$resultSetPrototype = new ResultSet();
+							$resultSetPrototype->setArrayObjectPrototype(new JobaEvent());
+							return new TableGateway('jobaevent', $dbAdapter, null, $resultSetPrototype);
+						},
 						'Ehome\Entity\RoomTable' => function ($sm) {
 							$tableGateway = $sm->get('RoomTableGateway');
 							$table = new RoomTable( $tableGateway );

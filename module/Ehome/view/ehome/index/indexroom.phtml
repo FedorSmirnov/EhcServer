@@ -1,5 +1,5 @@
 <?php 
-//use \Zend\Debug\Debug;
+use \Zend\Debug\Debug;
 ?>
 <script>
 // jquery main function after page is loaded
@@ -90,6 +90,10 @@ td,th {
 		<p>
 			<a class="btn" href="">Normaler Button</a>
 		</p>
+		<h3>Events</h3>
+		<?php 
+			Debug::dump($events);
+		?>
 	</div>
 	<div class='span3'>
 		<h3>Actions</h3>
@@ -206,6 +210,7 @@ if ($lighttwoLivingRoom) {
             <!-- <th>ID</th> -->
             	<th>Name</th>
             	<th>Luftfeuchtigkeit</th>
+            	<th>Temperatur</th>
             	<th>LichtEins</th>
             	<th>LichtZwei</th>
             	<th>Aktion</th>
@@ -215,6 +220,7 @@ if ($lighttwoLivingRoom) {
         //echo "<td>" . $room->getId() . "</td>";
         echo "<td>" . $room->getName() . "</td>";
         echo "<td>" . $room->getHumidity() . "</td>";
+        echo "<td>" . $room->getTemperature() . "</td>";
         if ($room->getLightone() == 100){
         	echo "<td>";
         	echo "<span style='color:orange;'>AN </span> ";
