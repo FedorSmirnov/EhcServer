@@ -32,6 +32,7 @@ class JobaEventTable {
 	public function saveEvent(JobaEvent $event){
 		$data = array (
 				'name' => $event->getName(),
+				'name' => $event->getValue(),
 				'type' => $event->getType(),
 				'start' => $event->getStart(),
 				'end' => $event->getEnd(),

@@ -5,7 +5,8 @@ namespace Ehome\Entity;
 class JobaEvent {
 	private $id;
 	private $name; // infotext
-	private $type; // vital, message
+	private $value; // varchar
+	private $type; // health, message
 	private $start; // start time timestamp
 	private $end;  // targeted time timestamp 
 	private $done; // bool
@@ -13,6 +14,7 @@ class JobaEvent {
 	public function exchangeArray($data) {
 		$this->id = (! empty ( $data ['id'] )) ? $data ['id'] : null;
 		$this->name = (! empty ( $data ['name'] )) ? $data ['name'] : null;
+		$this->name = (! empty ( $data ['value'] )) ? $data ['value'] : null;
 		$this->type = (! empty ( $data ['type'] )) ? $data ['type'] : null;
 		$this->start= (! empty ( $data ['start'] )) ? $data ['start'] : null;
 		$this->end = (! empty ( $data ['end'] )) ? $data ['end'] : null;
@@ -37,6 +39,14 @@ class JobaEvent {
 
 	public function setName($name){
 		$this->name = $name;
+	}
+	
+	public function getValue(){
+		return $this->value;
+	}
+	
+	public function setValue($value){
+		$this->value = $value;
 	}
 
 	public function getType(){

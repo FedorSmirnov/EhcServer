@@ -66,13 +66,13 @@ td,th {
         right: 440px;
 }
 </style>
-<!-- DEBUGGING AREA -->
-
+<!-- DEBUGGING AREA --> 
 <div class='row'>
         <div class='span12'>
                 <h2>Debugging Area</h2>
         </div>
 </div>
+<!--
 <div class='row'>
 	<div class='span6'>
 		<h3>TODOs</h3>
@@ -90,10 +90,6 @@ td,th {
 		<p>
 			<a class="btn" href="">Normaler Button</a>
 		</p>
-		<h3>Events</h3>
-		<?php 
-			Debug::dump($events);
-		?>
 	</div>
 	<div class='span3'>
 		<h3>Actions</h3>
@@ -102,8 +98,38 @@ td,th {
 		</p>
 	</div>
 </div>
-<hr>
+-->
+<div class='row'>
+	<div class='span6'>
+		<h3>Events</h3>
+		<?php 
+$messages = array();
+$healthEvents = array();
 
+foreach($events as $event){
+	if ($event->getType() == "message"){
+		$messages[] = $event;
+	}
+	if ($event->getType() == "health"){
+		$healthEvents[] = $event;
+	}
+	echo "<p>" . $event->getId() . "; " . $event->getName() . "; " . $event->getValue() . "; " . $event->getType() . ";</p>";
+}
+		?>
+	</div>
+	<div class='span6'>
+		<h3>Gesundheitsrelevante Vorkommnisse</h3>
+		<?php 
+foreach($healthEvents as $healthEvent){
+	echo "<p>";
+	echo $healthEvent->getId() . "; " . $healthEvent->getName() . "; " . $healthEvent->getValue() . "; ";
+	echo $healthEvent->getType() . "; ";
+	echo "<a href='" . $this->url('home', array('action' => 'editjobaevent' , 'id' => $healthEvent->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Edit</a>";
+	echo "</p>";
+}
+		?>
+</div>
+<hr>
 <!-- // DEBUGGING AREA -->
 <!-- Startseite -->
 <div class="row">

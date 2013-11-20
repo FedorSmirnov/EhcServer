@@ -256,6 +256,7 @@ class IndexController extends AbstractActionController {
 				$formData = $eventForm->getData();
 				$event = $this->getEventTable()->getEvent($eventId); // siehe JobaEventTable.php
 				$event->setName($formData['name']);
+				$event->setValue($formData['value']);
 				$event->setType($formData['type']);
 				$event->setStart($formData['start']);
 				$event->setEnd($formData['end']);

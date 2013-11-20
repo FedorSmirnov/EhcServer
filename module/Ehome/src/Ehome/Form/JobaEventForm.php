@@ -24,6 +24,15 @@ class JobaEventForm extends Form {
 				'options' => array('label' => 'Name des Events')
 		));
 		$this->add(array(
+				'name' => 'value',
+				'attributes' => array(
+						'type' => 'text',
+						'id' => 'name',
+						'readonly' => 'true'
+				),
+				'options' => array('label' => 'Wert des Events')
+		));
+		$this->add(array(
 				'name' => 'type',
 				'attributes' => array(
 						'type' => 'text',
