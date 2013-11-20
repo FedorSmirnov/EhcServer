@@ -214,17 +214,26 @@ class IndexController extends AbstractActionController {
 		//Debug::dump($state);
 		if ($state == "100"){
 			$room->setLightone("0");
-		} else if ($state == "0"){
-			$room->setLightone("100");
 		} else {
-			throw new \Exception("Fehler bei IndexController.toggleLightOneAction()");
+			$room->setLightone("100");
 		}
 		$this->getRoomTable()->saveRoom($room);
 		return $this->redirect()->toRoute('home'); // TODO create const
 	}
 	
-	public function toggleLightTwoAction(){
-	
+	public function togglelighttwoAction(){
+		$roomId = (int) $this->params()->fromRoute('id', 0);
+		// Debug::dump($roomId);
+		$room = $this->getRoomTable()->getRoom($roomId);
+		$state = $room->getLighttwo();
+		//Debug::dump($state);
+		if ($state == "100"){
+			$room->setLighttwo("0");
+		} else {
+			$room->setLighttwo("100");
+		}
+		$this->getRoomTable()->saveRoom($room);
+		return $this->redirect()->toRoute('home'); // TODO create const
 	}
 	
 	public function editroomAction() {
