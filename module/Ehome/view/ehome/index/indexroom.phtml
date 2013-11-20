@@ -1,77 +1,26 @@
 <?php 
 use \Zend\Debug\Debug;
+
+// collect data structures from database
+$logMessages = array();
+$healthMessages = array();
+foreach($events as $event){
+	if ($event->getType() == "message"){
+		$logMessages[] = $event;
+	}
+	if ($event->getType() == "health"){
+		$healthMessages[] = $event;
+	}
+}
 ?>
-<script>
-// jquery main function after page is loaded
-jQuery(document).ready(function() {
-        var isiPad = navigator.userAgent.match(/iPad/i) != null;
-        if (isiPad){
-                // move all lights more to the right;
-                jQuery('#light_kitchen_one').css('right','600px');
-                jQuery('#light_kitchen_two').css('right','580px');
-                jQuery('#light_bathroom_one').css('right','630px');
-                jQuery('#light_bathroom_two').css('right','610px');
-                jQuery('#light_living_one').css('right','320px');
-                jQuery('#light_living_two').css('right','300px');
-        } else {
-                // do nothing
-        }
-});
-</script>
-<style type="text/css">
-td,th {
-        padding: 10px;
-        text-align: left;
-}
-#container {
-        text-align: center;
-        position: relative;
-}
-#background {
-        width: 100%;
-        height: 100%;
-}
-.light {
-        width: 35px;
-        height: 35px;
-}
-#light_kitchen_one {
-        position: absolute;
-        bottom: 35px;
-        right: 740px;
-}
-#light_kitchen_two {
-        position: absolute;
-        bottom: 35px;
-        right: 720px;
-}
-#light_bathroom_one {
-        position: absolute;
-        bottom: 240px;
-        right: 770px;
-}
-#light_bathroom_two {
-        position: absolute;
-        bottom: 240px;
-        right: 750px;
-}
-#light_living_one {
-        position: absolute;
-        bottom: 150px;
-        right: 460px;
-}
-#light_living_two {
-        position: absolute;
-        bottom: 150px;
-        right: 440px;
-}
-</style>
 <!-- DEBUGGING AREA --> 
+<!-- 
 <div class='row'>
         <div class='span12'>
                 <h2>Debugging Area</h2>
         </div>
 </div>
+ -->
 <!--
 <div class='row'>
 	<div class='span6'>
@@ -99,50 +48,32 @@ td,th {
 	</div>
 </div>
 -->
+<!-- 
 <div class='row'>
 	<div class='span6'>
 		<h3>Events</h3>
 		<?php 
-$messages = array();
-$healthEvents = array();
-
-foreach($events as $event){
-	//Debug::dump($event);
-	if ($event->getType() == "message"){
-		$messages[] = $event;
-	}
-	if ($event->getType() == "health"){
-		$healthEvents[] = $event;
-	}
-	echo "<p>";
-	echo "ID : " . $event->getId() . "; ";
-	echo "name : " . $event->getName() . "; ";
-	echo "value : " . $event->getValue() . "; ";
-	echo "type : " . $event->getType() . "; ";
-	echo "start : " . $event->getStart() . "; ";
-	echo "end : " . $event->getEnd() . "; ";
-	echo "done : " . $event->getDone() . "; ";
-    echo "</p>";
-}
+//foreach($events as $event){
+// 	echo "<p>";
+// 	echo "ID : " . $event->getId() . "; ";
+// 	echo "name : " . $event->getName() . "; ";
+// 	echo "value : " . $event->getValue() . "; ";
+// 	echo "type : " . $event->getType() . "; ";
+// 	echo "start : " . $event->getStart() . "; ";
+// 	echo "end : " . $event->getEnd() . "; ";
+// 	echo "done : " . $event->getDone() . "; ";
+//     echo "</p>";
+//}
 		?>
 	</div>
 	<div class='span6'>
 		<h3>Actions</h3>
 		<p>
-			<a class="btn" href="<?php echo $this->url('home', array('action' => 'temp')); ?>">TempAction</a>
+			<a class="btn" href="<?php //echo $this->url('home', array('action' => 'temp')); ?>">TempAction</a>
 		</p>
-		<h3>Gesundheitsrelevante Vorkommnisse</h3>
-		<?php 
-foreach($healthEvents as $healthEvent){
-	echo "<p>";
-	echo $healthEvent->getId() . "; " . $healthEvent->getName() . "; " . $healthEvent->getValue() . "; ";
-	echo $healthEvent->getType() . "; ";
-	echo "<a href='" . $this->url('home', array('action' => 'editjobaevent' , 'id' => $healthEvent->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Edit</a>";
-	echo "</p>";
-}
-		?>
 </div>
 <hr>
+-->
 <!-- // DEBUGGING AREA -->
 <!-- Startseite -->
 <div class="row">
@@ -155,6 +86,7 @@ foreach($healthEvents as $healthEvent){
 <div class="hero-unit">
     <h1><?php echo sprintf("Willkommen!", '<span class="zf-green">', '</span>') ?></h1>
     <p>Mustermann, Musterweg 13, 12345 Musterstadt</p>
+    <p>[<a class="show_hide" href="#" rel="#container">+/-</a>]</p>
     <div id="container">
     	<div id="background">
 			<img alt="apartment_picture" src='<?php echo $this->basePath();?>/img/praterstr3.jpg'>
@@ -219,6 +151,7 @@ if ($lighttwoLivingRoom) {
                         </div><!-- // light-living -->
                 </div><!-- // div container -->
 </div><!-- // hero-unit -->
+<hr>
 <div class='row'>
 	<div class='span8'>
     <h2>Cockpit</h2>
@@ -229,8 +162,6 @@ if ($lighttwoLivingRoom) {
     </p>
     <p>
     	<a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
-		<!-- <a class='btn' href="user/changeemail"<?php //echo $this->url('zfcuser', array('action' => 'changeemail')); ?>>E-Mail ändern</a> -->
-        <!-- <a class='btn' href="<?php //echo $this->url('zfcuser', array('action' => 'changepassword')); ?>">Passwort ändern</a> -->
 	</p>
     </div>
     <div class='span4'>
@@ -241,10 +172,13 @@ if ($lighttwoLivingRoom) {
         </p>
 	</div>
 </div>
+<hr>
 <div class='row'>
 	<div class='span12'>
     	<h2>Räume</h2>
-        <table border="1px">
+    	<p>[<a class="show_hide" href="#" rel="#rooms">+/-</a>]</p>
+    	<div id="rooms">
+        	<table border="1px">
         	<tr>
             <!-- <th>ID</th> -->
             	<th>Name</th>
@@ -286,22 +220,43 @@ if ($lighttwoLivingRoom) {
         echo "</tr>";
 	}
 	echo "</table>";
-    // TODO add Room
+
 ?>
+		</div>
 	</div>
 </div>
-
-<!-- 
 <hr>
 <div class="row">
-        <div class="span12">
-                <h2>Systemnachrichten</h2>
--->
+	<div class="span12">
+    	<h2>Gesundheitsdaten</h2>
+    	<p>[<a class="show_hide" href="#" rel="#health">+/-</a>]</p>
+    	<div id='health'>
 <?php 
-// foreach($logMessages as $logMessage){
-//         echo "<p>" . $logMessage . "</p>";
-// }
+foreach($healthMessages as $healthMessage){
+        echo "<p>";
+        echo $healthMessage->getName(); 
+        echo "</p>";
+}
 ?>
+		</div>
+	</div>
+</div>
+<hr>
+<div class="row">
+	<div class="span12">
+		<h2>Systemnachrichten</h2>
+		<p>[<a class="show_hide" href="#" rel="#messages">+/-</a>]</p>
+		<div id='messages'>
+<?php 
+foreach($logMessages as $logMessage){
+        echo "<p>";
+        echo $logMessage->getName(); 
+        echo "</p>";
+}
+?>
+		</div>
+	</div>
+</div>
 <!-- 
                  <p>
                         <a class="btn" href="<?php // echo $this->url('clearlog'); ?>">Systemnachrichten l�schen</a>

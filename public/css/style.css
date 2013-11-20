@@ -36,6 +36,54 @@ div.container a.brand {
     padding: 8px 20px 12px 40px;
 }
 
+/* visualize living lab */
+td,th {
+        padding: 10px;
+        text-align: left;
+}
+#container {
+        text-align: center;
+        position: relative;
+}
+#background {
+        width: 100%;
+        height: 100%;
+}
+.light {
+        width: 35px;
+        height: 35px;
+}
+#light_kitchen_one {
+        position: absolute;
+        bottom: 35px;
+        right: 740px;
+}
+#light_kitchen_two {
+        position: absolute;
+        bottom: 35px;
+        right: 720px;
+}
+#light_bathroom_one {
+        position: absolute;
+        bottom: 240px;
+        right: 770px;
+}
+#light_bathroom_two {
+        position: absolute;
+        bottom: 240px;
+        right: 750px;
+}
+#light_living_one {
+        position: absolute;
+        bottom: 150px;
+        right: 460px;
+}
+#light_living_two {
+        position: absolute;
+        bottom: 150px;
+        right: 440px;
+}
+
 /* Zend Framework 2 Standard-Dateiinhalt
 body {
     padding-top: 60px;
