@@ -1,82 +1,30 @@
 <?php 
 use \Zend\Debug\Debug;
+
+// collect data structures from database
+$logMessages = array();
+$healthMessages = array();
+foreach($events as $event){
+	if ($event->getType() == "message"){
+		$logMessages[] = $event;
+	}
+	if ($event->getType() == "health"){
+		$healthMessages[] = $event;
+	}
+}
 ?>
-<script>
-// jquery main function after page is loaded
-jQuery(document).ready(function() {
-        var isiPad = navigator.userAgent.match(/iPad/i) != null;
-        if (isiPad){
-                // move all lights more to the right;
-                jQuery('#light_kitchen_one').css('right','600px');
-                jQuery('#light_kitchen_two').css('right','580px');
-                jQuery('#light_bathroom_one').css('right','630px');
-                jQuery('#light_bathroom_two').css('right','610px');
-                jQuery('#light_living_one').css('right','320px');
-                jQuery('#light_living_two').css('right','300px');
-        } else {
-                // do nothing
-        }
-});
-</script>
-<style type="text/css">
-td,th {
-        padding: 10px;
-        text-align: left;
-}
-#container {
-        text-align: center;
-        position: relative;
-}
-#background {
-        width: 100%;
-        height: 100%;
-}
-.light {
-        width: 35px;
-        height: 35px;
-}
-#light_kitchen_one {
-        position: absolute;
-        bottom: 35px;
-        right: 740px;
-}
-#light_kitchen_two {
-        position: absolute;
-        bottom: 35px;
-        right: 720px;
-}
-#light_bathroom_one {
-        position: absolute;
-        bottom: 240px;
-        right: 770px;
-}
-#light_bathroom_two {
-        position: absolute;
-        bottom: 240px;
-        right: 750px;
-}
-#light_living_one {
-        position: absolute;
-        bottom: 150px;
-        right: 460px;
-}
-#light_living_two {
-        position: absolute;
-        bottom: 150px;
-        right: 440px;
-}
-</style>
 <!-- Startseite -->
 <div class="row">
-        <div class="span12">
-                <p style="text-align: center;">
-                        <img src='<?php echo $this->basePath(); ?>/img/ehome-center-logo.png' alt="Bild Header E|Home-Center" />
-                </p>
-        </div>
+	<div class="span12">
+    <p style="text-align: center;">
+    <img src='<?php echo $this->basePath(); ?>/img/ehome-center-logo.png' alt="Bild Header E|Home-Center" />
+    </p>
+    </div>
 </div>
 <div class="hero-unit">
     <h1><?php echo sprintf("Willkommen!", '<span class="zf-green">', '</span>') ?></h1>
     <p>Mustermann, Musterweg 13, 12345 Musterstadt</p>
+    <p>[<a class="show_hide" href="#" rel="#container">+/-</a>]</p>
     <div id="container">
     	<div id="background">
 			<img alt="apartment_picture" src='<?php echo $this->basePath();?>/img/praterstr3.jpg'>
@@ -137,6 +85,7 @@ if ($lighttwoLivingRoom) {
                         </div><!-- // light-living -->
                 </div><!-- // div container -->
 </div><!-- // hero-unit -->
+<hr>
 <div class='row'>
 	<div class='span8'>
     <h2>Cockpit</h2>
@@ -147,10 +96,6 @@ if ($lighttwoLivingRoom) {
     </p>
     <p>
     	<a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
-		<!-- 
-        <a class='btn' href="<?php //echo $this->url('zfcuser/changeemail'); ?>">E-Mail ändern</a> 
-        <a class='btn' href="<?php //echo $this->url('zfcuser/changepassword'); ?>">Passwort ändern</a>
-        -->
 	</p>
     </div>
     <div class='span4'>
@@ -161,9 +106,12 @@ if ($lighttwoLivingRoom) {
         </p>
 	</div>
 </div>
+<hr>
 <div class='row'>
 	<div class='span12'>
 		<h2>Funktionen</h2>
+		<p>[<a class="show_hide" href="#" rel="#functions">+/-</a>]</p>
+    	<div id="functions">
 		<table border="1px">
  <?php 
 $functionsTable = array();
@@ -186,9 +134,7 @@ for($i=0;$i<$rowsSize;$i++){
 	echo "<tr>";
 	echo "<td>" . $functionsTableRowTitle[$i] . "</td>";
 	$j = 0;
-	//Debug::dump($rooms);
 	foreach($rooms as $room){
-		//Debug::dump($room);
 		if ($i == 0 && $room->getName() == $functionsTableColumnTitle[0]){
 			$valLightOneCellOne = $room->getLightone();  
 			if ($valLightOneCellOne == "100"){
@@ -280,5 +226,38 @@ for($i=0;$i<$rowsSize;$i++){
 }
 echo "</table>";
 ?>
+	</div>
+	</div>
+</div>
+<hr>
+<div class="row">
+	<div class="span12">
+    	<h2>Gesundheitsdaten</h2>
+    	<p>[<a class="show_hide" href="#" rel="#health">+/-</a>]</p>
+    	<div id='health'>
+<?php 
+foreach($healthMessages as $healthMessage){
+        echo "<p>";
+        echo $healthMessage->getName(); 
+        echo "</p>";
+}
+?>
+		</div>
+	</div>
+</div>
+<hr>
+<div class="row">
+	<div class="span12">
+		<h2>Systemnachrichten</h2>
+		<p>[<a class="show_hide" href="#" rel="#messages">+/-</a>]</p>
+		<div id='messages'>
+<?php 
+foreach($logMessages as $logMessage){
+        echo "<p>";
+        echo $logMessage->getName(); 
+        echo "</p>";
+}
+?>
+		</div>
 	</div>
 </div>
