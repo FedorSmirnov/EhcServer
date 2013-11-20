@@ -30,50 +30,29 @@ class RoomForm extends Form {
 						'id' => 'humidity'),
 				'options' => array('label' => 'Luftfeuchtigkeit')
 		));
-		// input fields
-// 		$this->add(array(
-// 				'name' => 'lightone',
-// 				'attributes' => array(
-// 						'type' => 'text',
-// 						'id' => 'lightone'),
-// 				'options' => array('label' => 'Lampe Eins')
-// 		));
-// 		$this->add(array(
-// 				'name' => 'lighttwo',
-// 				'attributes' => array(
-// 					'type' => 'text',
-// 					'id' => 'lighttwo'),
-// 				'options' => array('label' => 'Lampe Zwei')
-// 		));
-		// checkboxes
-		$this->add(array(
+		// radiobuttons
+		$this->add ( array (
+				'type' => 'Zend\Form\Element\Radio',
 				'name' => 'lightone',
-				'type' => 'Zend\Form\Element\Checkbox',
-				//'attributes' => array(
-						// 'type' => 'text',
-						// 'id' => 'lightone'
-				//),
-				'options' => array(
-						'label' => 'Lampe Eins',
-						'use_hidden_element' => true,
-						'checked_value' => "100",
-						'unchecked_value' => "0",
+				'options' => array (
+						'label' => 'Licht 1',
+						'value_options' => array (
+								'0' => 'Aus',
+								'1' => 'An'
+						)
 				)
-		));
-		$this->add(array(
+		) );
+		$this->add ( array (
+				'type' => 'Zend\Form\Element\Radio',
 				'name' => 'lighttwo',
-				'type' => 'Zend\Form\Element\Checkbox',
-				//'attributes' => array(
-						// 'type' => 'text',
-						// 'id' => 'lighttwo'
-				//),
-				'options' => array(
-						'label' => 'Lampe Zwei',
-						'use_hidden_element' => true,
-						'checked_value' => "100",
-						'unchecked_value' => "0",
+				'options' => array (
+						'label' => 'Licht 2',
+						'value_options' => array (
+								'0' => 'Aus',
+								'1' => 'An'
+						)
 				)
-		));
+		) );
 		$this->add(array( // submit;
 				'name' => 'submit',
 				'attributes' => array(

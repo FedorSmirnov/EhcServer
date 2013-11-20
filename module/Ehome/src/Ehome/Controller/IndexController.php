@@ -246,61 +246,39 @@ class IndexController extends AbstractActionController {
 		$message = "";
 		if ($this->getRequest()->isPost()){ // form was submitted
 			$roomForm->setData($this->getRequest()->getPost());
-			// Problem with checkboxes
-			//$data = $roomForm->setAttribute($key, $value);
-// 			$valueLightOne = $roomForm->get('lightone');
-// 			$valueLightTwo = $roomForm->get('lighttwo');
-// 			if ($valueLightOne != null){
-// 				Debug::dump("BP11");
-// 				$roomForm->get('lightone')->setValue("100");
-// 			} else {
-// 				Debug::dump("BP10");
-// 				$roomForm->get('lightone')->setValue("0");
-// 			}
-// 			if ($valueLightTwo != null){
-// 				Debug::dump("BP21");
-// 				$roomForm->get('lighttwo')->setValue("100");
-// 			} else {
-// 				Debug::dump("BP20");
-// 				$roomForm->get('lighttwo')->setValue("0");
-// 			}
-// 			Debug::dump($roomForm->isValid());
 			if ($roomForm->isValid()){
 				$formData = $roomForm->getData();
 				$room = $this->getRoomTable()->getRoom($roomId);
 				$room->setName($formData['name']);
 				$room->setHumidity($formData['humidity']);
-				$room->setLightone($formData['lightone']);
-				$room->setLighttwo($formData['lighttwo']);
-				$this->getRoomTable()->saveRoom($room);
-				return $this->redirect()->toRoute('home');
+				if ($formData['lightone'] == 1){
+					$room->setLightone("100");
+				}else{
+					$room->setLightone("0");
+				}
+				if ($formData['lighttwo'] == 1){
+					$room->setLighttwo("100");
+				} else {
+					$room->setLighttwo ( "0" );
+				}
+				$this->getRoomTable ()->saveRoom ( $room );
+				return $this->redirect ()->toRoute ( 'home' );
 			}
 		} else { // show form
-			$room = $this->getRoomTable()->getRoom($roomId);
-			$roomForm->bind($room);
-			// checkbox-problems
-			$lightOneValue = $room->getLightone();
-			if ($lightOneValue == "100"){
-				//Debug::dump('11');
-				$roomForm->get('lightone')->setValue(true);
-				$roomForm->get('lightone')->setChecked(true);
+			$room = $this->getRoomTable ()->getRoom ( $roomId );
+			$roomForm->bind( $room );
+			$lightOneValue = $room->getLightone ();
+			if ($lightOneValue == '100') {
+				$roomForm->get ( 'lightone' )->setValue ( 1 );
 			} else {
-				//Debug::dump('10');
-				$roomForm->get('lightone')->setValue(false);
-				$roomForm->get('lightone')->setChecked(false);
+				$roomForm->get ( 'lightone' )->setValue ( 0 );
 			}
-			$lightTwoValue = $room->getLighttwo();
-			if ($lightTwoValue == "100"){
-				//Debug::dump('21');
-				$roomForm->get('lighttwo')->setValue(true);
-				$roomForm->get('lighttwo')->setChecked(true);
-			} else {
-				//Debug::dump('20');
-				$roomForm->get('lighttwo')->setValue(false);
-				$roomForm->get('lighttwo')->setChecked(false);
-			}
-			//Debug::dump($room);
-			//Debug::dump($roomForm);
+			$lightTwoValue = $room->getLighttwo ();
+			if ($lightTwoValue == '100'){
+            	$roomForm->get('lighttwo')->setValue(1);
+            } else {
+            	$roomForm->get('lighttwo')->setValue(0);
+            }
 		}
 		return new ViewModel(array(
 			'form' => $roomForm,
