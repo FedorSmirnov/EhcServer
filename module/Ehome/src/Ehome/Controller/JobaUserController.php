@@ -14,28 +14,28 @@ class JobaUserController extends UserController { // from ZfcUser, extends Abstr
     const CONTROLLER_NAME    = 'zfcuser';
 	
 	public function loginAction() {
-		$request = $this->getRequest ();
-		$form = $this->getLoginForm ();
-		if ($this->getOptions ()->getUseRedirectParameterIfPresent () && $request->getQuery ()->get('redirect')) {
+		$request = $this->getRequest();
+		$form = $this->getLoginForm();
+		if ($this->getOptions()->getUseRedirectParameterIfPresent() && $request->getQuery()->get('redirect')) {
 			$redirect = $request->getQuery ()->get('redirect');
 		} else {
 			$redirect = false;
 		}
-		if (! $request->isPost ()) {
+		if (! $request->isPost()) {
 			return array (
 					'loginForm' => $form,
 					'redirect' => $redirect,
 					'enableRegistration' => $this->getOptions ()->getEnableRegistration ()
 			);
 		}
-		$form->setData ( $request->getPost () );
-		if (!$form->isValid ()) {
-			$this->flashMessenger ()->setNamespace ( 'zfcuser-login-form' )->addMessage ( $this->failedLoginMessage );
-			return $this->redirect ()->toUrl ( $this->url ()->fromRoute ( static::ROUTE_LOGIN ) . ($redirect ? '?redirect=' . $redirect : '') );
+		$form->setData($request->getPost());
+		if (!$form->isValid()){
+			$this->flashMessenger()->setNamespace('zfcuser-login-form')->addMessage($this->failedLoginMessage);
+			return $this->redirect()->toUrl( $this->url()->fromRoute(static::ROUTE_LOGIN) . ($redirect ? '?redirect=' . $redirect : '') );
 		}
 		// clear adapters
-		$this->zfcUserAuthentication ()->getAuthAdapter ()->resetAdapters ();
-		$this->zfcUserAuthentication ()->getAuthService ()->clearIdentity ();
+		$this->zfcUserAuthentication()->getAuthAdapter()->resetAdapters();
+		$this->zfcUserAuthentication()->getAuthService()->clearIdentity();
 		// set the view type in session
 		$subname1 = $request->getPost('functional');
 		$subname2 = $request->getPost('room');
@@ -48,7 +48,7 @@ class JobaUserController extends UserController { // from ZfcUser, extends Abstr
 			$session = new Container('session');
 			$session->viewType = 'room';
 		}
-		return $this->forward ()->dispatch ( static::CONTROLLER_NAME, array (
+		return $this->forward ()->dispatch ( static::CONTROLLER_NAME, array(
 				'action' => 'authenticate'
 		));
 	}

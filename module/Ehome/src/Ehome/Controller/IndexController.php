@@ -102,7 +102,6 @@ class IndexController extends AbstractActionController {
 		$email = $user->getEmail ();
 		$rooms = $this->getRoomTable ()->fetchAll();
 		$events = $this->getEventTable()->fetchAll();
-		//Debug::dump($events);
 		$lightoneBath = false;
 		$lighttwoBath = false;
 		$lightoneKitchen = false;
@@ -157,10 +156,10 @@ class IndexController extends AbstractActionController {
 	
 	public function indexfunctionalAction(){
 		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
-			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
+			return $this->redirect()->toRoute(static::ROUTE_LOGIN);
 		}
-		$user = $this->zfcUserAuthentication ()->getIdentity ();
-		$email = $user->getEmail ();
+		$user = $this->zfcUserAuthentication()->getIdentity();
+		$email = $user->getEmail();
 		$events = $this->getEventTable()->fetchAll();
 		$rooms = $this->getRoomTable()->fetchAll();
 		$lightoneBath = false;
@@ -173,30 +172,30 @@ class IndexController extends AbstractActionController {
 		foreach ($rooms as $room){
 			$id = $room->getId ();
 			if ($id == 3){
-				$lightoneBathValue = $room->getLightone ();
-				$lighttwoBathValue = $room->getLighttwo ();
-				if ($lightoneBathValue == 100) {
+				$lightoneBathValue = $room->getLightone();
+				$lighttwoBathValue = $room->getLighttwo();
+				if ($lightoneBathValue == 100){
 					$lightoneBath = true;
 				}
-				if ($lighttwoBathValue == 100) {
+				if ($lighttwoBathValue == 100){
 					$lighttwoBath = true;
 				}
-			} else if ($id == 1) { // kitchen
-				$lightoneKitchenValue = $room->getLightone ();
-				$lighttwoKitchenValue = $room->getLighttwo ();
-				if ($lightoneKitchenValue == 100) {
+			} else if ($id == 1){ // kitchen
+				$lightoneKitchenValue = $room->getLightone();
+				$lighttwoKitchenValue = $room->getLighttwo();
+				if ($lightoneKitchenValue == 100){
 					$lightoneKitchen = true;
 				}
-				if ($lighttwoKitchenValue == 100) {
+				if ($lighttwoKitchenValue == 100){
 					$lighttwoKitchen = true;
 				}
 			} else if ($id == 2) {
-				$lightoneLivingRoomValue = $room->getLightone ();
-				$lighttwoLivingRoomValue = $room->getLighttwo ();
-				if ($lightoneLivingRoomValue == 100) {
+				$lightoneLivingRoomValue = $room->getLightone();
+				$lighttwoLivingRoomValue = $room->getLighttwo();
+				if ($lightoneLivingRoomValue == 100){
 					$lightoneLivingRoom = true;
 				}
-				if ($lighttwoLivingRoomValue == 100) {
+				if ($lighttwoLivingRoomValue == 100){
 					$lighttwoLivingRoom = true;
 				}
 			} else {
@@ -283,7 +282,7 @@ class IndexController extends AbstractActionController {
 		));
 	}
 	
-	public function editroomAction() {
+	public function editroomAction(){
 		$roomForm = new RoomForm(); 
 		$roomId = (int) $this->params()->fromRoute('id', 0);
 		$message = "";
@@ -329,13 +328,13 @@ class IndexController extends AbstractActionController {
 		));
 	}
 	
-	public function logoutAction() {
-		$session = new Container ( 'session' );
-		$session->getManager ()->getStorage ()->clear ( 'session' );
-		return $this->redirect ()->toRoute ( 'zfcuser/logout' );
+	public function logoutAction(){
+		$session = new Container('session');
+		$session->getManager()->getStorage ()->clear('session');
+		return $this->redirect()->toRoute('zfcuser/logout');
 	}
 	
-	public function getEventTable() {
+	public function getEventTable(){
 		if (!$this->eventTable) {
 			$sm = $this->getServiceLocator();
 			$this->eventTable = $sm->get('Ehome\Entity\JobaEventTable');
@@ -343,8 +342,8 @@ class IndexController extends AbstractActionController {
 		return $this->eventTable;
 	}
 	
-	public function getRoomTable() {
-		if (!$this->roomTable) {
+	public function getRoomTable(){
+		if (!$this->roomTable){
 			$sm = $this->getServiceLocator();
 			$this->roomTable = $sm->get('Ehome\Entity\RoomTable');
 		}

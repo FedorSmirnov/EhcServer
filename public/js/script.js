@@ -13,7 +13,6 @@ $(document).ready(function() {
         } else {
                 // do nothing
         }
-
         // show-hide divs
         $('.show_hide').showHide({
     		speed: 1000,  // speed you want the toggle to happen
@@ -22,6 +21,5 @@ $(document).ready(function() {
     		showText: 'Aufklappen',// the button text to show when a div is closed
     		hideText: 'Zuklappen' // the button text to show when a div is open
         });
-           
 });
 
