@@ -11,17 +11,20 @@
         	echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
                         ->prependStylesheet($this->basePath() . '/css/bootstrap-responsive.min.css')
                         ->prependStylesheet($this->basePath() . '/css/style.css')
+                        ->prependStylesheet($this->basePath() . '/css/jquery.jqplot.css')
                         ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
-
+	
         <!-- Scripts -->
         <?php 
         	echo $this->headScript()->prependFile($this->basePath() . '/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',))
                                       ->prependFile($this->basePath() . '/js/bootstrap.min.js')
                                       ->prependFile($this->basePath() . '/js/script.js')
                                       ->prependFile($this->basePath() . '/js/showHide.js')
+                                      ->prependFile($this->basePath() . '/js/excanvas.js')
+                                      ->prependFile($this->basePath() . '/js/RGraph.bar.js')
+                                      ->prependFile($this->basePath() . '/js/RGraph.common.core.js')
                                       ->prependFile($this->basePath() . '/js/jquery.min.js')
-        ?>
-
+        ?>	
     </head>
     <body>
     	<!-- Navigation -->
