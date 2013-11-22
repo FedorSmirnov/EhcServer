@@ -197,8 +197,7 @@ if ($lighttwoLivingRoom) {
     	Angemeldet als <?php echo $useremail; ?>
     </p>
 		<p>
-			<a class='btn'
-				href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
+			<a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
 		</p>
 	</div>
 	<div class='span5'>
@@ -207,7 +206,7 @@ if ($lighttwoLivingRoom) {
 	foreach($warningMessages as $warningMessage){
 		echo "<p style='padding-left: 5px;'> * ";
         //echo $warningMessage->getId() . "; ";
-        echo $warningMessage->getName() . ": ";
+        echo "<span style='color: red;'>" . $warningMessage->getName() . "</span>: ";
         echo $warningMessage->getValue() . "; ";
         //echo $warningMessage->getStart() . "; ";
         //echo $warningMessage->getEnd() . "; ";
@@ -250,7 +249,7 @@ if ($lighttwoLivingRoom) {
 <?php foreach($this->rooms as $room){
 		echo "<tr>";
         //echo "<td>" . $room->getId() . "</td>";
-        echo "<td style='text-align: right;'>" . $room->getName() . "</td>";
+        echo "<td>" . $room->getName() . "</td>";
         echo "<td style='text-align: right;'>" . $room->getHumidity() . "</td>";
         echo "<td style='text-align: right;'>" . $room->getTemperature() . "</td>";
         if ($room->getLightone() == 100){
@@ -281,10 +280,6 @@ if ($lighttwoLivingRoom) {
 	echo "</table>";
 
 ?>
-		
-		
-		
-		
 		</div>
 	</div>
 </div>
@@ -296,26 +291,103 @@ if ($lighttwoLivingRoom) {
 			[<a class="show_hide" href="#" rel="#health">+/-</a>]
 		</p>
 		<div id='health'>
-<?php 
-foreach($healthMessages as $healthMessage){
-        echo "<div style='border: 1px solid grey;'>";
-		echo "<p style='padding-left: 5px;'>";
-        //echo $healthMessage->getId() . "; ";
-        echo $healthMessage->getName() . ": ";
-        echo $healthMessage->getValue() . "; ";
-        echo $healthMessage->getStart() . "; ";
-        echo $healthMessage->getEnd() . "; ";
-        if ($healthMessage->getDone() == 1){
-			echo "<span style='color: green;'>OK</span>; ";
-		} else {
-			echo "<span style='color: red;'>ACHTUNG</span>; ";
+		<!-- Sub containers -->
+		<div class='row'>
+                <div class='span6'>
+                <?php 
+echo "<table border='1px'>";
+echo "<tr>";
+echo "<!-- <th>ID</th> -->";
+echo "<th>Datum</th>";
+echo "<th>Uhrzeit</th>";
+echo "<th>Meldung</th>";
+echo "<th>Wert</th>";
+echo "<th>Bemerkung</th>";
+echo "<th>ID</th>";
+echo "</tr>";
+$healthMessageCounter = 0;
+$healthMessagesReversed = array_reverse($healthMessages);
+foreach($healthMessagesReversed as $healthMessage){
+		if ($healthMessageCounter > 5){
+			continue;
 		}
-        echo "<a href='' title=''>edit</a>" . "; ";
-        echo "<a href='' title=''>delete</a>" . "; ";
-        echo "</p>";
-        echo "</div>";
+		echo "<tr>";
+		echo "<td>";
+		$date = new DateTime($healthMessage->getStart());
+        echo $date->format('d.m.Y');
+        echo "</td>";
+        echo "<td>";
+        $date = new DateTime($healthMessage->getStart());
+        echo $date->format('h:m');
+        echo "</td>";
+		echo "<td>";
+		echo $healthMessage->getName();
+		echo "</td>";
+		echo "<td>";
+		echo $healthMessage->getValue();
+		echo "</td>";
+		echo "<td>";
+		if ($healthMessage->getDone() == 1){
+			echo "<span style='color: green;'>OK</span>";
+		} else {
+			echo "<span style='color: red;'>ACHTUNG</span>";
+		}
+		echo "</td>";
+		echo "<td>";
+		echo $healthMessage->getId();
+		echo "</td>";
+		echo "</tr>";
+		$healthMessageCounter++;
 }
+echo "</table>"
 ?>
+                
+                </div>              
+                <div class='span6'>
+        <!-- RGraph Lib // start -->
+		<canvas id="weightGraph" width="500" height="150">[No canvas support]</canvas>
+		<canvas id="pulseGraph" width="500" height="150">[No canvas support]</canvas>
+		<script>
+        window.onload = function()
+        {
+            var weightLine = new RGraph.Line('weightGraph', [82.4,82.8,82.6,82.2,82.0,79.3,79.6,79.1,78.2,78.9,77.3])
+			.Set('title','Gewichtsentwicklung 2013')
+            .Set('spline', true)
+            .Set('numxticks', 0)
+            .Set('numyticks', 0)
+            .Set('hmargin', 10)
+            .Set('background.grid.autofit.numvlines', 11)
+            .Set('colors', ['orange'])
+            .Set('linewidth', 5)
+            .Set('gutter.left', 40)
+            .Set('gutter.right', 15)
+            .Set('labels',['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov'])
+            .Set('shadow',true)
+            .Set('shadow.color','#aaa')
+            .Set('shadow.blur',5)
+            .Draw();
+            
+            var pulseGraph = new RGraph.Line('pulseGraph', [65,68,66,61,68,72,66,63,66,68,69])
+			.Set('title','Pulsentwicklung 2013')
+            .Set('spline', true)
+            .Set('numxticks', 0)
+            .Set('numyticks', 0)
+            .Set('hmargin', 10)
+            .Set('background.grid.autofit.numvlines', 11)
+            .Set('colors', ['orange'])
+            .Set('linewidth', 5)
+            .Set('gutter.left', 40)
+            .Set('gutter.right', 15)
+            .Set('labels',['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov'])
+            .Set('shadow',true)
+            .Set('shadow.color','#aaa')
+            .Set('shadow.blur',5)
+            .Draw();
+        };
+    	</script>
+		<!-- RGraph Lib // end -->
+                </div>
+            </div>
 		</div>
 	</div>
 </div>
@@ -328,43 +400,21 @@ foreach($healthMessages as $healthMessage){
 		</p>
 		<div id='messages'>
 <?php 
-foreach($logMessages as $logMessage){
-        echo "<p>";
+$logMessagesReversed = array_reverse($logMessages);
+echo "<ul>";
+$logMessageCounter = 0;
+foreach($logMessagesReversed as $logMessage){
+		if($logMessageCounter > 5){
+			continue;
+		}
+        echo "<li>";
         echo $logMessage->getName(); 
-        echo "</p>";
+        echo "</li>";
+        $logMessageCounter++;
 }
+echo "</ul>";
 ?>
 		</div>
-		<!-- RGraph Lib // start -->
-		<canvas id="myGraph" width="600" height="250">[No canvas support]</canvas>
-		<script>
-        window.onload = function()
-        {
-            var line = new RGraph.Line('myBar', [82.4,82.8,82.6,82.2,82.0,79.3,79.6,79.1,78.2,78.9,77.5,77.7])
-         	//var line = new RGraph.Line("myGraph", [1,6,8], [8,6,8], [6,6,8])
-            .Set('spline', true)
-            .Set('numxticks', 0)
-            .Set('numyticks', 0)
-            .Set('hmargin', 10)
-            .Set('background.grid.autofit.numvlines', 11)
-            .Set('colors', ['black'])
-            .Set('linewidth', 5)
-            .Set('gutter.left', 40)
-            .Set('gutter.right', 15)
-            .Set('labels',['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'])
-            .Set('shadow',true)
-            .Set('shadow.color','#aaa')
-            .Set('shadow.blur',5)
-            .Draw();
-            
-//             var bar = new RGraph.Bar('myBar', [82.4,82.8,82.6,82.2,82.0,79.3,79.6,79.1,78.2,78.9,77.5,77.7])
-//                 .Set('gutter.left', 35)
-//                 .Set('title', 'Gewichtsentwicklung 2013')
-//                 .Set('labels', ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
-//                 .Draw();
-        }
-    	</script>
-		<!-- RGraph Lib // end -->
 	</div>
 </div>
 <!-- 
