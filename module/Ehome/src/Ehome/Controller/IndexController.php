@@ -304,6 +304,7 @@ class IndexController extends AbstractActionController {
 				} else {
 					$room->setLighttwo ( "0" );
 				}
+				$room->setTemperature($formData['window']);
 				$this->getRoomTable ()->saveRoom ( $room );
 				return $this->redirect ()->toRoute ( 'home' );
 			}

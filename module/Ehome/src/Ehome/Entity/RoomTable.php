@@ -34,7 +34,8 @@ class RoomTable {
 				'humidity' => $room->getHumidity(),
 				'temperature' => $room->getTemperature(),
 				'lightone' => $room->getLightOne(),
-				'lighttwo' => $room->getLightTwo() 
+				'lighttwo' => $room->getLightTwo(),
+				'window' => $room->getWindow(),
 		);
 		$id = (int) $room->getId();
 		if ($id == 0) {

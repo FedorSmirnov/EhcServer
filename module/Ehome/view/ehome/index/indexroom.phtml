@@ -244,6 +244,8 @@ if ($lighttwoLivingRoom) {
 					<th>Temperatur</th>
 					<th>LichtEins</th>
 					<th>LichtZwei</th>
+					<th>Fenster</th>
+					<th>Türe</th>
 					<th>Aktion</th>
 				</tr>
 <?php foreach($this->rooms as $room){
@@ -274,6 +276,8 @@ if ($lighttwoLivingRoom) {
         	echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 			echo "</td>";
         }
+        echo "<td style='text-align: right;'>" . $room->getWindow() . "</td>";
+        echo "<td style='text-align: right;'>Türe</td>";
         echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
         echo "</tr>";
 	}

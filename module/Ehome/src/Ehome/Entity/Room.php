@@ -10,6 +10,7 @@ class Room {
 	private $temperature;
 	private $lightone; // value from 0 to 100 percent
 	private $lighttwo;
+	private $window;
 
 	public function exchangeArray($data) {
 		$this->id = (! empty ( $data ['id'] )) ? $data ['id'] : null;
@@ -18,6 +19,7 @@ class Room {
 		$this->temperature = (! empty ( $data ['temperature'] )) ? $data ['temperature'] : null;
 		$this->lightone = (! empty ( $data ['lightone'] )) ? $data ['lightone'] : null;
 		$this->lighttwo = (! empty ( $data ['lighttwo'] )) ? $data ['lighttwo'] : null;
+		$this->window = (! empty ( $data ['window'] )) ? $data ['window'] : null;
 	}
 	
 	public function getArrayCopy(){
@@ -70,5 +72,13 @@ class Room {
 	
 	public function setLighttwo($value){
 		$this->lighttwo = $value;
+	}
+	
+	public function getWindow(){
+		return $this->window;
+	}
+	
+	public function setWindow($value){
+		$this->window = $window;
 	}
 }
