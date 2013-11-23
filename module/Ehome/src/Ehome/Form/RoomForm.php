@@ -71,6 +71,17 @@ class RoomForm extends Form {
 						)
 				)
 		) );
+		$this->add ( array (
+				'type' => 'Zend\Form\Element\Radio',
+				'name' => 'door',
+				'options' => array (
+						'label' => 'Tuere',
+						'value_options' => array (
+								'0' => 'Zu',
+								'1' => 'Auf'
+						)
+				)
+		) );
 		$this->add(array( // submit;
 				'name' => 'submit',
 				'attributes' => array(

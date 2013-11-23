@@ -16,7 +16,10 @@ $form->prepare();
         <dd><?php echo $this->formRadio($form->get('lightone')) ?></dd>
         <dt><?php echo $this->formLabel($form->get('lighttwo')) ?></dt>
         <dd><?php echo $this->formRadio($form->get('lighttwo')) ?></dd>
+        <dt><?php echo $this->formLabel($form->get('window')) ?></dt>
         <dd><?php echo $this->formRadio($form->get('window')) ?></dd>
+        <dt><?php echo $this->formLabel($form->get('door')) ?></dt>
+        <dd><?php echo $this->formRadio($form->get('door')) ?></dd>
         <?php if ($this->redirect): ?>
             <input type="hidden" name="redirect" value="<?php echo $this->escapeHtml($this->redirect) ?>" />
         <?php endif ?>

@@ -4,9 +4,13 @@ use \Zend\Debug\Debug;
 // collect data structures from database
 $logMessages = array();
 $healthMessages = array();
+$warningMessages = array();
 foreach($events as $event){
 	if ($event->getType() == "message"){
 		$logMessages[] = $event;
+	}
+	if ($event->getType() == "message" && $event->getName() == 'Warnung'){
+		$warningMessages[] = $event;
 	}
 	if ($event->getType() == "health"){
 		$healthMessages[] = $event;
@@ -87,23 +91,46 @@ if ($lighttwoLivingRoom) {
 </div><!-- // hero-unit -->
 <hr>
 <div class='row'>
-	<div class='span8'>
-    <h2>Cockpit</h2>
-    <div style='float: left; padding-right: 16px;'><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()); ?>
+	<div class='span4'>
+		<h2>Cockpit</h2>
+		<div style='float: left; padding-right: 16px;'><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()); ?>
     </div>
-    <p>
+		<p>
     	Angemeldet als <?php echo $useremail; ?>
     </p>
-    <p>
-    	<a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
-	</p>
-    </div>
-    <div class='span4'>
-    	<h2>Hilfe</h2>
-        <p>
-        	Wir helfen Ihnen gerne:<br>
-        	support@example.org und 01234-12345
-        </p>
+		<p>
+			<a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
+		</p>
+	</div>
+	<div class='span5'>
+		<h2>Hinweise</h2>
+<?php
+echo "<ul>";	 
+$openWarningMessagesCounter = 0;
+foreach($warningMessages as $warningMessage){
+	if ($warningMessage->getDone() == 1){
+		continue;
+	}
+	echo "<li>";
+    echo "<span style='color: red;'>" . $warningMessage->getName() . "</span>: ";
+    echo $warningMessage->getValue() . "; ";
+    echo "<a class='btn' href='" . $this->url('home', array('action' => 'togglemessage' , 'id' => $warningMessage->getId())) . "' title='Nachricht als zur Kenntnis genommen markieren und verstecken.'>x</a>";
+	echo "</li>";
+	$openWarningMessagesCounter++;
+}
+if ($openWarningMessagesCounter == 0){
+	echo "<li>";
+	echo "Alle Warnungen wurden gelesen und als erledigt markiert!";
+	echo "</li>";
+}
+echo "</ul>"
+?>
+	</div>
+	<div class='span3'>
+		<h2>Hilfe</h2>
+		<p>
+			Wir helfen Ihnen gerne:<br> support@example.org und 01234-12345
+		</p>
 	</div>
 </div>
 <hr>
@@ -115,7 +142,7 @@ if ($lighttwoLivingRoom) {
 		<table border="1px">
  <?php 
 $functionsTable = array();
-$functionsTableRowTitle = array("LichtEins", "LichtZwei");
+$functionsTableRowTitle = array("Licht Eins", "Licht Zwei");
 $functionsTableColumnTitle = array("Küche", "Wohnzimmer", "Bad");
 //             Kueche   Wohnzimmer  Bad
 // LichtEins    Val      Val        Val
@@ -234,16 +261,108 @@ echo "</table>";
 <hr>
 <div class="row">
 	<div class="span12">
-    	<h2>Gesundheitsdaten</h2>
-    	<p>[<a class="show_hide" href="#" rel="#health">+/-</a>]</p>
-    	<div id='health'>
-<?php 
-foreach($healthMessages as $healthMessage){
-        echo "<p>";
-        echo $healthMessage->getName(); 
-        echo "</p>";
+		<h2>Gesundheitsdaten</h2>
+		<p>
+			[<a class="show_hide" href="#" rel="#health">+/-</a>]
+		</p>
+		<div id='health'>
+		<!-- Sub containers -->
+		<div class='row'>
+                <div class='span6'>
+                <?php 
+echo "<table border='1px'>";
+echo "<tr>";
+echo "<!-- <th>ID</th> -->";
+echo "<th>Datum</th>";
+echo "<th>Uhrzeit</th>";
+echo "<th>Meldung</th>";
+echo "<th>Wert</th>";
+echo "<th>Bemerkung</th>";
+//echo "<th>ID</th>";
+echo "</tr>";
+$healthMessageCounter = 0;
+$healthMessagesReversed = array_reverse($healthMessages);
+foreach($healthMessagesReversed as $healthMessage){
+		if ($healthMessageCounter > 5){
+			continue;
+		}
+		echo "<tr>";
+		echo "<td>";
+		$date = new DateTime($healthMessage->getStart());
+        echo $date->format('d.m.Y');
+        echo "</td>";
+        echo "<td>";
+        $date = new DateTime($healthMessage->getStart());
+        echo $date->format('h:m');
+        echo "</td>";
+		echo "<td>";
+		echo $healthMessage->getName();
+		echo "</td>";
+		echo "<td>";
+		echo $healthMessage->getValue();
+		echo "</td>";
+		echo "<td>";
+		if ($healthMessage->getDone() == 1){
+			echo "<span style='color: green;'>OK</span>";
+		} else {
+			echo "<span style='color: red;'>ACHTUNG</span>";
+		}
+		echo "</td>";
+		//echo "<td>";
+		//echo $healthMessage->getId();
+		//echo "</td>";
+		echo "</tr>";
+		$healthMessageCounter++;
 }
+echo "</table>"
 ?>
+                
+                </div>              
+                <div class='span6'>
+        <!-- RGraph Lib // start -->
+		<canvas id="weightGraph" width="500" height="150">[No canvas support]</canvas>
+		<canvas id="pulseGraph" width="500" height="150">[No canvas support]</canvas>
+		<script>
+        window.onload = function()
+        {
+            var weightLine = new RGraph.Line('weightGraph', [82.4,82.8,82.6,82.2,82.0,79.3,79.6,79.1,78.2,78.9,77.3])
+			.Set('title','Gewichtsentwicklung 2013')
+            .Set('spline', true)
+            .Set('numxticks', 0)
+            .Set('numyticks', 0)
+            .Set('hmargin', 10)
+            .Set('background.grid.autofit.numvlines', 11)
+            .Set('colors', ['orange'])
+            .Set('linewidth', 5)
+            .Set('gutter.left', 40)
+            .Set('gutter.right', 15)
+            .Set('labels',['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov'])
+            .Set('shadow',true)
+            .Set('shadow.color','#aaa')
+            .Set('shadow.blur',5)
+            .Draw();
+            
+            var pulseGraph = new RGraph.Line('pulseGraph', [65,68,66,61,68,72,66,63,66,68,69])
+			.Set('title','Pulsentwicklung 2013')
+            .Set('spline', true)
+            .Set('numxticks', 0)
+            .Set('numyticks', 0)
+            .Set('hmargin', 10)
+            .Set('background.grid.autofit.numvlines', 11)
+            .Set('colors', ['orange'])
+            .Set('linewidth', 5)
+            .Set('gutter.left', 40)
+            .Set('gutter.right', 15)
+            .Set('labels',['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov'])
+            .Set('shadow',true)
+            .Set('shadow.color','#aaa')
+            .Set('shadow.blur',5)
+            .Draw();
+        };
+    	</script>
+		<!-- RGraph Lib // end -->
+                </div>
+            </div>
 		</div>
 	</div>
 </div>
@@ -251,14 +370,29 @@ foreach($healthMessages as $healthMessage){
 <div class="row">
 	<div class="span12">
 		<h2>Systemnachrichten</h2>
-		<p>[<a class="show_hide" href="#" rel="#messages">+/-</a>]</p>
+		<p>
+			[<a class="show_hide" href="#" rel="#messages">+/-</a>]
+		</p>
 		<div id='messages'>
 <?php 
-foreach($logMessages as $logMessage){
-        echo "<p>";
-        echo $logMessage->getName(); 
-        echo "</p>";
+$logMessagesReversed = array_reverse($logMessages);
+echo "<ul>";
+$logMessageCounter = 0;
+foreach($logMessagesReversed as $logMessage){
+		if($logMessageCounter > 8){
+			continue;
+		}
+        echo "<li>";
+        $date = new DateTime($logMessage->getStart());
+        echo $date->format('d.m.Y');
+        echo ", ";
+        echo $date->format('h:m');
+        echo "Uhr, ";
+        echo $logMessage->getValue(); 
+        echo "</li>";
+        $logMessageCounter++;
 }
+echo "</ul>";
 ?>
 		</div>
 	</div>

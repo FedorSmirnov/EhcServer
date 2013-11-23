@@ -51,10 +51,6 @@ class JobaEventTable {
 			}
 		}
 	}
-
-	public function addEvent(){
-		
-	}
 	
 	public function deleteEvent($id){
 		$this->tableGateway->delete(array(

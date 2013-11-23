@@ -202,12 +202,17 @@ if ($lighttwoLivingRoom) {
 	</div>
 	<div class='span5'>
 		<h2>Hinweise</h2>
-<?php 
-	foreach($warningMessages as $warningMessage){
-		echo "<p style='padding-left: 5px;'> * ";
-        //echo $warningMessage->getId() . "; ";
-        echo "<span style='color: red;'>" . $warningMessage->getName() . "</span>: ";
-        echo $warningMessage->getValue() . "; ";
+<?php
+echo "<ul>";	 
+$openWarningMessagesCounter = 0;
+foreach($warningMessages as $warningMessage){
+	if ($warningMessage->getDone() == 1){
+		continue;
+	}
+	echo "<li>";
+    //echo $warningMessage->getId() . "; ";
+    echo "<span style='color: red;'>" . $warningMessage->getName() . "</span>: ";
+    echo $warningMessage->getValue() . "; ";
         //echo $warningMessage->getStart() . "; ";
         //echo $warningMessage->getEnd() . "; ";
         //if ($warningMessage->getDone() == 1){
@@ -217,8 +222,16 @@ if ($lighttwoLivingRoom) {
 		//}
         //echo "<a href='' title=''>edit</a>" . "; ";
         //echo "<a href='' title=''>delete</a>" . "; ";
-        echo "</p>";
+    echo "<a class='btn' href='" . $this->url('home', array('action' => 'togglemessage' , 'id' => $warningMessage->getId())) . "' title='Nachricht als zur Kenntnis genommen markieren und verstecken.'>x</a>";
+	echo "</li>";
+	$openWarningMessagesCounter++;
 }
+if ($openWarningMessagesCounter == 0){
+	echo "<li>";
+	echo "Alle Warnungen wurden gelesen und als erledigt markiert!";
+	echo "</li>";
+}
+echo "</ul>"
 ?>
 	</div>
 	<div class='span3'>
@@ -242,8 +255,8 @@ if ($lighttwoLivingRoom) {
 					<th>Name</th>
 					<th>Luftfeuchtigkeit</th>
 					<th>Temperatur</th>
-					<th>LichtEins</th>
-					<th>LichtZwei</th>
+					<th>Licht Eins</th>
+					<th>Licht Zwei</th>
 					<th>Fenster</th>
 					<th>Türe</th>
 					<th>Aktion</th>
@@ -276,13 +289,32 @@ if ($lighttwoLivingRoom) {
         	echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
 			echo "</td>";
         }
-        echo "<td style='text-align: right;'>" . $room->getWindow() . "</td>";
-        echo "<td style='text-align: right;'>Türe</td>";
+		if ($room->getWindow() == 1){
+        	echo "<td style='text-align: right;'>";
+        	echo "<span style='color:orange;'>AUF</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'togglewindow' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+			echo "</td>";
+        } else {
+        	echo "<td style='text-align: right;'>";
+        	echo "<span style='color:green;'>ZU</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'togglewindow' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+			echo "</td>";
+        }
+        if ($room->getDoor() == 1){
+        	echo "<td style='text-align: right;'>";
+        	echo "<span style='color:orange;'>AUF</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'toggledoor' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+        	echo "</td>";
+        } else {
+        	echo "<td style='text-align: right;'>";
+        	echo "<span style='color:green;'>ZU</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'toggledoor' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+        	echo "</td>";
+        }
         echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
         echo "</tr>";
 	}
 	echo "</table>";
-
 ?>
 		</div>
 	</div>
@@ -307,7 +339,7 @@ echo "<th>Uhrzeit</th>";
 echo "<th>Meldung</th>";
 echo "<th>Wert</th>";
 echo "<th>Bemerkung</th>";
-echo "<th>ID</th>";
+//echo "<th>ID</th>";
 echo "</tr>";
 $healthMessageCounter = 0;
 $healthMessagesReversed = array_reverse($healthMessages);
@@ -337,9 +369,9 @@ foreach($healthMessagesReversed as $healthMessage){
 			echo "<span style='color: red;'>ACHTUNG</span>";
 		}
 		echo "</td>";
-		echo "<td>";
-		echo $healthMessage->getId();
-		echo "</td>";
+		//echo "<td>";
+		//echo $healthMessage->getId();
+		//echo "</td>";
 		echo "</tr>";
 		$healthMessageCounter++;
 }
@@ -408,11 +440,16 @@ $logMessagesReversed = array_reverse($logMessages);
 echo "<ul>";
 $logMessageCounter = 0;
 foreach($logMessagesReversed as $logMessage){
-		if($logMessageCounter > 5){
+		if($logMessageCounter > 8){
 			continue;
 		}
         echo "<li>";
-        echo $logMessage->getName(); 
+        $date = new DateTime($logMessage->getStart());
+        echo $date->format('d.m.Y');
+        echo ", ";
+        echo $date->format('h:m');
+        echo "Uhr, ";
+        echo $logMessage->getValue(); 
         echo "</li>";
         $logMessageCounter++;
 }

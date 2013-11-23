@@ -36,6 +36,7 @@ class RoomTable {
 				'lightone' => $room->getLightOne(),
 				'lighttwo' => $room->getLightTwo(),
 				'window' => $room->getWindow(),
+				'door' => $room->getDoor(),
 		);
 		$id = (int) $room->getId();
 		if ($id == 0) {

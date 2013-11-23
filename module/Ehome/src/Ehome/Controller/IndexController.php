@@ -224,8 +224,10 @@ class IndexController extends AbstractActionController {
 		$state = $room->getLightone();
 		if ($state == "100"){
 			$room->setLightone("0");
+			$this->createMessage("Protokoll", "Licht Nummer Eins im Raum '" . $room->getName() . "' ausgeschaltet.");
 		} else {
 			$room->setLightone("100");
+			$this->createMessage("Protokoll", "Licht Nummer Eins im Raum '" . $room->getName() . "' eingeschaltet.");
 		}
 		$this->getRoomTable()->saveRoom($room);
 		return $this->redirect()->toRoute('home'); // TODO create const
@@ -237,12 +239,58 @@ class IndexController extends AbstractActionController {
 		$state = $room->getLighttwo();
 		if ($state == "100"){
 			$room->setLighttwo("0");
+			$this->createMessage("Protokoll", "Licht Nummer Zwei im Raum '" . $room->getName() . "' ausgeschaltet.");
 		} else {
 			$room->setLighttwo("100");
+			$this->createMessage("Protokoll", "Licht Nummer Eins im Raum '" . $room->getName() . "' eingeschaltet.");
 		}
 		$this->getRoomTable()->saveRoom($room);
 		return $this->redirect()->toRoute('home'); // TODO create const
 	}
+	
+	public function togglewindowAction(){
+		$roomId = (int) $this->params()->fromRoute('id', 0);
+		$room = $this->getRoomTable()->getRoom($roomId);
+		$state = $room->getWindow();
+		if ($state == "1"){
+			$room->setWindow("0");
+			$this->createMessage("Protokoll", "Fenster im Raum '" . $room->getName() . "' geschlossen.");
+		} else {
+			$room->setWindow("1");
+			$this->createMessage("Protokoll", "Fenster im Raum '" . $room->getName() . "' geöffnet.");
+		}
+		$this->getRoomTable()->saveRoom($room);
+		return $this->redirect()->toRoute('home'); // TODO create const
+	}
+	
+	public function toggledoorAction(){
+		$roomId = (int) $this->params()->fromRoute('id', 0);
+		$room = $this->getRoomTable()->getRoom($roomId);
+		$state = $room->getDoor();
+		if ($state == "1"){
+			$room->setDoor("0");
+			$this->createMessage("Protokoll", "Türe im Raum '" . $room->getName() . "' geschlossen.");
+		} else {
+			$room->setDoor("1");
+			$this->createMessage("Protokoll", "Türe im Raum '" . $room->getName() . "' geöffnet.");
+		}
+		$this->getRoomTable()->saveRoom($room);
+		return $this->redirect()->toRoute('home'); // TODO create const
+	}
+	
+	public function togglemessageAction(){
+		$messageId = (int) $this->params()->fromRoute('id', 0);
+		$message = $this->getEventTable()->getEvent($messageId);
+		$state = $message->getDone();
+		if ($state == "1"){
+			$message->setDone("0");
+		} else {
+			$message->setDone("1");
+		}
+		$this->getEventTable()->saveEvent($message);
+		return $this->redirect()->toRoute('home'); // TODO create const
+	}
+	
 	
 	public function editjobaeventAction() {
 		$eventForm = new JobaEventForm();
@@ -304,8 +352,10 @@ class IndexController extends AbstractActionController {
 				} else {
 					$room->setLighttwo ( "0" );
 				}
-				$room->setTemperature($formData['window']);
-				$this->getRoomTable ()->saveRoom ( $room );
+				$room->setWindow($formData['window']);
+				$room->setDoor($formData['door']);
+				$this->getRoomTable()->saveRoom ( $room );
+				$this->createMessage("Protokoll", "Raum '" . $room->getName() . "' konfiguriert.");
 				return $this->redirect ()->toRoute ( 'home' );
 			}
 		} else { // show form
@@ -322,6 +372,18 @@ class IndexController extends AbstractActionController {
             	$roomForm->get('lighttwo')->setValue(1);
             } else {
             	$roomForm->get('lighttwo')->setValue(0);
+            }
+            $windowValue = $room->getWindow();
+            if ($windowValue == '1') {
+            	$roomForm->get('window')->setValue (1);
+            } else {
+            	$roomForm->get('window')->setValue (0);
+            }
+		    $doorValue = $room->getDoor();
+            if ($doorValue == '1') {
+            	$roomForm->get('door')->setValue(1);
+            } else {
+            	$roomForm->get('door')->setValue(0);
             }
 		}
 		return new ViewModel(array(
@@ -351,9 +413,18 @@ class IndexController extends AbstractActionController {
 		return $this->roomTable;
 	}
 	
+	private function createMessage($name, $value){
+		// Message erzeugen:
+		$message = new JobaEvent();
+		$message->setName($name);
+		$message->setValue($value);
+		$message->setType("message");
+		$message->setDone(0);
+		$this->getEventTable()->saveEvent($message);
+	}
+	
 	// DEVELOPMENT AREA
 	public function tempAction(){
-		
 		// Message erzeugen:
 		$message = new JobaEvent();
 		$message->setName("tempActionCall");
@@ -361,6 +432,7 @@ class IndexController extends AbstractActionController {
 		$message->setType("message");
 		$message->setDone(0);
 		$this->getEventTable()->saveEvent($message);
+		
 		
 		// clear session and log out
 		//$session = new Container('session');

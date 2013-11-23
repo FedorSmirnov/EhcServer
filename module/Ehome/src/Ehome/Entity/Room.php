@@ -11,6 +11,7 @@ class Room {
 	private $lightone; // value from 0 to 100 percent
 	private $lighttwo;
 	private $window;
+	private $door;
 
 	public function exchangeArray($data) {
 		$this->id = (! empty ( $data ['id'] )) ? $data ['id'] : null;
@@ -20,6 +21,7 @@ class Room {
 		$this->lightone = (! empty ( $data ['lightone'] )) ? $data ['lightone'] : null;
 		$this->lighttwo = (! empty ( $data ['lighttwo'] )) ? $data ['lighttwo'] : null;
 		$this->window = (! empty ( $data ['window'] )) ? $data ['window'] : null;
+		$this->door = (! empty ( $data ['door'] )) ? $data ['door'] : null;
 	}
 	
 	public function getArrayCopy(){
@@ -79,6 +81,14 @@ class Room {
 	}
 	
 	public function setWindow($value){
-		$this->window = $window;
+		$this->window = $value;
+	}
+	
+	public function getDoor(){
+		return $this->door;
+	}
+	
+	public function setDoor($value){
+		$this->door = $value;
 	}
 }
