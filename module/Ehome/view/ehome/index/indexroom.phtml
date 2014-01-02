@@ -1,4 +1,5 @@
 <?php 
+
 use \Zend\Debug\Debug;
 
 // collect data structures from database
@@ -17,86 +18,6 @@ foreach($events as $event){
 	}
 }
 ?>
-<!-- DEBUGGING AREA -->
-<!-- 
-<div class='row'>
-        <div class='span12'>
-                <h2>Debugging Area</h2>
-        </div>
-</div>
- -->
-<!--
-<div class='row'>
-	<div class='span6'>
-		<h3>TODOs</h3>
-		<p>Funktionalitaet: Jalousinen, Aufstehbett, Sturzerkennung, Sturzmonitoring, Waage,
-							Licht, Sensornetzwerk Sturzprävention, iPad
-		<br>
-		UseCases:<br> 
-		Naechtlicher Gang - abends wird das Licht angeschalten und das Aufstehbett betätigt, 
-							automatisch startet die Beobachtung des Ganges und am Ende entsteht eine 
-							Kennzahl ähnlich wie beim Laborbericht beim Bluttest, die Vitaldaten könnten 
-							durch einen Zugriff auf die Patientenaktendaten und das Körpergewicht der Waage 
-							angereichert werden. Eine zugehörige User-Story lautet: Sie erinnern sich, dass 
-							Sie nachts zur Toilette mussten, allerdings durch das Aufstehbett und den moderat
-							beleuchteten Gang (jeweils Lampe 2 in Wohnzimmer und Bad) nicht vollkommen wach 
-							wurden - sie öffnen das Licht via iPad, die Jalousinen und wollen sich vergewissern welche Sturzrisikokennzahl 
-							Sie gestern hatten;<br>
-		Schlaue Heizung - Sie starten die Heizung, das System erkennt, dass Sie die Fenster offen haben und warnt;
-		Gute Nacht - Sie wollen ins Bett gehen, schalten Sie alle Lichter aus, das System warnt, wenn etwa im Bad das Fenster noch offen ist oder wenn die Tür noch nicht abgeschlossen ist;
-		Guten Morgen - Sie stehen morgens auf, das System erkennt Luftfeuchtigkeit und Luftqualität und ermuntert zum Auslüften;
-		Blumengiessen - jeden morgen wird in den Blumenvasen der Feuchtigkeitssensor angestoßen und meldet ggf. ob die Pflanzen gegossen werden müssen;
-		</p>
-		<p>url helper problem, siehe http://stackoverflow.com/questions/20056698/zend-framework-2-url-helper</p>
-		<p>Änderung des Layouts - Frage: wie setze ich ein eigenes Layout für das Ehome-Modul?</p>
-		<p>Auflisten der Profileinstellungen macht Probleme!</p>
-		<p>Problemlösung: man will nach dem Login auf die Seite des IndexControllers, man will dort aber den Link einen Link zu den Profileinstellungen des ZfcUser-Controllers.</p>
-		<p>EditRoom-View und Rolle der Datentypen heraus arbeiten.</p>
-	</div>
-	<div class='span3'>
-		<h3>UI-Komponenten</h3>
-		<p>
-			<a class="btn btn-success" href="" target="_blank">Erfolgsbutton mit Pfeilen &raquo;</a>
-		</p>
-		<p>
-			<a class="btn" href="">Normaler Button</a>
-		</p>
-	</div>
-	<div class='span3'>
-		<h3>Actions</h3>
-		<p>
-			<a class="btn" href="<?php //echo $this->url('home', array('action' => 'temp')); ?>">TempAction</a>
-		</p>
-	</div>
-</div>
--->
-<!-- 
-<div class='row'>
-	<div class='span6'>
-		<h3>Events</h3>
-		<?php 
-//foreach($events as $event){
-// 	echo "<p>";
-// 	echo "ID : " . $event->getId() . "; ";
-// 	echo "name : " . $event->getName() . "; ";
-// 	echo "value : " . $event->getValue() . "; ";
-// 	echo "type : " . $event->getType() . "; ";
-// 	echo "start : " . $event->getStart() . "; ";
-// 	echo "end : " . $event->getEnd() . "; ";
-// 	echo "done : " . $event->getDone() . "; ";
-//     echo "</p>";
-//}
-		?>
-	</div>
-	<div class='span6'>
-		<h3>Actions</h3>
-		<p>
-			<a class="btn" href="<?php //echo $this->url('home', array('action' => 'temp')); ?>">TempAction</a>
-		</p>
-</div>
-<hr>
--->
-<!-- // DEBUGGING AREA -->
 <!-- Startseite -->
 <div class="row">
 	<div class="span12">

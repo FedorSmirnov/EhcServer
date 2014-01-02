@@ -6,6 +6,7 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Debug\Debug;
+use Zend\Http\Client;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
@@ -19,79 +20,157 @@ class IndexController extends AbstractActionController {
 	protected $roomTable;
 	const ROUTE_LOGIN = 'zfcuser/login';
 	
+	// DEVELOPMENT AREA
+	public function tempAction(){
+		
+		// Create new request and connect to Z-Wave demonstrator, TODO
+		//$client = new Client();
+		//$client->setAdapter('Zend\Http\Client\Adapter\Curl');
+		//$client->setUri('http://graph.facebook.com/jochen.bauer.18');
+		//$uri = 'http://10.11.12.1:8083/ZWaveAPI/Run/devices\[5\].instances\[0\].Basic.Set\(255\)';
+		//$client->setUri($uri); 
+		//$result = $client->send();
+		//$body = $result->getBody();
+		//Debug::dump("DEBUG: " . $body);
+		
+		// Create Ajax-Link to connect to Z-Wave demonstrator
+		// see index.phtml
+		
+		// create Log Message // TODO add exception handling
+		// $this->createMessage("Protokoll", "TestEvent getriggert.");
+	
+	
+		// clear session and log out
+		//$session = new Container('session');
+		//$viewType = $session->viewType;
+		//Debug::dump(($session->viewType == 'functional'));
+		// 		if ($session->viewType == 'functional'){ // TODO create const
+		// 			//Debug::dump("BP");
+		// 			$this->redirect()->toRoute('home', array('action' => 'functional'));
+		// 		} else if ($session->viewType == 'room'){ // room
+		// 			$this->redirect()->toRoute('home', array('action' => 'room'));
+		// 		} else {
+		// 			throw new \Exception("No corresponding index view!");
+		// 		}
+	
+		//Debug::dump($roomForm->getData());
+		//throw new \Exception("BP");
+	
+		// return $this->redirect()->toRoute('home');
+	
+		// logout and clear session
+		// 		$session = new Container('session');
+		// 		$session->getManager()->getStorage()->clear('session');
+		// 		$this->redirect()->toRoute('zfcuser/logout');
+		// 		// 		$id = (int) $this->params ()->fromRoute('id', 0);
+		// 		if (!$id) {
+		// 			return $this->redirect ()->toRoute( 'home', array (
+		// 					'action' => 'add'
+		// 			));
+		// 		}
+		// 		try {
+		// 			$room = $this->getRoomTable()->getRoom($id);
+		// 		} catch ( \Exception $ex ) {
+		// 			return $this->redirect ()->toRoute('home', array (
+		// 					'action' => 'index'
+		// 			) );
+		// 		}
+	
+		// 		$form = new RoomForm();
+		// 		// Bind: tut die Daten aus dem Modell in die Form und am Ende des Vorgangs wieder zur�ck
+		// 		$form->bind($room);
+		// 		$form->get('submit')->setAttribute('value', 'Edit');
+		// 		$request = $this->getRequest();
+		// 		if ($request->isPost()){ // form was submitted
+		// 			$form->setInputFilter($room->getInputfilter());
+		// 			$form->setData($request->getPost());
+		// 			if ($form->isValid()) { // save
+		// 				$this->getRoomTable()->saveRoom($room);
+		// 				return $this->redirect()->toRoute('home');
+		// 			}
+		// 		}
+		// 		return array (
+		// 				'id' => $id,
+		// 				'form' => $form
+		// 		);
+		//return new ViewModel();
+		return $this->redirect()->toRoute('home');
+	}
+	
 	public function indexAction(){
 		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
 			return $this->redirect ()->toRoute ( static::ROUTE_LOGIN );
 		}
 		// pick corresponding view 
-		$session = new Container("session");
-		$viewType = $session->viewType;
-		if ($viewType == "functional"){
-			return $this->redirect()->toRoute('home', array(
-				'action' => 'indexfunctional' 
-			));
-		} else if ($viewType == "room"){
-			return $this->redirect ()->toRoute('home', array(
-				'action' => 'indexroom'
-			));
-		} else {
-			throw new \Exception("Problem with the session settings.");
-		}
+		//$session = new Container("session");
+		//$viewType = $session->viewType;
+		//if ($viewType == "functional"){
+		//	return $this->redirect()->toRoute('home', array(
+		//		'action' => 'indexfunctional' 
+		//	));
+		//} else if ($viewType == "room"){
+		//	return $this->redirect ()->toRoute('home', array(
+		//		'action' => 'indexroom'
+		//	));
+		//} else {
+		//	throw new \Exception("Problem with the session settings.");
+		//}
 		
 		// scenario: submit button
-// 		$user = $this->zfcUserAuthentication()->getIdentity();
-// 		$email = $user->getEmail();
-// 		$rooms = $this->getRoomTable()->fetchAll();
-// 		$lightoneBath = false;
-// 		$lighttwoBath = false;
-// 		$lightoneKitchen = false;
-// 		$lighttwoKitchen = false;
-// 		$lightoneLivingRoom = false;
-// 		$lighttwoLivingRoom = false;
-// 		$rooms->buffer();
-// 		foreach($rooms as $room){
-// 			$id = $room->getId();
-// 			if ($id == 3){
-// 				$lightoneBathValue = $room->getLightone();
-// 				$lighttwoBathValue = $room->getLighttwo();
-// 				if ($lightoneBathValue == 100){
-// 					$lightoneBath = true;
-// 				}
-// 				if ($lighttwoBathValue == 100){
-// 					$lighttwoBath = true;
-// 				}
-// 			} else if ($id == 1){ // kitchen
-// 				//Debug::dump($room);
-// 				$lightoneKitchenValue = $room->getLightone();
-// 				$lighttwoKitchenValue = $room->getLighttwo();
-// 				if ($lightoneKitchenValue == 100){
-// 					$lightoneKitchen = true;
-// 				}
-// 				if ($lighttwoKitchenValue == 100){
-// 					$lighttwoKitchen = true;
-// 				}
-// 			} else if ($id == 2){
-// 				$lightoneLivingRoomValue = $room->getLightone();
-// 				$lighttwoLivingRoomValue = $room->getLighttwo();
-// 				if ($lightoneLivingRoomValue == 100){
-// 					$lightoneLivingRoom = true;
-// 				}
-// 				if ($lighttwoLivingRoomValue == 100){
-// 					$lighttwoLivingRoom = true;
-// 				}
-// 			} else {}
-// 		}
-// 		return new ViewModel(
-// 				array(
-// 						'rooms' => $rooms,
-// 						'useremail' => $email,
-// 						'lightoneBath' => $lightoneBath,
-// 						'lighttwoBath' => $lighttwoBath,
-// 						'lightoneKitchen' => $lightoneKitchen,
-// 						'lighttwoKitchen' => $lighttwoKitchen,
-// 						'lightoneLivingRoom' => $lightoneLivingRoom,
-// 						'lighttwoLivingRoom' => $lighttwoLivingRoom
-// 				));
+		$user = $this->zfcUserAuthentication ()->getIdentity ();
+		$email = $user->getEmail();
+		$rooms = $this->getRoomTable()->fetchAll();
+		$events = $this->getEventTable()->fetchAll();
+		$lightoneBath = false;
+		$lighttwoBath = false;
+		$lightoneKitchen = false;
+		$lighttwoKitchen = false;
+		$lightoneLivingRoom = false;
+		$lighttwoLivingRoom = false;
+		$rooms->buffer();
+		foreach ($rooms as $room){
+			$id = $room->getId ();
+			if ($id == 3){
+				$lightoneBathValue = $room->getLightone ();
+				$lighttwoBathValue = $room->getLighttwo ();
+				if ($lightoneBathValue == 100) {
+					$lightoneBath = true;
+				}
+				if ($lighttwoBathValue == 100) {
+					$lighttwoBath = true;
+				}
+			} else if ($id == 1) { // kitchen
+				$lightoneKitchenValue = $room->getLightone ();
+				$lighttwoKitchenValue = $room->getLighttwo ();
+				if ($lightoneKitchenValue == 100) {
+					$lightoneKitchen = true;
+				}
+				if ($lighttwoKitchenValue == 100) {
+					$lighttwoKitchen = true;
+				}
+			} else if ($id == 2) {
+				$lightoneLivingRoomValue = $room->getLightone();
+				$lighttwoLivingRoomValue = $room->getLighttwo();
+				if ($lightoneLivingRoomValue == 100) {
+					$lightoneLivingRoom = true;
+				}
+				if ($lighttwoLivingRoomValue == 100) {
+					$lighttwoLivingRoom = true;
+				}
+			} else {
+			}
+		}
+		return new ViewModel ( array (
+				'rooms' => $rooms,
+				'events' => $events,
+				'useremail' => $email,
+				'lightoneBath' => $lightoneBath,
+				'lighttwoBath' => $lighttwoBath,
+				'lightoneKitchen' => $lightoneKitchen,
+				'lighttwoKitchen' => $lighttwoKitchen,
+				'lightoneLivingRoom' => $lightoneLivingRoom,
+				'lighttwoLivingRoom' => $lighttwoLivingRoom
+		) );
 	}
 	
 	public function indexroomAction(){
@@ -151,66 +230,6 @@ class IndexController extends AbstractActionController {
 				'lighttwoKitchen' => $lighttwoKitchen,
 				'lightoneLivingRoom' => $lightoneLivingRoom,
 				'lighttwoLivingRoom' => $lighttwoLivingRoom
-		) );
-	}
-	
-	public function indexfunctionalAction(){
-		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
-			return $this->redirect()->toRoute(static::ROUTE_LOGIN);
-		}
-		$user = $this->zfcUserAuthentication()->getIdentity();
-		$email = $user->getEmail();
-		$events = $this->getEventTable()->fetchAll();
-		$rooms = $this->getRoomTable()->fetchAll();
-		$lightoneBath = false;
-		$lighttwoBath = false;
-		$lightoneKitchen = false;
-		$lighttwoKitchen = false;
-		$lightoneLivingRoom = false;
-		$lighttwoLivingRoom = false;
-		$rooms->buffer();
-		foreach ($rooms as $room){
-			$id = $room->getId ();
-			if ($id == 3){
-				$lightoneBathValue = $room->getLightone();
-				$lighttwoBathValue = $room->getLighttwo();
-				if ($lightoneBathValue == 100){
-					$lightoneBath = true;
-				}
-				if ($lighttwoBathValue == 100){
-					$lighttwoBath = true;
-				}
-			} else if ($id == 1){ // kitchen
-				$lightoneKitchenValue = $room->getLightone();
-				$lighttwoKitchenValue = $room->getLighttwo();
-				if ($lightoneKitchenValue == 100){
-					$lightoneKitchen = true;
-				}
-				if ($lighttwoKitchenValue == 100){
-					$lighttwoKitchen = true;
-				}
-			} else if ($id == 2) {
-				$lightoneLivingRoomValue = $room->getLightone();
-				$lighttwoLivingRoomValue = $room->getLighttwo();
-				if ($lightoneLivingRoomValue == 100){
-					$lightoneLivingRoom = true;
-				}
-				if ($lighttwoLivingRoomValue == 100){
-					$lighttwoLivingRoom = true;
-				}
-			} else {
-			}
-		}
-		return new ViewModel ( array (
-				'rooms' => $rooms,
-				'events' => $events,
-				'useremail' => $email,
-				'lightoneBath' => $lightoneBath,
-				'lighttwoBath' => $lighttwoBath,
-				'lightoneKitchen' => $lightoneKitchen,
-				'lighttwoKitchen' => $lighttwoKitchen,
-				'lightoneLivingRoom' => $lightoneLivingRoom,
-				'lighttwoLivingRoom' => $lighttwoLivingRoom,
 		) );
 	}
 	
@@ -383,17 +402,17 @@ class IndexController extends AbstractActionController {
             if ($doorValue == '1') {
             	$roomForm->get('door')->setValue(1);
             } else {
-            	$roomForm->get('door')->setValue(0);
-            }
+            	$roomForm->get('door')->setValue ( 0 );
+			}
 		}
-		return new ViewModel(array(
-			'form' => $roomForm,
-		));
+		return new ViewModel ( array (
+				'form' => $roomForm 
+		) );
 	}
-	
+
 	public function logoutAction(){
-		$session = new Container('session');
-		$session->getManager()->getStorage ()->clear('session');
+		$session = new Container ( 'session' );
+		$session->getManager ()->getStorage ()->clear('session');
 		return $this->redirect()->toRoute('zfcuser/logout');
 	}
 	
@@ -423,72 +442,64 @@ class IndexController extends AbstractActionController {
 		$this->getEventTable()->saveEvent($message);
 	}
 	
-	// DEVELOPMENT AREA
-	public function tempAction(){
-		// Message erzeugen:
-		$message = new JobaEvent();
-		$message->setName("tempActionCall");
-		$message->setValue("testVal");
-		$message->setType("message");
-		$message->setDone(0);
-		$this->getEventTable()->saveEvent($message);
-		
-		
-		// clear session and log out
-		//$session = new Container('session');
-		//$viewType = $session->viewType;
-		//Debug::dump(($session->viewType == 'functional'));
-		// 		if ($session->viewType == 'functional'){ // TODO create const
-		// 			//Debug::dump("BP");
-		// 			$this->redirect()->toRoute('home', array('action' => 'functional'));
-		// 		} else if ($session->viewType == 'room'){ // room
-		// 			$this->redirect()->toRoute('home', array('action' => 'room'));
-		// 		} else {
-		// 			throw new \Exception("No corresponding index view!");
-		// 		}
-	
-		//Debug::dump($roomForm->getData());
-		//throw new \Exception("BP");
-	
-		// return $this->redirect()->toRoute('home');
-	
-		// logout and clear session
-// 		$session = new Container('session');
-// 		$session->getManager()->getStorage()->clear('session');
-// 		$this->redirect()->toRoute('zfcuser/logout');
-// 		// 		$id = (int) $this->params ()->fromRoute('id', 0);
-		// 		if (!$id) {
-		// 			return $this->redirect ()->toRoute( 'home', array (
-		// 					'action' => 'add'
-		// 			));
-		// 		}
-		// 		try {
-		// 			$room = $this->getRoomTable()->getRoom($id);
-		// 		} catch ( \Exception $ex ) {
-		// 			return $this->redirect ()->toRoute('home', array (
-		// 					'action' => 'index'
-		// 			) );
-		// 		}
-	
-		// 		$form = new RoomForm();
-		// 		// Bind: tut die Daten aus dem Modell in die Form und am Ende des Vorgangs wieder zur�ck
-		// 		$form->bind($room);
-		// 		$form->get('submit')->setAttribute('value', 'Edit');
-		// 		$request = $this->getRequest();
-		// 		if ($request->isPost()){ // form was submitted
-		// 			$form->setInputFilter($room->getInputfilter());
-		// 			$form->setData($request->getPost());
-		// 			if ($form->isValid()) { // save
-		// 				$this->getRoomTable()->saveRoom($room);
-		// 				return $this->redirect()->toRoute('home');
-		// 			}
-		// 		}
-		// 		return array (
-		// 				'id' => $id,
-		// 				'form' => $form
-		// 		);
-		//return new ViewModel();
-		return $this->redirect()->toRoute('home');
-	}
+	// 	public function indexfunctionalAction(){ // deprecated!
+	// 		if (! $this->zfcUserAuthentication ()->hasIdentity ()) { // check for valid session
+	// 			return $this->redirect()->toRoute(static::ROUTE_LOGIN);
+	// 		}
+	// 		$user = $this->zfcUserAuthentication()->getIdentity();
+	// 		$email = $user->getEmail();
+	// 		$events = $this->getEventTable()->fetchAll();
+	// 		$rooms = $this->getRoomTable()->fetchAll();
+	// 		$lightoneBath = false;
+	// 		$lighttwoBath = false;
+	// 		$lightoneKitchen = false;
+	// 		$lighttwoKitchen = false;
+	// 		$lightoneLivingRoom = false;
+	// 		$lighttwoLivingRoom = false;
+	// 		$rooms->buffer();
+	// 		foreach ($rooms as $room){
+	// 			$id = $room->getId ();
+	// 			if ($id == 3){
+	// 				$lightoneBathValue = $room->getLightone();
+	// 				$lighttwoBathValue = $room->getLighttwo();
+	// 				if ($lightoneBathValue == 100){
+	// 					$lightoneBath = true;
+	// 				}
+	// 				if ($lighttwoBathValue == 100){
+	// 					$lighttwoBath = true;
+	// 				}
+	// 			} else if ($id == 1){ // kitchen
+	// 				$lightoneKitchenValue = $room->getLightone();
+	// 				$lighttwoKitchenValue = $room->getLighttwo();
+	// 				if ($lightoneKitchenValue == 100){
+	// 					$lightoneKitchen = true;
+	// 				}
+	// 				if ($lighttwoKitchenValue == 100){
+	// 					$lighttwoKitchen = true;
+	// 				}
+	// 			} else if ($id == 2) {
+	// 				$lightoneLivingRoomValue = $room->getLightone();
+	// 				$lighttwoLivingRoomValue = $room->getLighttwo();
+	// 				if ($lightoneLivingRoomValue == 100){
+	// 					$lightoneLivingRoom = true;
+	// 				}
+	// 				if ($lighttwoLivingRoomValue == 100){
+	// 					$lighttwoLivingRoom = true;
+	// 				}
+	// 			} else {
+	// 			}
+	// 		}
+	// 		return new ViewModel ( array (
+	// 				'rooms' => $rooms,
+	// 				'events' => $events,
+	// 				'useremail' => $email,
+	// 				'lightoneBath' => $lightoneBath,
+	// 				'lighttwoBath' => $lighttwoBath,
+	// 				'lightoneKitchen' => $lightoneKitchen,
+	// 				'lighttwoKitchen' => $lighttwoKitchen,
+	// 				'lightoneLivingRoom' => $lightoneLivingRoom,
+	// 				'lighttwoLivingRoom' => $lighttwoLivingRoom,
+	// 		) );
+	// 	}
 }
 ?>

@@ -1,81 +1,102 @@
 <?php 
-//use \Zend\Debug\Debug;
-?>
-<script>
-// jquery main function after page is loaded
-jQuery(document).ready(function() {
-	var isiPad = navigator.userAgent.match(/iPad/i) != null;
-	if (isiPad){
-		// move all lights more to the right;
-		jQuery('#light_kitchen_one').css('right','600px');
-		jQuery('#light_kitchen_two').css('right','580px');
-		jQuery('#light_bathroom_one').css('right','630px');
-		jQuery('#light_bathroom_two').css('right','610px');
-		jQuery('#light_living_one').css('right','320px');
-		jQuery('#light_living_two').css('right','300px');
-	} else {
-		// do nothing
+use \Zend\Debug\Debug;
+
+// collect data structures from database
+$logMessages = array();
+$healthMessages = array();
+$warningMessages = array();
+foreach($events as $event){
+	if ($event->getType() == "message"){
+		$logMessages[] = $event;
 	}
-});
-</script>
-<style type="text/css">
-td,th {
-        padding: 10px;
-        text-align: left;
+	if ($event->getType() == "message" && $event->getName() == 'Warnung'){
+		$warningMessages[] = $event;
+	}
+	if ($event->getType() == "health"){
+		$healthMessages[] = $event;
+	}
 }
-#container {
-        text-align: center;
-        position: relative;
-}
-#background {
-        width: 100%;
-        height: 100%;
-}
-.light {
-        width: 35px;
-        height: 35px;
-}
-#light_kitchen_one {
-        position: absolute;
-        bottom: 35px;
-        right: 740px;
-}
-#light_kitchen_two {
-        position: absolute;
-        bottom: 35px;
-        right: 720px;
-}
-#light_bathroom_one {
-        position: absolute;
-        bottom: 240px;
-        right: 770px;
-}
-#light_bathroom_two {
-        position: absolute;
-        bottom: 240px;
-        right: 750px;
-}
-#light_living_one {
-        position: absolute;
-        bottom: 150px;
-        right: 460px;
-}
-#light_living_two {
-        position: absolute;
-        bottom: 150px;
-        right: 440px;
-}
-</style>
+?>
 <!-- DEBUGGING AREA -->
-<!-- 
 <div class='row'>
-	<div class='span12'>
-		<h2>Debugging Area</h2>
-	</div>
+        <div class='span12'>
+                <h2>Debugging Area</h2>
+                <p>
+					<a class="btn" href="<?php echo $this->url('home', array('action' => 'temp')); ?>">TempAction</a>
+				</p>
+<script type="text/javascript">
+function turnLightOn(){
+	var url = 'http://10.11.12.1:8083/ZWaveAPI/Run/devices\[5\].instances\[0\].Basic.Set\(255\)';
+	jQuery.getJSON(url, 'callback=?', function(data){
+		alert("BP9");
+	});
+}
+
+function turnLightOff(){
+	var url = 'http://10.11.12.1:8083/ZWaveAPI/Run/devices\[5\].instances\[0\].Basic.Set\(0\)';
+	jQuery.getJSON(url, 'callback=?', function(data){
+		// TODO
+	});
+}
+
+function getZwaveData(){
+	var url = 'http://10.11.12.1:8083/ZWaveAPI/Data/0';
+	jQuery.getJSON(url, 'callback=?', function(data){
+		//var jsonString = JSON.stringify(data);
+		var jsonString = data.toString();
+		jQuery('#ajaxResult').append(jsonString);
+		//alert("JSON-Response: \n" + JSON.stringify(data));
+	});
+}
+
+function getZwaveLightState(){
+	var url = 'http://10.11.12.1:8083/ZWaveAPI/Run/devices\[5\].instances\[0\].Basic.Get\(\)';
+	jQuery.getJSON(url, 'callback=?', function(data){
+		alert("BP0" + data);
+	});
+}
+
+function ajaxTest(){
+	getZwaveLightState();
+}
+</script>
+				<p>
+					<a href="#" title="ajaxTestLink" onclick="ajaxTest();">TempAjaxAction</a>
+				</p>
+				<p>
+					<a href="#" title="ajaxTestLink" onclick="turnLightOn();">LichtAn</a>
+				</p>
+				<p>
+					<a href="#" title="ajaxTestLink" onclick="turnLightOff();">LichtAus</a>
+				</p>
+				<div id="ajaxResult">
+				</div>
+        </div>
 </div>
+<!-- 
 <div class='row'>
 	<div class='span6'>
 		<h3>TODOs</h3>
+		<p>Exception Handling wenn etwa Session oder Datenbank-Ausnahmen fliegen.</p>
+		<p>Uhrzeit der Nachrichten stimmt nicht.</p>
+		<p>Funktionalitaet: Jalousinen, Aufstehbett, Sturzerkennung, Sturzmonitoring, Waage,
+							Licht, Sensornetzwerk Sturzprävention, iPad
+		<br>
+		UseCases:<br> 
+		Naechtlicher Gang - abends wird das Licht angeschalten und das Aufstehbett betätigt, 
+							automatisch startet die Beobachtung des Ganges und am Ende entsteht eine 
+							Kennzahl ähnlich wie beim Laborbericht beim Bluttest, die Vitaldaten könnten 
+							durch einen Zugriff auf die Patientenaktendaten und das Körpergewicht der Waage 
+							angereichert werden. Eine zugehörige User-Story lautet: Sie erinnern sich, dass 
+							Sie nachts zur Toilette mussten, allerdings durch das Aufstehbett und den moderat
+							beleuchteten Gang (jeweils Lampe 2 in Wohnzimmer und Bad) nicht vollkommen wach 
+							wurden - sie öffnen das Licht via iPad, die Jalousinen und wollen sich vergewissern welche Sturzrisikokennzahl 
+							Sie gestern hatten;<br>
+		Schlaue Heizung - Sie starten die Heizung, das System erkennt, dass Sie die Fenster offen haben und warnt;
+		Gute Nacht - Sie wollen ins Bett gehen, schalten Sie alle Lichter aus, das System warnt, wenn etwa im Bad das Fenster noch offen ist oder wenn die Tür noch nicht abgeschlossen ist;
+		Guten Morgen - Sie stehen morgens auf, das System erkennt Luftfeuchtigkeit und Luftqualität und ermuntert zum Auslüften;
+		Blumengiessen - jeden morgen wird in den Blumenvasen der Feuchtigkeitssensor angestoßen und meldet ggf. ob die Pflanzen gegossen werden müssen;
+		</p>
 		<p>url helper problem, siehe http://stackoverflow.com/questions/20056698/zend-framework-2-url-helper</p>
 		<p>Änderung des Layouts - Frage: wie setze ich ein eigenes Layout für das Ehome-Modul?</p>
 		<p>Auflisten der Profileinstellungen macht Probleme!</p>
@@ -91,203 +112,431 @@ td,th {
 			<a class="btn" href="">Normaler Button</a>
 		</p>
 	</div>
-		<div class='span3'>
+	<div class='span3'>
 		<h3>Actions</h3>
 		<p>
 			<a class="btn" href="<?php //echo $this->url('home', array('action' => 'temp')); ?>">TempAction</a>
 		</p>
 	</div>
 </div>
-<hr>
  -->
+<!-- 
+<div class='row'>
+	<div class='span6'>
+		<h3>Events</h3>
+		<?php 
+//foreach($events as $event){
+// 	echo "<p>";
+// 	echo "ID : " . $event->getId() . "; ";
+// 	echo "name : " . $event->getName() . "; ";
+// 	echo "value : " . $event->getValue() . "; ";
+// 	echo "type : " . $event->getType() . "; ";
+// 	echo "start : " . $event->getStart() . "; ";
+// 	echo "end : " . $event->getEnd() . "; ";
+// 	echo "done : " . $event->getDone() . "; ";
+//     echo "</p>";
+//}
+		?>
+	</div>
+	<div class='span6'>
+		<h3>Actions</h3>
+		<p>
+			<a class="btn" href="<?php //echo $this->url('home', array('action' => 'temp')); ?>">TempAction</a>
+		</p>
+</div>
+<hr>
+-->
 <!-- // DEBUGGING AREA -->
 <!-- Startseite -->
 <div class="row">
 	<div class="span12">
 		<p style="text-align: center;">
-			<img src='<?php echo $this->basePath(); ?>/img/ehome-center-logo.png' alt="Bild Header E|Home-Center" />
+			<img src='<?php echo $this->basePath(); ?>/img/ehome-center-logo.png'
+				alt="Bild Header E|Home-Center" />
 		</p>
 	</div>
 </div>
 <div class="hero-unit">
-    <h1><?php echo sprintf("Willkommen!", '<span class="zf-green">', '</span>') ?></h1>
-    <p>Mustermann, Musterweg 13, 12345 Musterstadt</p>
-    <div id="container">
-			<div id="background">
-				<img alt="apartment_picture" src='<?php echo $this->basePath();?>/img/praterstr3.jpg'>
-			</div>
-            <div id="light_kitchen_one" class="light">
-            	<img class="img_light" id="img_light_kitchen_one" alt="gluehbirne_aus" src=<?php
+	<h1><?php echo sprintf("Willkommen!", '<span class="zf-green">', '</span>') ?></h1>
+	<p>Mustermann, Musterweg 13, 12345 Musterstadt</p>
+	<p>
+		[<a class="show_hide" href="#" rel="#container">+/-</a>]
+	</p>
+	<div id="container">
+		<div id="background">
+			<img alt="apartment_picture"
+				src='<?php echo $this->basePath();?>/img/praterstr3.jpg'>
+		</div>
+		<div id="light_kitchen_one" class="light">
+			<img class="img_light" id="img_light_kitchen_one"
+				alt="gluehbirne_aus"
+				src=<?php
 if ($lightoneKitchen) {
-	//Debug::dump(lightoneKitchen);
-	echo $this->basePath() . '/img/gluehbirne_an.png';
+        echo $this->basePath() . '/img/gluehbirne_an.png';
 } else {
-	//Debug::dump(lightoneKitchen);
-	echo $this->basePath() . '/img/gluehbirne_aus.png';
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
 }
-				?> />
-			</div>
-			<div id="light_kitchen_two" class="light">
-            	<img class="img_light" id="img_light_kitchen_two" alt="gluehbirne_aus" src=<?php
+                                ?> />
+		</div>
+		<div id="light_kitchen_two" class="light">
+			<img class="img_light" id="img_light_kitchen_two"
+				alt="gluehbirne_aus"
+				src=<?php
 if ($lighttwoKitchen) {
-	//Debug::dump(lighttwoKitchen);
-	echo $this->basePath() . '/img/gluehbirne_an.png';
+        echo $this->basePath() . '/img/gluehbirne_an.png';
 } else {
-	//Debug::dump(lighttwoKitchen);
-	echo $this->basePath() . '/img/gluehbirne_aus.png';
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
 }
-				?> />
-			</div>
-            <div id="light_bathroom_one" class="light">
-            	<img class="img_light" id="img_light_bathroom_one" alt="gluehbirne_aus" src=<?php
+                                ?> />
+		</div>
+		<div id="light_bathroom_one" class="light">
+			<img class="img_light" id="img_light_bathroom_one"
+				alt="gluehbirne_aus"
+				src=<?php
 if ($lightoneBath) {
-	echo $this->basePath() . '/img/gluehbirne_an.png';
+    echo $this->basePath() . '/img/gluehbirne_an.png';
 } else {
     echo $this->basePath() . '/img/gluehbirne_aus.png';
 }
                 ?> />
-            </div>
-            <div id="light_bathroom_two" class="light">
-            	<img class="img_light" id="img_light_bathroom_two" alt="gluehbirne_aus" src=<?php
+		</div>
+		<div id="light_bathroom_two" class="light">
+			<img class="img_light" id="img_light_bathroom_two"
+				alt="gluehbirne_aus"
+				src=<?php
 if ($lighttwoBath) {
-	echo $this->basePath() . '/img/gluehbirne_an.png';
+    echo $this->basePath() . '/img/gluehbirne_an.png';
 } else {
     echo $this->basePath() . '/img/gluehbirne_aus.png';
 }
                 ?> />
-            </div>
-            <div id="light_living_one" class="light">
-            	<img class="img_light" id="img_light_living_one" alt="gluehbirne_aus" src=<?php 
+		</div>
+		<div id="light_living_one" class="light">
+			<img class="img_light" id="img_light_living_one" alt="gluehbirne_aus"
+				src=<?php 
 if ($lightoneLivingRoom) {
-	echo $this->basePath() . '/img/gluehbirne_an.png';
+        echo $this->basePath() . '/img/gluehbirne_an.png';
 } else {
-	echo $this->basePath() . '/img/gluehbirne_aus.png';
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
 }
-				?> />
-			</div><!-- // light-living -->
-			<div id="light_living_two" class="light">
-            	<img class="img_light" id="img_light_living_two" alt="gluehbirne_aus" src=<?php 
+                                ?> />
+		</div>
+		<!-- // light-living -->
+		<div id="light_living_two" class="light">
+			<img class="img_light" id="img_light_living_two" alt="gluehbirne_aus"
+				src=<?php 
 if ($lighttwoLivingRoom) {
-	echo $this->basePath() . '/img/gluehbirne_an.png';
+        echo $this->basePath() . '/img/gluehbirne_an.png';
 } else {
-	echo $this->basePath() . '/img/gluehbirne_aus.png';
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
 }
-				?> />
-			</div><!-- // light-living -->
-		</div><!-- // div container -->
-</div><!-- // hero-unit -->
+                                ?> />
+		</div>
+		<!-- // light-living -->
+	</div>
+	<!-- // div container -->
+</div>
+<!-- // hero-unit -->
+<hr>
 <div class='row'>
-	<div class='span8'>
+	<div class='span4'>
 		<h2>Cockpit</h2>
 		<div style='float: left; padding-right: 16px;'><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()); ?>
-		</div>
+    </div>
 		<p>
-			Angemeldet als <?php echo $useremail; ?>
-		</p>
+    	Angemeldet als <?php echo $useremail; ?>
+    </p>
 		<p>
-			<!-- <a class='btn' href="<?php //echo $this->url('zfcuser/logout'); ?>">Ausloggen</a> -->
 			<a class='btn' href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
-			<!-- 
-			<a class='btn' href="<?php //echo $this->url('zfcuser/changeemail'); ?>">E-Mail ändern</a> 
-			<a class='btn' href="<?php //echo $this->url('zfcuser/changepassword'); ?>">Passwort ändern</a>
-			-->
 		</p>
 	</div>
-	<div class='span4'>
+	<div class='span5'>
+		<h2>Hinweise</h2>
+<?php
+echo "<ul>";	 
+$openWarningMessagesCounter = 0;
+foreach($warningMessages as $warningMessage){
+	if ($warningMessage->getDone() == 1){
+		continue;
+	}
+	echo "<li>";
+    //echo $warningMessage->getId() . "; ";
+    echo "<span style='color: red;'>" . $warningMessage->getName() . "</span>: ";
+    echo $warningMessage->getValue() . "; ";
+        //echo $warningMessage->getStart() . "; ";
+        //echo $warningMessage->getEnd() . "; ";
+        //if ($warningMessage->getDone() == 1){
+		//	echo "<span style='color: green;'>OK</span>; ";
+		//} else {
+		//	echo "<span style='color: red;'>ACHTUNG</span>; ";
+		//}
+        //echo "<a href='' title=''>edit</a>" . "; ";
+        //echo "<a href='' title=''>delete</a>" . "; ";
+    echo "<a class='btn' href='" . $this->url('home', array('action' => 'togglemessage' , 'id' => $warningMessage->getId())) . "' title='Nachricht als zur Kenntnis genommen markieren und verstecken.'>x</a>";
+	echo "</li>";
+	$openWarningMessagesCounter++;
+}
+if ($openWarningMessagesCounter == 0){
+	echo "<li>";
+	echo "Alle Warnungen wurden gelesen und als erledigt markiert!";
+	echo "</li>";
+}
+echo "</ul>"
+?>
+	</div>
+	<div class='span3'>
 		<h2>Hilfe</h2>
 		<p>
-			Wir helfen Ihnen gerne:<br>
-			support@example.org und 01234-12345
+			Wir helfen Ihnen gerne:<br> support@example.org und 01234-12345
 		</p>
 	</div>
 </div>
+<hr>
 <div class='row'>
 	<div class='span12'>
 		<h2>Räume</h2>
-		<table border="1px">
-		<tr>
-			<!-- <th>ID</th> -->
-			<th>Name</th>
-			<th>Luftfeuchtigkeit</th>
-			<th>LichtEins</th>
-			<th>LichtZwei</th>
-			<th>Aktion</th>
-		</tr>
-		<?php foreach($this->rooms as $room){
-				echo "<tr>";
-				//echo "<td>" . $room->getId() . "</td>";
-				echo "<td>" . $room->getName() . "</td>";
-				echo "<td>" . $room->getHumidity() . "</td>";
-				if ($room->getLightone() == 100){
-					echo "<td><span style='color:orange;'>AN</span></td>";
-				} else {
-					echo "<td><span style='color:green;'>AUS</span></td>";
-				}
-				if ($room->getLighttwo() == 100){
-					echo "<td><span style='color:orange;'>AN</span></td>";
-				} else {
-					echo "<td><span style='color:green;'>AUS</span></td>";
-				}
-				//echo "<td><a href='" . $this->url('editroom', array('id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
-				echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
-				echo "</tr>";
-		}
-		echo "</table>";
-		// TODO add Room
-		?>
+		<p>
+			[<a class="show_hide" href="#" rel="#rooms">+/-</a>]
+		</p>
+		<div id="rooms">
+			<table border="1px">
+				<tr>
+					<!-- <th>ID</th> -->
+					<th>Name</th>
+					<th>Luftfeuchtigkeit</th>
+					<th>Temperatur</th>
+					<th>Licht Eins</th>
+					<th>Licht Zwei</th>
+					<th>Fenster</th>
+					<th>Türe</th>
+					<th>Aktion</th>
+				</tr>
+<?php foreach($this->rooms as $room){
+		echo "<tr>";
+        //echo "<td>" . $room->getId() . "</td>";
+        echo "<td>" . $room->getName() . "</td>";
+        echo "<td style='text-align: right;'>" . $room->getHumidity() . "</td>";
+        echo "<td style='text-align: right;'>" . $room->getTemperature() . "</td>";
+        if ($room->getLightone() == 100){
+        	echo "<td style='text-align: right;'>";
+        	echo "<span style='color:orange;'>AN </span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'togglelightone' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+			echo "</td>";
+        } else {
+        	echo "<td style='text-align: right;'>";
+        	echo "<span style='color:green;'>AUS</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'togglelightone' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+        	echo "</td>";
+        }
+        if ($room->getLighttwo() == 100){
+        	echo "<td style='text-align: right;'>";
+        	echo "<span style='color:orange;'>AN</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+			echo "</td>";
+        } else {
+        	echo "<td style='text-align: right;'>";
+        	echo "<span style='color:green;'>AUS</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'togglelighttwo' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+			echo "</td>";
+        }
+		if ($room->getWindow() == 1){
+        	echo "<td style='text-align: right;'>";
+        	echo "<span style='color:orange;'>AUF</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'togglewindow' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+			echo "</td>";
+        } else {
+        	echo "<td style='text-align: right;'>";
+        	echo "<span style='color:green;'>ZU</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'togglewindow' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+			echo "</td>";
+        }
+        if ($room->getDoor() == 1){
+        	echo "<td style='text-align: right;'>";
+        	echo "<span style='color:orange;'>AUF</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'toggledoor' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+        	echo "</td>";
+        } else {
+        	echo "<td style='text-align: right;'>";
+        	echo "<span style='color:green;'>ZU</span> ";
+        	echo "<a href='" . $this->url('home', array('action' => 'toggledoor' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'><></a>";
+        	echo "</td>";
+        }
+        echo "<td><a href='" . $this->url('home', array('action' => 'editroom' , 'id' => $room->getId())) . "' title='Bearbeiten des Eintrags' class='btn btn-success'>Eintreten &raquo;</a>" . "</td>";
+        echo "</tr>";
+	}
+	echo "</table>";
+?>
+		</div>
 	</div>
 </div>
-
-<!-- 
+<hr>
+<div class="row">
+	<div class="span12">
+		<h2>Gesundheitsdaten</h2>
+		<p>
+			[<a class="show_hide" href="#" rel="#health">+/-</a>]
+		</p>
+		<div id='health'>
+		<!-- Sub containers -->
+		<div class='row'>
+                <div class='span6'>
+                <?php 
+echo "<table border='1px'>";
+echo "<tr>";
+echo "<!-- <th>ID</th> -->";
+echo "<th>Datum</th>";
+echo "<th>Uhrzeit</th>";
+echo "<th>Meldung</th>";
+echo "<th>Wert</th>";
+echo "<th>Bemerkung</th>";
+//echo "<th>ID</th>";
+echo "</tr>";
+$healthMessageCounter = 0;
+$healthMessagesReversed = array_reverse($healthMessages);
+foreach($healthMessagesReversed as $healthMessage){
+		if ($healthMessageCounter > 5){
+			continue;
+		}
+		echo "<tr>";
+		echo "<td>";
+		$date = new DateTime($healthMessage->getStart());
+        echo $date->format('d.m.Y');
+        echo "</td>";
+        echo "<td>";
+        $date = new DateTime($healthMessage->getStart());
+        echo $date->format('h:m');
+        echo "</td>";
+		echo "<td>";
+		echo $healthMessage->getName();
+		echo "</td>";
+		echo "<td>";
+		echo $healthMessage->getValue();
+		echo "</td>";
+		echo "<td>";
+		if ($healthMessage->getDone() == 1){
+			echo "<span style='color: green;'>OK</span>";
+		} else {
+			echo "<span style='color: red;'>ACHTUNG</span>";
+		}
+		echo "</td>";
+		//echo "<td>";
+		//echo $healthMessage->getId();
+		//echo "</td>";
+		echo "</tr>";
+		$healthMessageCounter++;
+}
+echo "</table>"
+?>
+                
+                </div>              
+                <div class='span6'>
+        <!-- RGraph Lib // start -->
+		<canvas id="weightGraph" width="500" height="150">[No canvas support]</canvas>
+		<canvas id="pulseGraph" width="500" height="150">[No canvas support]</canvas>
+		<script>
+        window.onload = function()
+        {
+            var weightLine = new RGraph.Line('weightGraph', [82.4,82.8,82.6,82.2,82.0,79.3,79.6,79.1,78.2,78.9,77.3])
+			.Set('title','Gewichtsentwicklung 2013')
+            .Set('spline', true)
+            .Set('numxticks', 0)
+            .Set('numyticks', 0)
+            .Set('hmargin', 10)
+            .Set('background.grid.autofit.numvlines', 11)
+            .Set('colors', ['orange'])
+            .Set('linewidth', 5)
+            .Set('gutter.left', 40)
+            .Set('gutter.right', 15)
+            .Set('labels',['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov'])
+            .Set('shadow',true)
+            .Set('shadow.color','#aaa')
+            .Set('shadow.blur',5)
+            .Draw();
+            
+            var pulseGraph = new RGraph.Line('pulseGraph', [65,68,66,61,68,72,66,63,66,68,69])
+			.Set('title','Pulsentwicklung 2013')
+            .Set('spline', true)
+            .Set('numxticks', 0)
+            .Set('numyticks', 0)
+            .Set('hmargin', 10)
+            .Set('background.grid.autofit.numvlines', 11)
+            .Set('colors', ['orange'])
+            .Set('linewidth', 5)
+            .Set('gutter.left', 40)
+            .Set('gutter.right', 15)
+            .Set('labels',['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov'])
+            .Set('shadow',true)
+            .Set('shadow.color','#aaa')
+            .Set('shadow.blur',5)
+            .Draw();
+        };
+    	</script>
+		<!-- RGraph Lib // end -->
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
 <hr>
 <div class="row">
 	<div class="span12">
 		<h2>Systemnachrichten</h2>
--->
+		<p>
+			[<a class="show_hide" href="#" rel="#messages">+/-</a>]
+		</p>
+		<div id='messages'>
 <?php 
-// foreach($logMessages as $logMessage){
-// 	echo "<p>" . $logMessage . "</p>";
-// }
+$logMessagesReversed = array_reverse($logMessages);
+echo "<ul>";
+$logMessageCounter = 0;
+foreach($logMessagesReversed as $logMessage){
+		if($logMessageCounter > 8){
+			continue;
+		}
+        echo "<li>";
+        $date = new DateTime($logMessage->getStart());
+        echo $date->format('d.m.Y');
+        echo ", ";
+        echo $date->format('h:m');
+        echo "Uhr, ";
+        echo $logMessage->getValue(); 
+        echo "</li>";
+        $logMessageCounter++;
+}
+echo "</ul>";
 ?>
+		</div>
+	</div>
+</div>
 <!-- 
- 		<p>
-			<a class="btn" href="<?php // echo $this->url('clearlog'); ?>">Systemnachrichten löschen</a>
-		</p>
+                 <p>
+                        <a class="btn" href="<?php // echo $this->url('clearlog'); ?>">Systemnachrichten l�schen</a>
+                </p>
 
-	</div>
+        </div>
 </div>
 -->
 <!-- 
 <div class="row">
-	<div class="span12">
-		<h2>Haussystem</h2>
-		<p>
-			Energiefüllstand Solaranlage; Anzahl der Benutzer; Datenzugriffe extern;
-		</p>
-		<p>
-			<a class="btn" href="">Betreten</a>
-		</p>
-	</div>
+        <div class="span12">
+                <h2>Haussystem</h2>
+                <p>
+                        Energief�llstand Solaranlage; Anzahl der Benutzer; Datenzugriffe extern;
+                </p>
+                <p>
+                        <a class="btn" href="">Betreten</a>
+                </p>
+        </div>
 </div>
 -->
 <!-- 
 <div class="row">
-	<div class="span12">
-		<h2>Gemeinschaftsmodul</h2>
-		<p>Organisation der Gartenbepflanzung</p>
-		<p>
-			<a class="btn" href="">Betreten</a>
-		</p>
-	</div>
+        <div class="span12">
+                <h2>Gemeinschaftsmodul</h2>
+                <p>Organisation der Gartenbepflanzung</p>
+                <p>
+                        <a class="btn" href="">Betreten</a>
+                </p>
+        </div>
 </div>
 -->
-<!-- 
-<div class="row">
-	<div class="span12">
-		<h2>Hilfebereich</h2>
-		<h3>Anwender-Geschichten</h3>
-		<p>Die Temperatur um ein Grad erhöhen.</p>
-	</div>
-</div>
- -->
-

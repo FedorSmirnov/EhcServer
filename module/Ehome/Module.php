@@ -69,19 +69,24 @@ class Module {
 			$pwelement = $form->get ('credential');
 			$pwelement->setLabel ('Passwort');
 			$form->remove ('submit');
-			$submitElementRoom = new Element\Button ( 'room' );
-			$submitElementFunc = new Element\Button ( 'functional' );
-			$submitElementRoom->setLabel('Raumbasierte Sicht');
-			$submitElementRoom->setAttribute ( 'type', 'submit' );
-			$submitElementRoom->setAttribute ( 'value', 'room');
-			$submitElementFunc->setLabel( 'Funktionale Sicht' );
-			$submitElementFunc->setAttribute ( 'type', 'submit' );
-			$submitElementFunc->setAttribute ( 'value', 'functional' );
-			$form->add( $submitElementRoom );
-			$form->add( $submitElementFunc );
+			$submitElementEnter = new Element\Button('enter');
+			$submitElementEnter->setLabel('Eintreten');
+			$submitElementEnter->setAttribute ('type', 'submit' );
+			$submitElementEnter->setAttribute ('value', 'enter');
+			$form->add($submitElementEnter);
+			//$submitElementRoom = new Element\Button ( 'room' );
+			//$submitElementFunc = new Element\Button ( 'functional' );
+// 			$submitElementRoom->setLabel('Raumbasierte Sicht');
+// 			$submitElementRoom->setAttribute ( 'type', 'submit' );
+// 			$submitElementRoom->setAttribute ( 'value', 'room');
+// 			$submitElementFunc->setLabel( 'Funktionale Sicht' );
+// 			$submitElementFunc->setAttribute ( 'type', 'submit' );
+// 			$submitElementFunc->setAttribute ( 'value', 'functional' );
+// 			$form->add( $submitElementRoom );
+// 			$form->add( $submitElementFunc );
 		} );
 		// Adjust the changeEmail form
-		$events->attach ( 'ZfcUser\Form\ChangeEmail', 'init', function ($e) {
+		$events->attach( 'ZfcUser\Form\ChangeEmail', 'init', function ($e) {
 			$form = $e->getTarget ();
 			$nEmailElement = $form->get ( 'newIdentity' );
 			$nEmailElement->setLabel ( 'Neue Email:' );
@@ -91,7 +96,7 @@ class Module {
 			$pwElement->setLabel ( 'Passwort' );
 		} );
 		// Adjust the changePassword form
-		$events->attach ( 'ZfcUser\Form\ChangePassword', 'init', function ($e) {
+		$events->attach( 'ZfcUser\Form\ChangePassword', 'init', function ($e) {
 			$form = $e->getTarget ();
 			$cpElement = $form->get ( 'credential' );
 			$cpElement->setLabel ( 'Aktuelles Passwort:' );
