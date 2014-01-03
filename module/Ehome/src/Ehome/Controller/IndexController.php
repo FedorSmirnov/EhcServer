@@ -10,6 +10,7 @@ use Zend\Http\Client;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Session\Container;
 use Zend\View\Model\ViewModel;
+use Zend\View\Model\JsonModel;
 use Ehome\Form\RoomForm;
 use Ehome\Entity\JobaEvent;
 use Ehome\Form\JobaEventForm;
