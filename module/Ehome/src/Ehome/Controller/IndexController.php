@@ -12,6 +12,8 @@ use Zend\View\Model\JsonModel;
 use Ehome\Form\RoomForm;
 use Ehome\Entity\JobaEvent;
 use Ehome\Form\JobaEventForm;
+use Ehome\Entity\Api;
+use Ehome\Entity\ApiTable;
 
 class IndexController extends AbstractActionController
 {
@@ -19,6 +21,8 @@ class IndexController extends AbstractActionController
     protected $eventTable;
 
     protected $roomTable;
+
+    protected $apiTable;
 
     const ROUTE_LOGIN = 'zfcuser/login';
     
@@ -273,32 +277,88 @@ class IndexController extends AbstractActionController
     }
 
     /**
+     * The function used as the access point for the APIs.
+     *
+     * @throws \Exception
+     */
+    public function apiAuthenticateAction ()
+    {
+        $post = $_POST;
+        
+        if (! $post['src'] or $post['src'] == '') {
+            throw new \Exception('Connection attempt from an unknown source.');
+        }
+        
+        if ($post['src'] == 'raspberry') {
+            $grant_access = $this->raspberryRequestAuthentication($post);
+            if ($grant_access) {
+                return $this->apiPositiveResponse($post);
+            } else {
+                return $this->apiNegativeResponse($post);
+            }
+        } elseif ($post['src'] == 'mobile') {
+            $grant_access = $this->mobileRequestAuthentication($post);
+            if ($grant_access) {
+                return $this->apiPositiveResponse($post);
+            } else {
+                return $this->apiNegativeResponse($post);
+            }
+        } else {
+            throw new \Exception('Connection attempt from an unknown source.');
+        }
+    }
+
+    /**
+     * This function specifies how the web application reacts to api requests
+     * with an invalid password
+     *
+     * @param unknown $post            
+     * @return \Zend\View\Model\JsonModel
+     */
+    private function apiNegativeResponse ($post)
+    {
+        return new JsonModel(
+                
+                array(
+                        
+                        'return_state' => 'Failure',
+                        'info' => 'wrong password'
+                ));
+    }
+
+    /**
+     * This function is called when an api request is found to be valid.
+     * The function is used to call the right function according to the "func"
+     * attribute of the api communication object.
+     *
+     * @param unknown $post            
+     * @throws \Exception
+     */
+    private function apiPositiveResponse ($post)
+    {
+        $func = $post['func'];
+        
+        switch ($func) {
+            case 'getLightState':
+                return $this->getLightState($post);
+            
+            case 'toggle':
+                return $this->toggleLight($post);
+            
+            default:
+                throw new \Exception('Request for an unknown function.');
+        }
+    }
+
+    /**
      * The function used by the clients (Android and Raspberry) to determine the
      * state of a device
      *
      * @throws \Exception
      * @return \Zend\View\Model\JsonModel
      */
-    public function stateQueryRespAction ()
+    private function getLightState ($post)
     {
-        
-        // TODO: check the password and username; return if not given or invalid
-        $func = $_POST['func'];
-        if ($func == '') {
-            $func = 'empty';
-        }
-        
-        if ($func != 'getLightState') { // TODO: names of JSON values should be
-                                        // stored in constants
-            
-            throw new \Exception(
-                    str_replace('%s%', $func, 
-                            'getLightState aufgerufen, obwohl Parameter im JSON Objekt:%s%'));
-        }
-        
-        //$email = $_POST['email'];
-        //$pw = $_POST['pw'];
-        
         $room = $this->getRoomTable()->getRoom(2);
         $state_int = $room->getLightone();
         
@@ -312,10 +372,74 @@ class IndexController extends AbstractActionController
                 
                 array(
                         
-                        'state' => $state_bool
-                )
-                );
+                        'state' => $state_bool,
+                        'return_state' => 'Success'
+                ));
         return $result;
+    }
+
+    /**
+     * This function is used to check, whether a request coming from a raspberry
+     * is
+     * valid.
+     *
+     * @param
+     *            JSON/associative array $post
+     * @return boolean
+     */
+    private function raspberryRequestAuthentication ($post)
+    {
+        // Does the post have the expected attributes?
+        if (! $post['src'] or ! $post['pw'] or ! $post['func']) {
+            return False;
+        }
+        
+        $pw = $post['pw'];
+        
+        $salted_hash = $this->getApiTable()
+            ->getApi(1)
+            ->getPw(); // TODO: use a
+                       // variable id
+        
+        $parts = explode('|', $salted_hash);
+        $hash = $parts[0];
+        $salt = $parts[1];
+        
+        $my_hash = hash('sha256', $pw . $salt);
+        
+        $grant_access = ($hash == $my_hash);
+        return $grant_access;
+    }
+
+    private function mobileRequestAuthentication ($post)
+    {
+        // Does the post have the expected attributes?
+        if (! $post['src'] or ! $post['pw_user'] or ! $post['func']) {
+            return False;
+        }
+        
+        $api = $this->getApiTable()->getApi(1); // TODO: use a
+                                                // variable id
+        
+        $email = $post['email'];
+        $stored_email = $api->getEmail();
+        
+        if ($stored_email != $email) {
+            return False;
+        }
+        
+        $pw = $post['pw_user'];
+        
+        $salted_hash = $api->getPw_user();
+        
+        $parts = explode('|', $salted_hash);
+        $hash = $parts[0];
+        $salt = $parts[1];
+        
+        $my_hash = hash('sha256', $pw . $salt);
+        
+        $grant_access = ($hash == $my_hash);
+        return $grant_access;
     }
 
     /**
@@ -325,14 +449,8 @@ class IndexController extends AbstractActionController
      * @throws \Exception
      * @return \Zend\View\Model\JsonModel
      */
-    public function stateChangeRespAction ()
+    private function toggleLight ($post)
     {
-        $func = $_POST['func']; // TODO: password and username check
-        if ($func != 'toggle') {
-            throw new \Exception(
-                    str_replace('%s%', $func, 
-                            'toggleLight aufgerufen, obwohl Parameter im JSON Objekt:%s%'));
-        }
         $room = $this->getRoomTable()->getRoom(2);
         
         $state_int = $room->getLightone();
@@ -357,7 +475,8 @@ class IndexController extends AbstractActionController
         $result = new JsonModel(
                 array(
                         
-                        'state' => $state_bool
+                        'state' => $state_bool,
+                        'return_state' => 'Success'
                 ));
         
         return $result;
@@ -565,6 +684,15 @@ class IndexController extends AbstractActionController
             $this->roomTable = $sm->get('Ehome\Entity\RoomTable');
         }
         return $this->roomTable;
+    }
+
+    public function getApiTable ()
+    {
+        if (! $this->apiTable) {
+            $sm = $this->getServiceLocator();
+            $this->apiTable = $sm->get('Ehome\Entity\ApiTable');
+        }
+        return $this->apiTable;
     }
 
     private function createMessage ($name, $value)
