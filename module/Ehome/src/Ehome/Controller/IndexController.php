@@ -322,7 +322,7 @@ class IndexController extends AbstractActionController
                 array(
                         
                         'return_state' => 'Failure',
-                        'info' => 'wrong password'
+                        'info' => 'incorrect login'
                 ));
     }
 
@@ -344,6 +344,15 @@ class IndexController extends AbstractActionController
             
             case 'toggle':
                 return $this->toggleLight($post);
+            case 'login':
+                return new JsonModel(
+                        
+                        array(
+                                'return_state' => 'Success',
+                                'Access' => 'granted'
+                        ));
+
+                
             
             default:
                 throw new \Exception('Request for an unknown function.');
