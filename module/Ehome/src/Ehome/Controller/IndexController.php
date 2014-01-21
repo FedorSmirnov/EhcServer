@@ -351,8 +351,6 @@ class IndexController extends AbstractActionController
                                 'return_state' => 'Success',
                                 'Access' => 'granted'
                         ));
-
-                
             
             default:
                 throw new \Exception('Request for an unknown function.');
