@@ -16,6 +16,73 @@ $lighttwoBath = False;
 
 ?>
 
+
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+
+    $('.btn-success').click(function(){
+
+        var index = $('.btn-success').index(this);
+        var room_sel = '#room' + index;
+        var entry_sel = '#entry' + index;
+        var state_sel = '#state' + index;
+
+        var room = $(room_sel).text();
+        var entry = $(entry_sel).text();
+        var state = $(state_sel).text();
+
+        if (state == 'AN '){
+            state = '(off)';
+            }else{
+                state = '(on)';
+                }
+            
+
+        var url = 'http://hiwi.jochen-bauer.net/EhcServer/public/' + 'rasp/changeState/' + room + '/' + entry + '/' + state; 
+
+        $.ajax({
+            type:"GET",
+            url:url,
+
+            success:function(data){
+                
+                if (data.response=='success'){
+
+                    if (state == '(on)'){
+                        
+                        $('#img_light_living_one').attr('src', "<?php echo $this->basePath();?>/img/gluehbirne_an.png");
+                        $(state_sel).css('color', 'orange');
+                        $(state_sel).text('AN ');
+
+
+                        }else{
+                        	$('#img_light_living_one').attr('src', "<?php echo $this->basePath();?>/img/gluehbirne_aus.png");
+                            $(state_sel).css('color', 'green');
+                            $(state_sel).text('AUS ');
+                            
+                            }
+                    }
+
+                }
+            
+
+
+            });
+
+
+
+        });
+
+
+	
+});
+
+
+
+</script>
+
 <!-- Startseite -->
 <div class="row">
 	<div class="span12">
@@ -138,16 +205,23 @@ $lighttwoBath = False;
 		<p>
 			[<a class="show_hide" href="#" rel="#rooms">+/-</a>]
 		</p>
+		<?php $counter = -1;?>
 		<?php foreach (array_keys($apartment) as $room):?>
+		<?php $counter++;?>
 		<div id=<?php echo $room?>>
-			<h3><?php echo $room?></h3>
+			<h3 id=<?php echo "room" . $counter;?>><?php echo $room?></h3>
 			<table border="1px">
 		<?php foreach (array_keys($apartment[$room]) as $entry):?>
 		<tr>
-					<th><?php echo $entry;?></th>
+					<th id=<?php echo "entry".$counter;?>><?php echo $entry;?></th>
 					<td style='text-align: right;'>
 					<?php if($apartment[$room][$entry] == "(on)"):?>
-					<span style='color: orange;'>AN </span> <a
+					<span style='color: orange;'>AN </span>
+					</td>
+					<td>
+					
+					<button class="btn-success">Aus</button>
+					<a
 						href=<?php
             echo $this->url('rasp', 
                     array(
@@ -159,20 +233,13 @@ $lighttwoBath = False;
             ?>
 						title='Bearbeiten des Eintrags' class='btn btn-success'><></a>
         <?php else :?>
-					<span style='color: green;'>AUS </span> <a
-						href=<?php
-            echo $this->url('rasp', 
-                    array(
-                            'action' => 'changeState',
-                            'room' => $room,
-                            'entry' => $entry,
-                            'state' => '(on)'
-                    ));
-            ?>
-						title='Bearbeiten des Eintrags' class='btn btn-success'><></a>
+					<span id=<?php echo "state" . $counter;?> style='color: green;'>AUS </span></td>
+					<td>
+				
+				<button id = "change"   class="btn btn-success"><></button>
+				
 					<?php endif;?>
-					</td>
-				</tr>
+					</td></tr>
 		<?php endforeach;?>
 		</table>
 		</div>
