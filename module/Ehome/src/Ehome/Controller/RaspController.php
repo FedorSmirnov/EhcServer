@@ -16,7 +16,7 @@ class RaspController extends AbstractActionController
 
     protected $password = 'geheim';
 
-    protected $rasp_external_ip = '92.74.73.87';
+    protected $extIpTable;
 
     public function indexAction ()
     {
@@ -36,6 +36,24 @@ class RaspController extends AbstractActionController
                 array(
                         'apartment' => $apartment,
                         'useremail' => $userEmail
+                ));
+    }
+
+    public function updateIpAction ()
+    {
+        $new_ip = $_POST['ip'];
+        
+        $extIpTable = $this->getExtIpTable();
+        
+        $ip = $extIpTable->getIp(1);
+        
+        $ip->setExtIp($new_ip);
+        
+        $extIpTable->saveIp($ip);
+        
+        return new JsonModel(
+                array(
+                        'message' => 'ip_changed to ' . $new_ip
                 ));
     }
 
@@ -91,22 +109,34 @@ class RaspController extends AbstractActionController
         }
         
         $room = $this->params()->fromRoute('room', '');
-        $entry = $this->params()->fromRoute('entry', '');
+        $dev_name = $this->params()->fromRoute('entry', '');
         $state = $this->params()->fromRoute('state', '');
         
         $apartment = $this->getApartmentState(false);
-        $apartment[$room][$entry] = $state;
+        
+        foreach ($apartment['rooms'] as $key_room => $myRoom) {
+            if ($myRoom['name'] == $room) {
+                foreach ($myRoom['devices'] as $key_device => $device) {
+                    if ($device['name'] == $dev_name) {
+                        
+                        $apartment['rooms'][$key_room]['devices'][$key_device]['state'] = $state;
+                    }
+                }
+            }
+        }
         
         if ($this->setApartmentState($apartment)) {
             
-            if ($request->isPost()){
+            if ($request->isPost()) {
                 return new JsonModel($apartment);
-            }else{
-            return new JsonModel(
-                    
-                    array(
-                            'response' => 'success'
-                    ));}
+            } else {
+                
+                return new JsonModel(
+                        
+                        array(
+                                'response' => 'success'
+                        ));
+            }
         } else {
             return new JsonModel(
                     
@@ -121,7 +151,7 @@ class RaspController extends AbstractActionController
         $client = new Client();
         
         $request = new Request();
-        $request->setUri("http://" . $this->rasp_external_ip . ':8080');
+        $request->setUri("http://" . $this->getExtIp() . ':8080');
         $request->setMethod(Request::METHOD_POST);
         
         $apartment['Password'] = $this->password;
@@ -147,7 +177,8 @@ class RaspController extends AbstractActionController
         $request = new Request();
         $request->getQuery()->set('Password', $this->password);
         $request->getQuery()->set('User', $this->user);
-        $request->setUri("http://" . $this->rasp_external_ip . ':8080');
+        
+        $request->setUri("http://" . $this->getExtIp() . ':8080');
         $request->setMethod(Request::METHOD_GET);
         $response = $client->dispatch($request);
         
@@ -159,6 +190,23 @@ class RaspController extends AbstractActionController
         } else {
             return new JsonModel($apartment);
         }
+    }
+
+    public function getExtIp ()
+    {
+        $extIpTable = $this->getExtIpTable();
+        
+        return $extIpTable->getIp(1)->getExtIp();
+    }
+
+    public function getExtIpTable ()
+    {
+        if (! $this->extIpTable) {
+            $sm = $this->getServiceLocator();
+            $this->extIpTable = $sm->get('Ehome\Entity\ExternalIpTable');
+        }
+        
+        return $this->extIpTable;
     }
 }
 

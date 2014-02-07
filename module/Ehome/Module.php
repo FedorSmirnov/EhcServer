@@ -13,7 +13,8 @@ use Zend\Form\Element;
 use Zend\EventManager\Event;
 use Ehome\Entity\ApiTable;
 use Ehome\Entity\Api;
-
+use Ehome\Entity\ExternalIpTable;
+use Ehome\Entity\ExternalIp;
 
 class Module
 {
@@ -86,9 +87,24 @@ class Module
                                     new Api());
                             return new TableGateway('apis', $dbAdapter, null, 
                                     $resultSetPrototype);
+                        },
+                        'Ehome\Entity\ExternalIpTable' => function  ($sm)
+                        {
+                            $tableGateway = $sm->get('ExternalIpTableGateway');
+                            $table = new ExternalIpTable($tableGateway);
+                            return $table;
+                        },
+                        'ExternalIpTableGateway' => function  ($sm)
+                        {
+                            $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                            $resultSetPrototype = new ResultSet();
+                            $resultSetPrototype->setArrayObjectPrototype(
+                                    new ExternalIp());
+                            return new TableGateway('externalIps', $dbAdapter, 
+                                    null, $resultSetPrototype);
                         }
-                        
                 )
+                
         );
     }
     

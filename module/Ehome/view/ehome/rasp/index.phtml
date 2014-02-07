@@ -4,12 +4,24 @@ use \Zend\Debug\Debug;
 $lightoneKitchen = False;
 $lighttwoKitchen = False;
 
-$lightoneLRstr = $apartment["Fedors_Zimmer"]["Lampe"];
-if ($lightoneLRstr == "(on)") {
-    $lightoneLivingRoom = True;
-} else {
-    $lightoneLivingRoom = False;
+foreach ($apartment['rooms'] as $room){
+    if ($room['name'] == 'Fedors_Zimmer'){
+        $devices = $room['devices'];
+        foreach ($devices as $device){
+            if ($device['name'] == 'Lampe'){
+                $state = $device['state'];
+                
+                if($state == "on"){
+                    $lightoneLivingRoom = True;
+                }else{
+                    $lightoneLivingRoom = False;
+                }
+            }
+        }
+    }
 }
+
+
 $lighttwoLivingRoom = False;
 $lightoneBath = False;
 $lighttwoBath = False;
@@ -33,10 +45,10 @@ $(document).ready(function(){
         var entry = $(entry_sel).text();
         var state = $(state_sel).text();
 
-        if (state == 'AN '){
-            state = '(off)';
+        if (state == 'AN'){
+            state = 'off';
             }else{
-                state = '(on)';
+                state = 'on';
                 }
             
 
@@ -50,17 +62,17 @@ $(document).ready(function(){
                 
                 if (data.response=='success'){
 
-                    if (state == '(on)'){
+                    if (state == 'on'){
                         
                         $('#img_light_living_one').attr('src', "<?php echo $this->basePath();?>/img/gluehbirne_an.png");
                         $(state_sel).css('color', 'orange');
-                        $(state_sel).text('AN ');
+                        $(state_sel).text('AN');
 
 
                         }else{
                         	$('#img_light_living_one').attr('src', "<?php echo $this->basePath();?>/img/gluehbirne_aus.png");
                             $(state_sel).css('color', 'green');
-                            $(state_sel).text('AUS ');
+                            $(state_sel).text('AUS');
                             
                             }
                     }
@@ -82,6 +94,8 @@ $(document).ready(function(){
 
 
 </script>
+
+
 
 <!-- Startseite -->
 <div class="row">
@@ -206,43 +220,72 @@ $(document).ready(function(){
 			[<a class="show_hide" href="#" rel="#rooms">+/-</a>]
 		</p>
 		<?php $counter = -1;?>
-		<?php foreach (array_keys($apartment) as $room):?>
+		<?php foreach (($apartment['rooms']) as $room):?>
 		<?php $counter++;?>
-		<div id=<?php echo $room?>>
-			<h3 id=<?php echo "room" . $counter;?>><?php echo $room?></h3>
+		<div id=<?php echo $room['name']?>>
+			<h3 id=<?php echo "room" . $counter;?>><?php echo $room['name']?></h3>
 			<table border="1px">
-		<?php foreach (array_keys($apartment[$room]) as $entry):?>
+		<?php foreach (($room['devices']) as $entry):?>
 		<tr>
-					<th id=<?php echo "entry".$counter;?>><?php echo $entry;?></th>
+					<th id=<?php echo "entry".$counter;?>><?php echo $entry['name'];?></th>
 					<td style='text-align: right;'>
-					<?php if($apartment[$room][$entry] == "(on)"):?>
-					<span style='color: orange;'>AN </span>
+					<?php if($entry['state'] == "on"):?>
+					<span id=<?php echo "state" . $counter;?> style='color: orange;'>AN</span>
 					</td>
 					<td>
+						<button id="change" class="btn btn-success"><></button>
 					
-					<button class="btn-success">Aus</button>
-					<a
-						href=<?php
-            echo $this->url('rasp', 
-                    array(
-                            'action' => 'changeState',
-                            'room' => $room,
-                            'entry' => $entry,
-                            'state' => '(off)'
-                    ));
-            ?>
-						title='Bearbeiten des Eintrags' class='btn btn-success'><></a>
-        <?php else :?>
-					<span id=<?php echo "state" . $counter;?> style='color: green;'>AUS </span></td>
+					
+            
+						
+        <?php elseif ($entry['state'] == "off") :?>
+					<span id=<?php echo "state" . $counter;?> style='color: green;'>AUS</span>
+					</td>
 					<td>
+
+						<button id="change" class="btn btn-success"><></button>
 				
-				<button id = "change"   class="btn btn-success"><></button>
 				
+		<?php else:?>
+		<span id=<?php echo "state" . $counter;?>><?php echo $entry['state']?></span>
+					</td>
+		
 					<?php endif;?>
-					</td></tr>
+					</td>
+				</tr>
 		<?php endforeach;?>
 		</table>
 		</div>
+		<br>
+		<table border="1px">
+		
+		<?php foreach ($room['sensors'] as $entry):?>
+		
+		<tr>
+
+				<th><?php
+        
+switch ($entry['name']) {
+            case 'temperature':
+                $name = 'Temperatur';
+                break;
+            case 'humidity':
+                $name = 'Luftfeuchtigkeit';
+                break;
+            default:
+                $name = $entry['name'];
+        }
+        
+        echo $name;
+        
+        ?></th>
+				<td><?php echo $entry['state'];?></td>
+
+			</tr>
+		
+		<?php endforeach;?>
+		</table>
+		
 				<?php endforeach;?>
 		
 		
