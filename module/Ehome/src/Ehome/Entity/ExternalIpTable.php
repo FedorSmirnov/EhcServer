@@ -35,7 +35,8 @@ class ExternalIpTable
     public function saveIp (ExternalIp $ip)
     {
         $data = array(
-                'extIp' => $ip->getExtIp()
+                'extIp' => $ip->getExtIp(),
+                'locIp' => $ip->getLocIp()
         );
         $id = (int) $ip->getId();
         if ($id == 0) {

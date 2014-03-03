@@ -41,19 +41,22 @@ class RaspController extends AbstractActionController
 
     public function updateIpAction ()
     {
-        $new_ip = $_POST['ip'];
+        $new_ex_ip = $_POST['ip'];
+        $new_loc_ip = trim($_POST['ip_local']);
         
         $extIpTable = $this->getExtIpTable();
         
         $ip = $extIpTable->getIp(1);
         
-        $ip->setExtIp($new_ip);
+        $ip->setExtIp($new_ex_ip);
+        $ip->setLocIp($new_loc_ip);
         
         $extIpTable->saveIp($ip);
         
         return new JsonModel(
                 array(
-                        'message' => 'ip_changed to ' . $new_ip
+                        'message' => 'ip_changed to ' . $new_ex_ip .
+                                 ' local ip changed to ' . $new_loc_ip
                 ));
     }
 
