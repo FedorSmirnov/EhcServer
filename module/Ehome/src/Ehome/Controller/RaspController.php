@@ -69,6 +69,11 @@ class RaspController extends AbstractActionController
         $pw = $_POST['pw_user'];
         $u = $_POST['email'];
         
+        $extIpTable = $this->getExtIpTable();
+        $ip = $extIpTable->getIp(1);
+        $extIp = $ip->getExtIp();
+        $locIp = $ip->getLocIp();
+        
         if ($pw != $this->password or $u != $this->user) {
             throw new \Exception('Connection attempt from unknown source.');
         }
@@ -81,7 +86,9 @@ class RaspController extends AbstractActionController
                 return new JsonModel(
                         
                         array(
-                                'response' => 'success'
+                                'response' => 'success',
+                                'extIp' => $extIp,
+                                'locIp' => $locIp
                         ));
             
             case 'getState':
