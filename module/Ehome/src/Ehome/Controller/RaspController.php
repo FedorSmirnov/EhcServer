@@ -99,6 +99,42 @@ class RaspController extends AbstractActionController
         }
     }
 
+    public function updateApartmentAction ()
+    {
+        $request = $this->getRequest();
+        
+        if ($request->isPost()) {
+            $pw = $_POST['pw_user'];
+            $u = $_POST['email'];
+            
+            if ($pw != $this->password or $u != $this->user) {
+                throw new \Exception('Connection attempt from unknown source.');
+            }
+        } else {
+            if (! $this->zfcUserAuthentication()->hasIdentity()) { // check for
+                                                                   // valid
+                                                                   // session
+                return $this->redirect()->toRoute(static::ROUTE_LOGIN);
+            }
+        }
+        
+        $apartment = $this->getApartmentState(true);
+        
+        return $apartment;
+    }
+
+    public function sendApartmentStateAction ()
+    {
+        $request = $this->getRequest();        
+        if (! $this->zfcUserAuthentication()->hasIdentity()) { // check for
+                                                               // valid
+                                                               // session
+            return $this->redirect()->toRoute(static::ROUTE_LOGIN);
+        }  
+        $this->setApartmentState($_POST);      
+        return new JsonModel($_POST);
+    }
+
     public function changeStateAction ()
     {
         $request = $this->getRequest();

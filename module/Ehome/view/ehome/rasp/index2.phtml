@@ -1,0 +1,294 @@
+<?php
+use \Zend\Debug\Debug;
+
+$lightoneKitchen = False;
+$lighttwoKitchen = False;
+
+foreach ($apartment['rooms'] as $room){
+    if ($room['name'] == 'Fedors_Zimmer'){
+        $devices = $room['devices'];
+        foreach ($devices as $device){
+            if ($device['name'] == 'Lampe'){
+                $state = $device['state'];
+                
+                if($state == "on"){
+                    $lightoneLivingRoom = True;
+                }else{
+                    $lightoneLivingRoom = False;
+                }
+            }
+        }
+    }
+}
+
+
+$lighttwoLivingRoom = False;
+$lightoneBath = False;
+$lighttwoBath = False;
+
+?>
+
+
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+
+    $('.btn-success').click(function(){
+
+        var index = $('.btn-success').index(this);
+        //var room_sel = '#room' + index;
+        var entry_sel = '#entry' + index;
+        var state_sel = '#state' + index;
+
+        var room = this.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+
+        //var room = $(room_sel).text();
+        var entry = $(entry_sel).text();
+        var state = $(state_sel).text();
+
+        if (state == 'AN'){
+            state = 'off';
+            }else{
+                state = 'on';
+                }
+            
+
+        var url = 'http://hiwi.jochen-bauer.net/EhcServer/public/' + 'rasp/changeState/' + room + '/' + entry + '/' + state; 
+
+        $.ajax({
+            type:"GET",
+            url:url,
+
+            success:function(data){
+                
+                if (data.response=='success'){
+
+                    if (state == 'on'){
+                        
+                        $('#img_light_living_one').attr('src', "<?php echo $this->basePath();?>/img/gluehbirne_an.png");
+                        $(state_sel).css('color', 'orange');
+                        $(state_sel).text('AN');
+
+
+                        }else{
+                        	$('#img_light_living_one').attr('src', "<?php echo $this->basePath();?>/img/gluehbirne_aus.png");
+                            $(state_sel).css('color', 'green');
+                            $(state_sel).text('AUS');
+                            
+                            }
+                    }
+
+                }
+            
+
+
+            });
+
+
+
+        });
+
+
+	
+});
+
+
+
+</script>
+<?php echo print_r($apartment);?>
+
+
+<!-- Startseite -->
+<div class="row">
+	<div class="span12">
+		<p style="text-align: center;">
+			<img src='<?php echo $this->basePath(); ?>/img/ehome-center-logo.png'
+				alt="Bild Header E|Home-Center" />
+		</p>
+	</div>
+</div>
+<div class="hero-unit">
+	<h1><?php echo sprintf("Willkommen!", '<span class="zf-green">', '</span>') ?></h1>
+	<p>Mustermann, Musterweg 13, 12345 Musterstadt</p>
+	<p>
+		[<a class="show_hide" href="#" rel="#container">+/-</a>]
+	</p>
+	<div id="container">
+		<div id="background">
+			<img alt="apartment_picture"
+				src='<?php echo $this->basePath();?>/img/praterstr3.jpg'>
+		</div>
+		<div id="light_kitchen_one" class="light">
+			<img class="img_light" id="img_light_kitchen_one"
+				alt="gluehbirne_aus"
+				src=<?php
+    if ($lightoneKitchen) {
+        echo $this->basePath() . '/img/gluehbirne_an.png';
+    } else {
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
+    }
+    ?> />
+		</div>
+		<div id="light_kitchen_two" class="light">
+			<img class="img_light" id="img_light_kitchen_two"
+				alt="gluehbirne_aus"
+				src=<?php
+    if ($lighttwoKitchen) {
+        echo $this->basePath() . '/img/gluehbirne_an.png';
+    } else {
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
+    }
+    ?> />
+		</div>
+		<div id="light_bathroom_one" class="light">
+			<img class="img_light" id="img_light_bathroom_one"
+				alt="gluehbirne_aus"
+				src=<?php
+    if ($lightoneBath) {
+        echo $this->basePath() . '/img/gluehbirne_an.png';
+    } else {
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
+    }
+    ?> />
+		</div>
+		<div id="light_bathroom_two" class="light">
+			<img class="img_light" id="img_light_bathroom_two"
+				alt="gluehbirne_aus"
+				src=<?php
+    if ($lighttwoBath) {
+        echo $this->basePath() . '/img/gluehbirne_an.png';
+    } else {
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
+    }
+    ?> />
+		</div>
+		<div id="light_living_one" class="light">
+			<img class="img_light" id="img_light_living_one" alt="gluehbirne_aus"
+				src=<?php
+    if ($lightoneLivingRoom) {
+        echo $this->basePath() . '/img/gluehbirne_an.png';
+    } else {
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
+    }
+    ?> />
+		</div>
+		<!-- // light-living -->
+		<div id="light_living_two" class="light">
+			<img class="img_light" id="img_light_living_two" alt="gluehbirne_aus"
+				src=<?php
+    if ($lighttwoLivingRoom) {
+        echo $this->basePath() . '/img/gluehbirne_an.png';
+    } else {
+        echo $this->basePath() . '/img/gluehbirne_aus.png';
+    }
+    ?> />
+		</div>
+		<!-- // light-living -->
+	</div>
+	<!-- // div container -->
+</div>
+<!-- // hero-unit -->
+<hr>
+<div class='row'>
+	<div class='span4'>
+		<h2>Cockpit</h2>
+		<div style='float: left; padding-right: 16px;'><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()); ?>
+    </div>
+		<p>
+    	Angemeldet als <?php echo $useremail; ?>
+    </p>
+		<p>
+			<a class='btn'
+				href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
+		</p>
+	</div>
+	<!-- 	<div class='span5'> -->
+	<!-- 		<h2>Hinweise</h2> -->
+
+	<!-- 	</div> -->
+	<div class='span3'>
+		<h2>Hilfe</h2>
+		<p>
+			Wir helfen Ihnen gerne:<br> support@example.org und 01234-12345
+		</p>
+	</div>
+</div>
+<hr>
+<div class='row'>
+	<div class='span12'>
+		<h2>Räume</h2>
+		<p>
+			[<a class="show_hide" href="#" rel="#rooms">+/-</a>]
+		</p>
+		<?php $counter_room = -1; $counter_device = -1;?>
+		<?php foreach (($apartment['rooms']) as $room):?>
+		<?php $counter_room++; ?>
+		<div id=<?php echo $room['name']?>>
+			<h3 id=<?php echo "room" . $counter_room;?>><?php echo $room['name']?></h3>
+			<table border="1px">
+		<?php foreach (($room['devices']) as $entry):?>
+		<?php $counter_device++;?>
+		<tr>
+					<th id=<?php echo "entry".$counter_device;?>><?php echo $entry['name'];?></th>
+					<td style='text-align: right;'>
+					<?php if($entry['state'] == "on"):?>
+					<span id=<?php echo "state" . $counter_device;?> style='color: orange;'>AN</span>
+					</td>
+					<td>
+						<button id="change" class="btn btn-success"><></button>
+					
+					
+            
+						
+        <?php elseif ($entry['state'] == "off") :?>
+					<span id=<?php echo "state" . $counter_device;?> style='color: green;'>AUS</span>
+					</td>
+					<td>
+
+						<button id="change" class="btn btn-success"><></button>
+				
+				
+		<?php else:?>
+		<span id=<?php echo "state" . $counter_device;?>><?php echo $entry['state']?></span>
+					</td>
+		
+					<?php endif;?>
+					</td>
+				</tr>
+		<?php endforeach;?>
+		</table>
+		</div>
+		<br>
+		<table border="1px">
+		
+		<?php foreach ($room['sensors'] as $entry):?>
+		
+		<tr>
+
+				<th><?php
+        
+switch ($entry['name']) {
+            case 'temperature':
+                $name = 'Temperatur';
+                break;
+            case 'humidity':
+                $name = 'Luftfeuchtigkeit';
+                break;
+            default:
+                $name = $entry['name'];
+        }
+        
+        echo $name;
+        
+        ?></th>
+				<td><?php echo $entry['state'];?></td>
+
+			</tr>
+		
+		<?php endforeach;?>
+		</table>
+		
+				<?php endforeach;?>
+		
+		

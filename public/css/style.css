@@ -1,87 +1,167 @@
 body {
-    padding-top: 60px;
-    padding-bottom: 40px;
+	padding-top: 60px;
+	padding-bottom: 40px;
+	background-color: #FAF0E6;
 }
 
 .zf-green {
-    color: #68b604;
+	color: #68b604;
 }
 
 .btn-success {
-  background-color: #57a900;
-  background-image: -moz-linear-gradient(top, #70d900, #57a900);
-  background-image: -ms-linear-gradient(top, #70d900, #57a900);
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#70d900), to(#57a900));
-  background-image: -webkit-linear-gradient(top, #70d900, #57a900);
-  background-image: -o-linear-gradient(top, #70d900, #57a900);
-  background-image: linear-gradient(top, #70d900, #57a900);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#70d900', endColorstr='#57a900', GradientType=0);
+	background-color: #57a900;
+	background-image: -moz-linear-gradient(top, #70d900, #57a900);
+	background-image: -ms-linear-gradient(top, #70d900, #57a900);
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#70d900),
+		to(#57a900));
+	background-image: -webkit-linear-gradient(top, #70d900, #57a900);
+	background-image: -o-linear-gradient(top, #70d900, #57a900);
+	background-image: linear-gradient(top, #70d900, #57a900);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#70d900',
+		endColorstr='#57a900', GradientType=0);
 }
 
-.btn-success:hover,
-.btn-success:active,
-.btn-success.active,
-.btn-success.disabled,
-.btn-success[disabled] {
-  background-color: #57a900;
+.btn-success:hover,.btn-success:active,.btn-success.active,.btn-success.disabled,.btn-success[disabled]
+	{
+	background-color: #57a900;
 }
 
-.btn-success:active, .btn-success.active {
-  background-color: #57a900;
+.btn-success:active,.btn-success.active {
+	background-color: #57a900;
 }
 
 div.container a.brand {
-    background: url("../img/zf2-logo.png") no-repeat scroll 0 10px transparent;
-    margin-left: 0;
-    padding: 8px 20px 12px 40px;
+	background: url("../img/zf2-logo.png") no-repeat scroll 0 10px
+		transparent;
+	margin-left: 0;
+	padding: 8px 20px 12px 40px;
 }
 
 /* visualize living lab */
 td,th {
-        padding: 10px;
-        text-align: left;
+	padding: 10px;
+	text-align: left;
 }
-#container {
-        text-align: center;
-        position: relative;
+
+#alarms{
+	
+	text-align: left;
+	width: 600px;
+	margin: 0 auto;
 }
+
+#settings_lamp{
+	text-align: left;
+	width: 600px;
+	margin: 0 auto;
+}
+
+#settings_flowers{
+	text-align: left;
+	width: 600px;
+	margin: 0 auto;
+}
+
+.container {
+	text-align: center;
+	position: relative;
+}
+
 #background {
-        width: 100%;
-        height: 100%;
+	width: 100%;
+	height: 100%;
 }
+
+#lamp_desktop {
+	width: 5%;
+	height: 5%;
+	position: absolute;
+	left: 55%;
+	bottom: 55%;
+	cursor: pointer;
+}
+
+#lamp_phone {
+	width: 10%;
+	height: 10%;
+	position: absolute;
+	left: 58%;
+	bottom: 50%;
+}
+
+#water_desktop {
+	width: 4%;
+	height: 4%;
+	position: absolute;
+	bottom: 65%;
+	left: 32%;
+}
+
+#water_phone {
+	width: 8%;
+	height: 8%;
+	position: absolute;
+	left: 16%;
+	bottom: 64%;
+}
+
+#window_desktop {
+	width: 5%;
+	height: 5%;
+	right: 22%;
+	bottom: 63%;
+	position: absolute;
+}
+
+#window_phone {
+	width: 11%;
+	height: 11%;
+	bottom: 58%;
+	right: 0%;
+	position: absolute;
+}
+
+#flowers_desktop {
+	width: 5%;
+	height: 5%;
+	bottom: 59%;
+	left: 62%;
+	position: absolute;
+}
+
+#flowers_phone {
+	width: 10%;
+	height: 10%;
+	bottom: 55%;
+	left: 70%;
+	position: absolute;
+}
+
+#door_desktop {
+	width: 4%;
+	height: 4%;
+	bottom: 33%;
+	left: 24%;
+	position: absolute;
+}
+
+#door_phone{
+	width: 8%;
+	height: 8%;
+	bottom: 31%;
+	left: 2%;
+	position: absolute;
+}
+
 .light {
-        width: 35px;
-        height: 35px;
+	width: 35px;
+	height: 35px;
 }
+
 #light_kitchen_one {
-        position: absolute;
-        bottom: 35px;
-        right: 740px;
-}
-#light_kitchen_two {
-        position: absolute;
-        bottom: 35px;
-        right: 720px;
-}
-#light_bathroom_one {
-        position: absolute;
-        bottom: 240px;
-        right: 770px;
-}
-#light_bathroom_two {
-        position: absolute;
-        bottom: 240px;
-        right: 750px;
-}
-#light_living_one {
-        position: absolute;
-        bottom: 150px;
-        right: 460px;
-}
-#light_living_two {
-        position: absolute;
-        bottom: 150px;
-        right: 440px;
+	position: absolute;
+	bottom: 35px;
+	right: 740px;
 }
 
 /* Zend Framework 2 Standard-Dateiinhalt

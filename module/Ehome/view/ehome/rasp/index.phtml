@@ -1,294 +1,546 @@
-<?php
-use \Zend\Debug\Debug;
-
-$lightoneKitchen = False;
-$lighttwoKitchen = False;
-
-foreach ($apartment['rooms'] as $room){
-    if ($room['name'] == 'Fedors_Zimmer'){
-        $devices = $room['devices'];
-        foreach ($devices as $device){
-            if ($device['name'] == 'Lampe'){
-                $state = $device['state'];
-                
-                if($state == "on"){
-                    $lightoneLivingRoom = True;
-                }else{
-                    $lightoneLivingRoom = False;
-                }
-            }
-        }
-    }
-}
+<?php // echo print_r($apartment);?>
 
 
-$lighttwoLivingRoom = False;
-$lightoneBath = False;
-$lighttwoBath = False;
-
-?>
-
+<html>
 
 <script type="text/javascript">
 
+var apartment;
 
 $(document).ready(function(){
+   
+    
 
-    $('.btn-success').click(function(){
+	// depending on the device, a different picture is shown
 
-        var index = $('.btn-success').index(this);
-        //var room_sel = '#room' + index;
-        var entry_sel = '#entry' + index;
-        var state_sel = '#state' + index;
+	var device = findBootstrapEnvironment();
 
-        var room = this.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+	if (device == "desktop"){
+		   $('#container_phone').hide();
+		}else{
+		    $('#container_desktop').hide();
 
-        //var room = $(room_sel).text();
-        var entry = $(entry_sel).text();
-        var state = $(state_sel).text();
+			}
+		
+	// Start the updating of the function
+	var intervalID = setInterval(updateRequest, 2000);
 
-        if (state == 'AN'){
-            state = 'off';
-            }else{
-                state = 'on';
-                }
-            
-
-        var url = 'http://hiwi.jochen-bauer.net/EhcServer/public/' + 'rasp/changeState/' + room + '/' + entry + '/' + state; 
-
-        $.ajax({
-            type:"GET",
-            url:url,
-
-            success:function(data){
-                
-                if (data.response=='success'){
-
-                    if (state == 'on'){
-                        
-                        $('#img_light_living_one').attr('src', "<?php echo $this->basePath();?>/img/gluehbirne_an.png");
-                        $(state_sel).css('color', 'orange');
-                        $(state_sel).text('AN');
+	
 
 
-                        }else{
-                        	$('#img_light_living_one').attr('src', "<?php echo $this->basePath();?>/img/gluehbirne_aus.png");
-                            $(state_sel).css('color', 'green');
-                            $(state_sel).text('AUS');
-                            
-                            }
+
+// End of init
+
+// sliding functions
+$('#button_settings').click(function(){
+    $('#settings').slideToggle();
+    $('#alarms').slideUp();	
+});
+
+$('#btn_lamp_settings').click(function(){
+	$('#settings_lamp').slideToggle();
+	$('#settings_flowers').slideUp();
+});
+
+$('#btn_flower_settings').click(function(){
+	$('#settings_flowers').slideToggle();
+	$('#settings_lamp').slideUp();
+});
+$('#btn_alarm_normal').click(function(){
+	$('#settings').slideUp();
+	$('#alarms').slideToggle();
+});
+$('#btn_alarm_urgent').click(function(){
+	$('#settings').slideUp();
+	$('#alarms').slideToggle();
+});
+
+// functions for client input
+
+// lamp control
+
+$('.lamp_icon').click(function(){
+    var lo_room = apartment.rooms[0];
+    var lo_devices = lo_room.devices;
+    for (var i = 0; i < lo_devices.length; i++){
+        var lo_dev = lo_devices[i];
+        if (lo_dev.name == "Lampe"){
+            var lo_lamp_state = lo_dev.state;
+            if (lo_lamp_state == "on"){
+                apartment.rooms[0].devices[i].state = "off";
+                }else{
+                	apartment.rooms[0].devices[i].state = "on";
                     }
+            }
+        }
 
-                }
-            
+    
+    sendApartmentState(apartment);
+});
+
+	   
 
 
-            });
+// setting value adjust functions
 
+$("#minus_lamp").click(function(){
+    var cur_value = parseInt($("#value_lamp").text());
+    cur_value = cur_value - 30;
+    if (cur_value >= 30){
+        $('#value_lamp').text(cur_value);
+        }
+});
+$("#plus_lamp").click(function(){
+    var cur_value = parseInt($("#value_lamp").text());
+    cur_value = cur_value + 30;
+    if (cur_value <= 300){
+        $('#value_lamp').text(cur_value);
+        }
+});
+$("#minus_flowers").click(function(){
+    var cur_value = parseInt($("#value_flowers").text());
+    cur_value = cur_value - 1;
+    if (cur_value >= 1){
+        $('#value_flowers').text(cur_value);
+        }
+});
+$("#plus_flowers").click(function(){
+    var cur_value = parseInt($("#value_flowers").text());
+    cur_value = cur_value + 1;
+    if (cur_value <= 14){
+        $('#value_flowers').text(cur_value);
+        }
+});
 
+// funtion for the save settings button
 
-        });
+$('#save_settings').click(function(){
+
+    // setting for the lamp_mode
+    var lo_lamp_mode;
+    var value = $('input[name=light_state]:checked').val();
+    lo_lamp_mode = !(value=="norm");
+    if (!lo_lamp_mode){
+        lo_lamp_mode = null;
+        }
+    var lo_lamp_time = parseInt($('#value_lamp').text());
+    var lo_flower_time = parseInt($('#value_flowers').text()) * 60;
+
+    apartment.no_movement_time = lo_lamp_time;
+    apartment.no_water_time = lo_flower_time;
+    apartment.lamp_movement = lo_lamp_mode;
+
+    sendApartmentState(apartment);
+    $('#settings').slideUp();
+	
+});
 
 
 	
 });
 
 
+// functions that are used
+function sendApartmentState(data){
+
+    var url = 'http://hiwi.jochen-bauer.net/EhcServer/public/' + 'rasp/sendApartmentState'; 
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+
+        success:function(myData){
+            updateDisplay(myData);
+            },
+           failure: function(data){alert("Fehler!!");}
+        
+        });
+	
+}
+
+
+function updateRequest(){
+
+	var url = 'http://hiwi.jochen-bauer.net/EhcServer/public/' + 'rasp/updateApartment'; 
+
+	$.ajax({
+        type:"GET",
+        url:url,
+        
+
+        success:function(data){
+            updateDisplay(data);
+            $('#cover').show();
+            apartment = data;
+            }
+        
+
+
+        });
+	
+}
+
+function updateDisplay(data){
+	var rooms = data.rooms;
+    var room = rooms[0];
+    var devices = room.devices;
+
+    var blink;
+    var sound;
+    var lamp;
+    var lamp_move = data.lamp_movement;
+    if (lamp_move == "true"){
+        lamp_move = true;
+        }
+    if (lamp_move == "false"){
+        lamp_move = false;
+        }
+    var lamp_time = data.no_movement_time;
+    var flower_time = data.no_water_time / 60;
+
+    var alarms_normal = data.alarmList;
+    var alarms = data.alarm;
+    if (alarms == "true"){
+        alarms = true;
+        }
+    if (alarms == "false"){
+        alarms = false;
+        }
+    var alarms_ur = data.alarm_urgent;
+    if (alarms_ur == "true"){
+        alarms_ur = true;
+        }
+    if (alarms_ur == "false"){
+        alarms_ur = false;
+        }
+    var alarms_urgent = data.alarmUrgentList;
+    
+    for (var i = 0; i < 3; i++){
+        var dev = devices[i];
+        if (dev.name == "Blinken"){
+            blink = dev.state;
+            }else if(dev.name == "Sound"){
+                sound = dev.state;
+                }else{
+                    lamp = dev.state;
+                    }
+        }
+
+    
+    var sensors = room.sensors;
+
+    var temperature;
+    var humidity;
+    var door;
+    var window;
+    var water;
+    var flowers;
+
+    for (var i = 0; i < 7; i++){
+        var sens = sensors[i];
+        var s_name = sens.name;
+        var s_state = sens.state;
+
+        switch (s_name) {
+		case "temperature":
+			temperature = s_state;
+			break;
+		case "humidity":
+			humidity = s_state;
+			break;
+		case "Tuer":
+			door = s_state;
+			break;
+		case "Wasserstand":
+			flowers = s_state;
+			break;
+		case "Fenster":
+			window = s_state
+			break;
+		case "Wasseralarm":
+			water = s_state;
+			break;
+		default:
+			break;
+		}
+}
+
+// update the display
+
+    // update the view elements in the apartment picture
+    $("#temperature").text(temperature + " °C");
+    $("#humidity").text(humidity + " %");
+
+    if (lamp == "on"){
+    	$('.lamp_icon').attr('src', "<?php echo $this->basePath();?>/img/gluehbirne_an.png");
+    }else{
+        if (lamp_move){
+        	$('.lamp_icon').attr('src', "<?php echo $this->basePath();?>/img/gluehbirne_move.png");
+            }else{
+    	$('.lamp_icon').attr('src', "<?php echo $this->basePath();?>/img/gluehbirne_aus.png");}
+    }
+
+    if (water == "wet"){
+    	$('.water_icon').attr('src', "<?php echo $this->basePath();?>/img/nass_icon.png");
+    }else{
+    	$('.water_icon').attr('src', "<?php echo $this->basePath();?>/img/trocken_icon.png");
+    }
+
+    if (flowers == "wet"){
+    	$('.flowers_icon').attr('src', "<?php echo $this->basePath();?>/img/giesskanne_icon_ok.png");
+    }else{
+    	$('.flowers_icon').attr('src', "<?php echo $this->basePath();?>/img/giesskanne_icon_not_ok.png");
+    }
+
+    if (window == "open"){
+    	$('.window_icon').attr('src', "<?php echo $this->basePath();?>/img/windows_icon_open.png");
+    }else{
+    	$('.window_icon').attr('src', "<?php echo $this->basePath();?>/img/windows_icon_closed.png");
+    }
+
+    if (door == "open"){
+    	$('.door_icon').attr('src', "<?php echo $this->basePath();?>/img/door_open_icon.png");
+    }else{
+    	$('.door_icon').attr('src', "<?php echo $this->basePath();?>/img/door_closed_icon.png");
+    }
+
+    // update the things depending on the alarm state
+    if (alarms_ur){
+        var alarms_ur_string = "";
+        $('#btn_alarm_urgent').show();
+        $('#btn_alarm_normal').hide();
+        for (var i = 0; i < alarms_urgent.length; i++){
+            alarms_ur_string =  alarms_ur_string +"-"+ alarms_urgent[i] + "<br>";
+            }
+        $('#alarms_urgent').html(alarms_ur_string);
+        
+    	var alarm_string = "";
+        for (var i = 0; i < alarms_normal.length; i++){
+            alarm_string =  alarm_string +"-"+ alarms_normal[i] + "<br>";
+            }
+        $('#alarms_normal').html(alarm_string);
+        
+        
+    }else if (alarms){
+    	$('#btn_alarm_urgent').hide();
+        $('#btn_alarm_normal').show();
+        var alarm_string = "";
+        for (var i = 0; i < alarms_normal.length; i++){
+            alarm_string =  alarm_string +"-"+ alarms_normal[i] + "<br>";
+            }
+        $('#alarms_normal').html(alarm_string);
+        $('#alarms_urgent').html("");
+    }else{
+    	$('#btn_alarm_urgent').hide();
+        $('#btn_alarm_normal').show();
+        $('#alarms_normal').text('Derzeit liegen keine Meldungen vor.');
+        $('#alarms_urgent').html("");
+
+    }
+
+    // update the settings (only if nothing set yet)
+    
+    if ($('#value_lamp').text()=='None'){
+    $("#value_lamp").text(lamp_time);}
+
+    if ($('#value_flowers').text()=='None'){
+        $("#value_flowers").text(flower_time);}
+
+    var lamp_state_rad = $('input[name=light_state]:checked').val();
+    if (!lamp_state_rad){
+        if (lamp_move){
+            $('input[value=move]').prop('checked', true);
+            }else{
+            	$('input[value=norm]').prop('checked', true);
+                }
+        }
+
+    }
+
+function findBootstrapEnvironment() {
+    var envs = ['phone', 'tablet', 'desktop'];
+
+    $el = $('<div>');
+    $el.appendTo($('body'));
+
+    for (var i = envs.length - 1; i >= 0; i--) {
+        var env = envs[i];
+
+        $el.addClass('hidden-'+env);
+        if ($el.is(':hidden')) {
+            $el.remove();
+            return env;
+        }
+    };
+}
+
+
 
 </script>
-<?php echo print_r($apartment);?>
 
+<div id="cover" hidden>
 
-<!-- Startseite -->
-<div class="row">
-	<div class="span12">
-		<p style="text-align: center;">
-			<img src='<?php echo $this->basePath(); ?>/img/ehome-center-logo.png'
-				alt="Bild Header E|Home-Center" />
-		</p>
+	<div class="row">
+		<div class="span12">
+			<p style="text-align: center;">
+				<img
+					src='<?php echo $this->basePath(); ?>/img/ehome-center-logo.png'
+					alt="Bild Header E|Home-Center" />
+			</p>
+		</div>
 	</div>
-</div>
-<div class="hero-unit">
-	<h1><?php echo sprintf("Willkommen!", '<span class="zf-green">', '</span>') ?></h1>
+
+	<hr>
+	<h1>Wilkommen!</h1>
+
 	<p>Mustermann, Musterweg 13, 12345 Musterstadt</p>
-	<p>
-		[<a class="show_hide" href="#" rel="#container">+/-</a>]
-	</p>
-	<div id="container">
+
+	<hr>
+
+	<button id="button_settings" class="btn">Einstellungen</button>
+
+	<button class="btn" id="btn_alarm_normal">Meldungen</button>
+
+	<button class="btn btn-danger" style="display: none;"
+		id="btn_alarm_urgent">Meldungen</button>
+
+	<div id="alarms" hidden>
+		<hr>
+		<h3>Meldungen</h3>
+
+		<p id="alarms_urgent" style="color: red;"></p>
+
+		<p id="alarms_normal"></p>
+
+	</div>
+	<div id="settings" hidden>
+		<hr>
+		<h3>Einstellungen</h3>
+
+		<button id="btn_lamp_settings" class="btn">Lampenverhalten</button>
+		<button class="btn" id="btn_flower_settings">Blumenkontrolle</button>
+		<div class="container">
+			<div id="settings_lamp" hidden>
+				<hr>
+				Steuerung:<br> <label> <input type="radio" value="norm"
+					name="light_state"> An/Aus
+				</label><br> <label> <input type="radio" name="light_state"
+					value="move"> An/Bewegungsgesteuert
+				</label><br> Bei Bewegung ist das Licht an für:<br>
+				<table>
+					<tr>
+						<td><button class="btn" id="minus_lamp">-</button></td>
+						<td><p id="value_lamp">None</p></td>
+						<td><button class="btn" id="plus_lamp">+</button></td>
+					</tr>
+				</table>
+				Sekunden.
+
+			</div>
+
+			<div id="settings_flowers" hidden>
+				<hr>
+				Benachrichtigung<br>
+				<table>
+					<tr>
+						<td><button class="btn" id="minus_flowers">-</button></td>
+						<td><p style="display: inline;" id="value_flowers">None</p></td>
+						<td>Tage</td>
+						<td><button class="btn" id="plus_flowers">+</button></td>
+					</tr>
+				</table>
+				nach dem letzten Giessen.
+
+			</div>
+
+
+		</div>
+
+
+		<hr>
+		<button class="btn" id="save_settings">Übernehmen</button>
+		<hr>
+	</div>
+
+
+	<table align="center">
+
+		<tr>
+			<th>Temperatur:</th>
+			<td id="temperature">30</td>
+
+			<th>Luftfeuchtigkeit:</th>
+			<td id="humidity">78</td>
+		</tr>
+
+	</table>
+
+	<div id="container_desktop" class="container">
+
+
+
+
 		<div id="background">
 			<img alt="apartment_picture"
 				src='<?php echo $this->basePath();?>/img/praterstr3.jpg'>
 		</div>
-		<div id="light_kitchen_one" class="light">
-			<img class="img_light" id="img_light_kitchen_one"
-				alt="gluehbirne_aus"
-				src=<?php
-    if ($lightoneKitchen) {
-        echo $this->basePath() . '/img/gluehbirne_an.png';
-    } else {
-        echo $this->basePath() . '/img/gluehbirne_aus.png';
-    }
-    ?> />
+		<div id="lamp_desktop">
+			<img class="lamp_icon" alt="lamp_picture"
+				src='<?php echo $this->basePath();?>/img/gluehbirne_aus.png'>
 		</div>
-		<div id="light_kitchen_two" class="light">
-			<img class="img_light" id="img_light_kitchen_two"
-				alt="gluehbirne_aus"
-				src=<?php
-    if ($lighttwoKitchen) {
-        echo $this->basePath() . '/img/gluehbirne_an.png';
-    } else {
-        echo $this->basePath() . '/img/gluehbirne_aus.png';
-    }
-    ?> />
+		<div id="water_desktop">
+			<img alt="water_picture" class="water_icon"
+				src='<?php echo $this->basePath();?>/img/nass_icon.png'>
 		</div>
-		<div id="light_bathroom_one" class="light">
-			<img class="img_light" id="img_light_bathroom_one"
-				alt="gluehbirne_aus"
-				src=<?php
-    if ($lightoneBath) {
-        echo $this->basePath() . '/img/gluehbirne_an.png';
-    } else {
-        echo $this->basePath() . '/img/gluehbirne_aus.png';
-    }
-    ?> />
+		<div id="window_desktop">
+			<img alt="window_picture" class="window_icon"
+				src='<?php echo $this->basePath();?>/img/windows_icon_closed.png'>
 		</div>
-		<div id="light_bathroom_two" class="light">
-			<img class="img_light" id="img_light_bathroom_two"
-				alt="gluehbirne_aus"
-				src=<?php
-    if ($lighttwoBath) {
-        echo $this->basePath() . '/img/gluehbirne_an.png';
-    } else {
-        echo $this->basePath() . '/img/gluehbirne_aus.png';
-    }
-    ?> />
+		<div id="flowers_desktop">
+			<img alt="flowers_picture" class="flowers_icon"
+				src='<?php echo $this->basePath();?>/img/giesskanne_icon_not_ok.png'>
 		</div>
-		<div id="light_living_one" class="light">
-			<img class="img_light" id="img_light_living_one" alt="gluehbirne_aus"
-				src=<?php
-    if ($lightoneLivingRoom) {
-        echo $this->basePath() . '/img/gluehbirne_an.png';
-    } else {
-        echo $this->basePath() . '/img/gluehbirne_aus.png';
-    }
-    ?> />
+		<div id="door_desktop">
+			<img alt="door_picture" class="door_icon"
+				src='<?php echo $this->basePath();?>/img/door_open_icon.png'>
 		</div>
-		<!-- // light-living -->
-		<div id="light_living_two" class="light">
-			<img class="img_light" id="img_light_living_two" alt="gluehbirne_aus"
-				src=<?php
-    if ($lighttwoLivingRoom) {
-        echo $this->basePath() . '/img/gluehbirne_an.png';
-    } else {
-        echo $this->basePath() . '/img/gluehbirne_aus.png';
-    }
-    ?> />
-		</div>
-		<!-- // light-living -->
-	</div>
-	<!-- // div container -->
-</div>
-<!-- // hero-unit -->
-<hr>
-<div class='row'>
-	<div class='span4'>
-		<h2>Cockpit</h2>
-		<div style='float: left; padding-right: 16px;'><?php echo $this->gravatar($this->zfcUserIdentity()->getEmail()); ?>
-    </div>
-		<p>
-    	Angemeldet als <?php echo $useremail; ?>
-    </p>
-		<p>
-			<a class='btn'
-				href="<?php echo $this->url('home', array('action' => 'logout')); ?>">Ausloggen</a>
-		</p>
-	</div>
-	<!-- 	<div class='span5'> -->
-	<!-- 		<h2>Hinweise</h2> -->
 
-	<!-- 	</div> -->
-	<div class='span3'>
-		<h2>Hilfe</h2>
-		<p>
-			Wir helfen Ihnen gerne:<br> support@example.org und 01234-12345
-		</p>
+	</div>
+
+	<div id="container_phone" class="container">
+
+
+
+
+		<div id="background">
+			<img alt="apartment_picture"
+				src='<?php echo $this->basePath();?>/img/praterstr3.jpg'>
+		</div>
+
+		<div id="lamp_phone">
+			<img class="lamp_icon" alt="lamp_picture"
+				src='<?php echo $this->basePath();?>/img/gluehbirne_aus.png'>
+		</div>
+		<div id="water_phone">
+			<img alt="water_picture" class="water_icon"
+				src='<?php echo $this->basePath();?>/img/nass_icon.png'>
+		</div>
+		<div id="window_phone">
+			<img alt="water_picture" class="window_icon"
+				src='<?php echo $this->basePath();?>/img/windows_icon_closed.png'>
+		</div>
+		<div id="flowers_phone">
+			<img alt="water_picture" class="flowers_icon"
+				src='<?php echo $this->basePath();?>/img/giesskanne_icon_not_ok.png'>
+		</div>
+		<div id="door_phone">
+			<img alt="door_picture" class="door_icon"
+				src='<?php echo $this->basePath();?>/img/door_open_icon.png'>
+		</div>
+
 	</div>
 </div>
-<hr>
-<div class='row'>
-	<div class='span12'>
-		<h2>Räume</h2>
-		<p>
-			[<a class="show_hide" href="#" rel="#rooms">+/-</a>]
-		</p>
-		<?php $counter_room = -1; $counter_device = -1;?>
-		<?php foreach (($apartment['rooms']) as $room):?>
-		<?php $counter_room++; ?>
-		<div id=<?php echo $room['name']?>>
-			<h3 id=<?php echo "room" . $counter_room;?>><?php echo $room['name']?></h3>
-			<table border="1px">
-		<?php foreach (($room['devices']) as $entry):?>
-		<?php $counter_device++;?>
-		<tr>
-					<th id=<?php echo "entry".$counter_device;?>><?php echo $entry['name'];?></th>
-					<td style='text-align: right;'>
-					<?php if($entry['state'] == "on"):?>
-					<span id=<?php echo "state" . $counter_device;?> style='color: orange;'>AN</span>
-					</td>
-					<td>
-						<button id="change" class="btn btn-success"><></button>
-					
-					
-            
-						
-        <?php elseif ($entry['state'] == "off") :?>
-					<span id=<?php echo "state" . $counter_device;?> style='color: green;'>AUS</span>
-					</td>
-					<td>
 
-						<button id="change" class="btn btn-success"><></button>
-				
-				
-		<?php else:?>
-		<span id=<?php echo "state" . $counter_device;?>><?php echo $entry['state']?></span>
-					</td>
-		
-					<?php endif;?>
-					</td>
-				</tr>
-		<?php endforeach;?>
-		</table>
-		</div>
-		<br>
-		<table border="1px">
-		
-		<?php foreach ($room['sensors'] as $entry):?>
-		
-		<tr>
 
-				<th><?php
-        
-switch ($entry['name']) {
-            case 'temperature':
-                $name = 'Temperatur';
-                break;
-            case 'humidity':
-                $name = 'Luftfeuchtigkeit';
-                break;
-            default:
-                $name = $entry['name'];
-        }
-        
-        echo $name;
-        
-        ?></th>
-				<td><?php echo $entry['state'];?></td>
-
-			</tr>
-		
-		<?php endforeach;?>
-		</table>
-		
-				<?php endforeach;?>
-		
-		
+</html>
