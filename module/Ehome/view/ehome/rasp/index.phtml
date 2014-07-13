@@ -1,4 +1,4 @@
-<?php // echo print_r($apartment);?>
+<?php  echo print_r($apartment);?>
 
 
 <html>
@@ -141,6 +141,8 @@ $('#save_settings').click(function(){
 
 
 // functions that are used
+
+// function that sends the apartment data to the pyServer
 function sendApartmentState(data){
 
     var url = 'http://hiwi.jochen-bauer.net/EhcServer/public/' + 'rasp/sendApartmentState'; 
@@ -159,7 +161,7 @@ function sendApartmentState(data){
 	
 }
 
-
+// function for getting the apartment data for the update of the display
 function updateRequest(){
 
 	var url = 'http://hiwi.jochen-bauer.net/EhcServer/public/' + 'rasp/updateApartment'; 
@@ -181,6 +183,7 @@ function updateRequest(){
 	
 }
 
+// function for the update of the display
 function updateDisplay(data){
 	var rooms = data.rooms;
     var room = rooms[0];
@@ -358,6 +361,7 @@ function updateDisplay(data){
 
     }
 
+// function to determine the target device    
 function findBootstrapEnvironment() {
     var envs = ['phone', 'tablet', 'desktop'];
 

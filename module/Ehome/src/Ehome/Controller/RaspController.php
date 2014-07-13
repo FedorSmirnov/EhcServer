@@ -17,7 +17,9 @@ class RaspController extends AbstractActionController
     protected $password = 'geheim';
 
     protected $extIpTable;
-
+    
+    // the index controller performs the identity check and serves the
+    // index.phtml file
     public function indexAction ()
     {
         if (! $this->zfcUserAuthentication()->hasIdentity()) { // check for
@@ -38,7 +40,8 @@ class RaspController extends AbstractActionController
                         'useremail' => $userEmail
                 ));
     }
-
+    
+    // function used by the pyserver to update its IP
     public function updateIpAction ()
     {
         $new_ex_ip = $_POST['ip'];
@@ -125,71 +128,14 @@ class RaspController extends AbstractActionController
 
     public function sendApartmentStateAction ()
     {
-        $request = $this->getRequest();        
+        $request = $this->getRequest();
         if (! $this->zfcUserAuthentication()->hasIdentity()) { // check for
                                                                // valid
                                                                // session
             return $this->redirect()->toRoute(static::ROUTE_LOGIN);
-        }  
-        $this->setApartmentState($_POST);      
+        }
+        $this->setApartmentState($_POST);
         return new JsonModel($_POST);
-    }
-
-    public function changeStateAction ()
-    {
-        $request = $this->getRequest();
-        
-        if ($request->isPost()) {
-            $pw = $_POST['pw_user'];
-            $u = $_POST['email'];
-            
-            if ($pw != $this->password or $u != $this->user) {
-                throw new \Exception('Connection attempt from unknown source.');
-            }
-        } else {
-            if (! $this->zfcUserAuthentication()->hasIdentity()) { // check for
-                                                                   // valid
-                                                                   // session
-                return $this->redirect()->toRoute(static::ROUTE_LOGIN);
-            }
-        }
-        
-        $room = $this->params()->fromRoute('room', '');
-        $dev_name = $this->params()->fromRoute('entry', '');
-        $state = $this->params()->fromRoute('state', '');
-        
-        $apartment = $this->getApartmentState(false);
-        
-        foreach ($apartment['rooms'] as $key_room => $myRoom) {
-            if ($myRoom['name'] == $room) {
-                foreach ($myRoom['devices'] as $key_device => $device) {
-                    if ($device['name'] == $dev_name) {
-                        
-                        $apartment['rooms'][$key_room]['devices'][$key_device]['state'] = $state;
-                    }
-                }
-            }
-        }
-        
-        if ($this->setApartmentState($apartment)) {
-            
-            if ($request->isPost()) {
-                return new JsonModel($apartment);
-            } else {
-                
-                return new JsonModel(
-                        
-                        array(
-                                'response' => 'success'
-                        ));
-            }
-        } else {
-            return new JsonModel(
-                    
-                    array(
-                            'response' => 'failure'
-                    ));
-        }
     }
 
     private function setApartmentState ($apartment)
